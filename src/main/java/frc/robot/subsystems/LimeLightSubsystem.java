@@ -4,11 +4,17 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimeLightSubsystem extends SubsystemBase {
-  /** Creates a new Limelight. */
-  public LimeLightSubsystem() {}
+  /** Creates a new LimeLightSubsystem. */
+  NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
+  
+  public LimeLightSubsystem() {
+
+  }
 
   @Override
   public void periodic() {
