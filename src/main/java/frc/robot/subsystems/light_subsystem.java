@@ -12,9 +12,9 @@ import com.ctre.phoenix.led.CANdle.LEDStripType;
 
 public class light_subsystem extends SubsystemBase {
   /** Creates a new light_subsystem. */
-  public light_subsystem() {
-    CANdle candle = new CANdle(0); // creates a new CANdle with ID 0
+  CANdle candle = new CANdle(0); // creates a new CANdle with ID 0
 
+  public light_subsystem() {
     CANdleConfiguration config = new CANdleConfiguration();
     config.stripType = LEDStripType.RGB; // set the strip type to RGB
     config.brightnessScalar = 0.5; // dim the LEDs to half brightness
