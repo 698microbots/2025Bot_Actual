@@ -21,6 +21,9 @@ public class light_subsystem extends SubsystemBase {
     candle.configAllSettings(config);
   }
 
+  public void setBrightness() {
+    candle.setLEDs(0,0,0);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
