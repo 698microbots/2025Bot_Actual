@@ -5,13 +5,16 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elevator_subsystem extends SubsystemBase {
   public TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
   public TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
+  DigitalInput revEncoder = new DigitalInput(Constants.revId);
   /** Creates a new slevator. */
   public Elevator_subsystem() {}
 

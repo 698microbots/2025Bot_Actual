@@ -21,4 +21,5 @@ public final class Constants {
   public static final int elevator_motor_2 = 2;
   public static final int dropper_id = 3;
   public static final int lidar_id = 4;
+  public static final int revId = 5;
 }
