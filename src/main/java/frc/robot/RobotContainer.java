@@ -22,8 +22,8 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-private final CommandXboxController controller = new CommandXboxController(Constants.kDriverControllerPort);
-private RobotClimber robotClimber = new RobotClimber();
+private final CommandXboxController controller = new CommandXboxController(Constants.kDriverControllerPort);//making a new s=xbox controller
+private RobotClimber robotClimber = new RobotClimber();//creating robot command
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -46,7 +46,7 @@ private RobotClimber robotClimber = new RobotClimber();
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-   controller.a().whileTrue(robotClimber);
+   controller.a().whileTrue(robotClimber);// binding the button to the command
   }
 
   /**

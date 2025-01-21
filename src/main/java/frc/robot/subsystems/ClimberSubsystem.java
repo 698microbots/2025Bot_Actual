@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase {
-  private final TalonFX climberMotor = new TalonFX (Constants.climberMotorID);
+  private final TalonFX climberMotor = new TalonFX (Constants.climberMotorID);//setting the ID for motor
   //private double speed;
   public ClimberSubsystem() {
   
   }
-public void motorSpeed(double speed) {
-  climberMotor.set(speed);
+public void motorSpeed(double speed) {//creating a method to control the motor 
+  climberMotor.set(speed);// setting the speed of the motor
 }  
 
   @Override
