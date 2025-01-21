@@ -3,12 +3,26 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkClosedLoopController;
+
+
 
 public class Dropper extends SubsystemBase {
   /** Creates a new Dropper. */
+  SparkMax max = new SparkMax(1, MotorType.kBrushless);
+  SparkFlex flex = new SparkFlex(2, MotorType.kBrushless);
+  SparkClosedLoopController maxPid = max.getClosedLoopController();
+  private final SparkMax dropperMotor = new SparkMax(Constants.dropperMotorID, MotorType.kBrushless); 
   public Dropper() {}
+
+  public void dropCoral(){
+  }
 
   @Override
   public void periodic() {
