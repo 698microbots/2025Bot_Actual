@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Dropper extends SubsystemBase {
-  /** Creates a new Dropper. */
+  /** Creates a new Dropper. */ 
   public Dropper() {}
 
   @Override
