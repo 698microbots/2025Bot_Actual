@@ -22,4 +22,7 @@ public final class Constants {
   public static final int dropper_id = 3;
   public static final int lidar_id = 4;
   public static final int revId = 5;
+  public static final int rotation_sensor = 6;
+  public static final int joystick_1 = 7;
+  public static final int joystick_2 = 8;
 }

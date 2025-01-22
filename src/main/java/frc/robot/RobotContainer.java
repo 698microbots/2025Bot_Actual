@@ -41,9 +41,15 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer(Dropper dropper, Elevator_subsystem elevator, light_subsystem light, sensor_subsystem sensor, LimeLightSubsystem limelight) {
+    this.dropper = dropper;
+    this.elevator = elevator;
+    this.light = light;
+    this.sensor = sensor;
+    this.limelight = limelight;
     // Configure the trigger bindings
     configureBindings();
   }
+  public RobotContainer() {}
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
