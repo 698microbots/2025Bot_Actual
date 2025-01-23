@@ -25,4 +25,7 @@ public final class Constants {
   public static final int rotation_sensor = 6;
   public static final int joystick_1 = 7;
   public static final int joystick_2 = 8;
+  public static double l2 = 5;
+  public static double l3 = 6;
+  public static double l4 = 7;
 }
