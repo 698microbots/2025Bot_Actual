@@ -7,22 +7,28 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdleConfiguration;
+import com.ctre.phoenix6.configs.CANrangeConfiguration;
+import com.ctre.phoenix6.hardware.CANrange;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 
-public class LED_subsystem extends SubsystemBase {
+public class ReactedLED_Subsystem extends SubsystemBase {
 
   /** Creates a new LED. */
   CANdle candle = new CANdle(0);
+  CANrange CANrange = new CANrange(0);
   
-  public LED_subsystem() {
+  public ReactedLED_Subsystem() {
     CANdleConfiguration config = new CANdleConfiguration();
     config.stripType = LEDStripType.RGB; //set strip type RGB
     config.brightnessScalar = 0.5;
+    CANrangeConfiguration configs = new CANrangeConfiguration();
    // config.configAllSettings(config);
   }
+
+  public void
 
   public void setBrightness() {
     candle.setLEDs(0,0,0);
@@ -41,6 +47,8 @@ public class LED_subsystem extends SubsystemBase {
       candle.setLEDs(255,0,0);
     }
   }*/
+
+  public void 
 
   @Override
   public void periodic() {
