@@ -19,16 +19,20 @@ public class ReactedLED_Subsystem extends SubsystemBase {
   /** Creates a new LED. */
   CANdle candle = new CANdle(0);
   CANrange CANrange = new CANrange(0);
+
+  double distance = CANrange.getDistance().getValueAsDouble();
   
   public ReactedLED_Subsystem() {
     CANdleConfiguration config = new CANdleConfiguration();
     config.stripType = LEDStripType.RGB; //set strip type RGB
     config.brightnessScalar = 0.5;
     CANrangeConfiguration configs = new CANrangeConfiguration();
-   // config.configAllSettings(config);
+    config.configAllSettings(config);
   }
 
-  public void
+  public double returnDistance(){
+    return CANrange.getDistance().getValueAsDouble();
+  }
 
   public void setBrightness() {
     candle.setLEDs(0,0,0);
@@ -47,8 +51,6 @@ public class ReactedLED_Subsystem extends SubsystemBase {
       candle.setLEDs(255,0,0);
     }
   }*/
-
-  public void 
 
   @Override
   public void periodic() {
