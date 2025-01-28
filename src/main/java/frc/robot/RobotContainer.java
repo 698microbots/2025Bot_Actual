@@ -11,8 +11,6 @@ import frc.robot.subsystems.Dropper;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
-import frc.robot.subsystems.light_subsystem;
-import frc.robot.subsystems.sensor_subsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -32,8 +30,6 @@ public class RobotContainer {
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
   public Dropper dropper = new Dropper();
   public Elevator_subsystem elevator = new Elevator_subsystem();
-  public light_subsystem light = new light_subsystem();
-  public sensor_subsystem sensor = new sensor_subsystem();
   public LimeLightSubsystem limelight = new LimeLightSubsystem();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
