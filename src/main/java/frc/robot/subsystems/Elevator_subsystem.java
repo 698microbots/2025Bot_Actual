@@ -13,7 +13,7 @@ import frc.robot.Constants;
 public class Elevator_subsystem extends SubsystemBase {
   public TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
   public TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
-  DigitalInput revEncoder = new DigitalInput(Constants.revId);
+  public DigitalInput revEncoder = new DigitalInput(Constants.revId);
   /** Creates a new slevator. */
   public Elevator_subsystem() {}
 
