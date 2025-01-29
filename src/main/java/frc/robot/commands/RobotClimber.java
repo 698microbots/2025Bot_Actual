@@ -11,9 +11,10 @@ import frc.robot.subsystems.ClimberSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class RobotClimber extends Command {
   /** Creates a new RobotClimber. */
+private double speed; 
   ClimberSubsystem newRobotClimberSubsystem = new ClimberSubsystem();//making an object of subsystem 
-  public RobotClimber() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public RobotClimber(double speed) {
+   this.speed = speed;
   }
 
   // Called when the command is initially scheduled.
@@ -23,7 +24,7 @@ public class RobotClimber extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {//running the subsystem
-    newRobotClimberSubsystem.motorSpeed(1);// when a is pressed, it runs this code
+    newRobotClimberSubsystem.motorSpeed(speed);// when a is pressed, it runs this code
   }
   
   public void climberDown() {
