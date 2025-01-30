@@ -22,6 +22,7 @@ public class Dropper extends SubsystemBase {
   public Dropper() {}
 
   public void dropCoral(){
+    dropperMotor.set(0.2);
   }
 
   @Override

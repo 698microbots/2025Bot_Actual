@@ -11,6 +11,7 @@ import frc.robot.subsystems.Dropper;
 public class DropCoral extends Command {
   /** Creates a new DropCoral. */
   private Dropper dropperSubsystem;
+  private int counter;
   public DropCoral(Dropper dropper) {
     // Use addRequirements() here to declare subsystem dependencies.\
     this.dropperSubsystem = dropper;
@@ -24,6 +25,8 @@ public class DropCoral extends Command {
   @Override
   public void execute() {
     dropperSubsystem.dropCoral();
+    counter++;
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -33,6 +36,11 @@ public class DropCoral extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (counter >= 5){
+      return true;
+    } else {
+      return false;
+    }
+    
   }
 }
