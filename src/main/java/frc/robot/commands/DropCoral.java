@@ -26,7 +26,6 @@ public class DropCoral extends Command {
   public void execute() {
     dropperSubsystem.dropCoral();
     counter++;
-    
   }
 
   // Called once the command ends or is interrupted.
