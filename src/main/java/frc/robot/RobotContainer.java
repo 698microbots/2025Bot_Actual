@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DropCoral;
 import frc.robot.commands.ExampleCommand;
@@ -12,6 +11,11 @@ import frc.robot.subsystems.Dropper;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.event.EventLoop;
+import frc.robot.commands.RobotClimber;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.LimeLightSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -30,9 +34,13 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public CommandXboxController xboxController = new CommandXboxController(0);
 
+  CommandXboxController Joystick = new CommandXboxController(Constants.joystickPort);
+  ClimberSubsystem climber = new ClimberSubsystem();
+  // Replace with CommandPS4Controller or CommandJoystick if needed
+ 
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the trigger bindings
     configureBindings();
   }
 
@@ -52,11 +60,16 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+  Joystick.x().whileTrue(new RobotClimber(1));
+
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
+
   }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
+   
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
