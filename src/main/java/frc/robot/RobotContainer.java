@@ -7,10 +7,16 @@ package frc.robot;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.LiftCommand;
+import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Dropper;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
+
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -25,12 +31,17 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  // private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+  .withDeadband(Constants.MaxSpeed * 0.1).withRotationalDeadband(Constants.MaxAngularRate * 0.1); // Add a 10% deadband
+// Use open-loop control for drive motors
+  
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
+  
+  
   public Dropper dropper = new Dropper();
   public Elevator_subsystem elevator = new Elevator_subsystem();
   public LimeLightSubsystem limelight = new LimeLightSubsystem();
+  public CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -53,9 +64,18 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    joystick_1.a().whileTrue(new LiftCommand(elevator, dropper,Constants.l2));
-    joystick_1.b().whileTrue(new LiftCommand(elevator, dropper,Constants.l3));
-    joystick_1.y().whileTrue(new LiftCommand(elevator, dropper,Constants.l4));
+    // joystick_1.a().whileTrue(new LiftCommand(elevator, dropper,Constants.l2));
+    // joystick_1.b().whileTrue(new LiftCommand(elevator, dropper,Constants.l3));
+    // joystick_1.y().whileTrue(new LiftCommand(elevator, dropper,Constants.l4));
+    drivetrain.setDefaultCommand(
+      // Drivetrain will execute this command periodically
+      drivetrain.applyRequest(() ->
+          drive.withVelocityX(-joystick_1.getLeftY() * Constants.MaxSpeed) // Drive forward with negative Y (forward)
+              .withVelocityY(-joystick_1.getLeftX() * Constants.MaxSpeed) // Drive left with negative X (left)
+              .withRotationalRate(-joystick_1.getRightX() * Constants.MaxAngularRate) // Drive counterclockwise with negative X (left)
+      )
+  );
+  
   }
 
   /**
