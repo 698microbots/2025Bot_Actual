@@ -14,7 +14,6 @@ import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 
-import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.Command;

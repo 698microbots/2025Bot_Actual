@@ -19,7 +19,6 @@ import frc.robot.generated.TunerConstants;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  //test
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
@@ -36,7 +35,6 @@ public final class Constants {
   public static final double l4 = 7;
   public static final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
   public static final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-
+  public static final int dropperMotorID = 30;
   
 }
-//hello
