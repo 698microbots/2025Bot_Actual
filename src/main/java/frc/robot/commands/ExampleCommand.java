@@ -34,35 +34,6 @@ public class ExampleCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    public double returnDistance(){
-      return CANrange.getDistance().getValueAsDouble();
-    }
-
-    public boolean visibleTarget(){
-      if (limelight.getEntry("tv").getDouble(0) == 1){
-        return true;
-      } else{
-        return false;
-      }
-    }
-
-    public void setColorWithString(String chosenColor) {
-      if (chosenColor == "Yellow") {
-        CANdle.setLEDs(255,255,0, 0, 0, 50);
-      }else if (chosenColor == "Green") {
-        CANdle.setLEDs(0,255,0, 0, 0, 50);
-      }else if (chosenColor == "Red"){
-        CANdle.setLEDs(255,0,0, 0, 0, 50);
-      }
-    }
-
-    if (returnDistance() < .25 && visibleTarget()) {
-      setColorWithString("Red");
-    } else if (returnDistance() < .25 ){
-      setColorWithString("Yellow");
-    } else {
-      setColorWithString("Green");
-    }
 
   }
 

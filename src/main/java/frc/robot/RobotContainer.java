@@ -7,10 +7,12 @@ package frc.robot;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.LiftCommand;
+import frc.robot.commands.UpdateLEDCommand;
 import frc.robot.subsystems.Dropper;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
+import frc.robot.subsystems.ReactedLED_Subsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -31,6 +33,7 @@ public class RobotContainer {
   public Dropper dropper = new Dropper();
   public Elevator_subsystem elevator = new Elevator_subsystem();
   public LimeLightSubsystem limelight = new LimeLightSubsystem();
+  public ReactedLED_Subsystem reactedLED_Subsystem = new ReactedLED_Subsystem();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -47,6 +50,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    reactedLED_Subsystem.setDefaultCommand(new UpdateLEDCommand(reactedLED_Subsystem));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
