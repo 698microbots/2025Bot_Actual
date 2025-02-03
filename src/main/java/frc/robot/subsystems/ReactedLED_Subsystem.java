@@ -59,7 +59,6 @@ public class ReactedLED_Subsystem extends SubsystemBase {
       return true;
     } else{
       return false;
-
     }
   }
 

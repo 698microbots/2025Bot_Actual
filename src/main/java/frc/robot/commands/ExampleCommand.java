@@ -5,7 +5,11 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
+import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix6.hardware.CANrange;
 
 /** An example command that uses an example subsystem. */
 public class ExampleCommand extends Command {
@@ -29,7 +33,38 @@ public class ExampleCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    public double returnDistance(){
+      return CANrange.getDistance().getValueAsDouble();
+    }
+
+    public boolean visibleTarget(){
+      if (limelight.getEntry("tv").getDouble(0) == 1){
+        return true;
+      } else{
+        return false;
+      }
+    }
+
+    public void setColorWithString(String chosenColor) {
+      if (chosenColor == "Yellow") {
+        CANdle.setLEDs(255,255,0, 0, 0, 50);
+      }else if (chosenColor == "Green") {
+        CANdle.setLEDs(0,255,0, 0, 0, 50);
+      }else if (chosenColor == "Red"){
+        CANdle.setLEDs(255,0,0, 0, 0, 50);
+      }
+    }
+
+    if (returnDistance() < .25 && visibleTarget()) {
+      setColorWithString("Red");
+    } else if (returnDistance() < .25 ){
+      setColorWithString("Yellow");
+    } else {
+      setColorWithString("Green");
+    }
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
