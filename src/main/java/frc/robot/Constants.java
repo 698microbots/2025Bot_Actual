@@ -22,12 +22,12 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-  public static final int elevator_motor_1 = 10;
-  public static final int elevator_motor_2 = 20;
-  public static final int dropper_id = 30;
-  public static final int lidar_id = 40;
-  public static final int revId = 50;
-  public static final int rotation_sensor = 60;
+  public static final int elevator_motor_1 = 1;
+  public static final int elevator_motor_2 = 2;
+  public static final int dropper_id = 3;
+  public static final int lidar_id = 4;
+  public static final int revId = 5;
+  public static final int rotation_sensor = 6;
   public static final int joystick_1 = 7;
   public static final int joystick_2 = 8;
   public static final double l2 = 5; // change this to say like coralL2 to not get confused
