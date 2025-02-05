@@ -66,14 +66,6 @@ public class ReactedLED_Subsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     //this all might need to be put into a command
-    if (returnDistance() < .25 && visibleTarget()) {
-      setColorWithString("Red");
-    } else if (returnDistance() < .25 ){
-      setColorWithString("Yellow");
-    } else {
-      setColorWithString("Green");
-     
-    }
     
   }
 
