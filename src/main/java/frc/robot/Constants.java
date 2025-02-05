@@ -22,11 +22,15 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-  public static final int elevator_motor_1 = 13;
-  public static final int elevator_motor_2 = 14;
-  public static final int dropper_id = 13;
-  public static final int lidar_id = 14;
-  public static final int revId = 15;
+
+    public static double numSeconds(double seconds){ //does the calculations for how many 20ms are in a second, compare it to a counter adds every 20ms
+      return seconds * 50;
+  }  
+  public static final int elevator_motor_1 = 20;
+  public static final int elevator_motor_2 = 21;
+  public static final int dropper_id = 22;
+  public static final int lidar_id = 23;
+  public static final int revId = 4;
   public static final int rotation_sensor = 6;
   public static final int joystick_1 = 0;
   public static final int joystick_2 = 1;
@@ -35,6 +39,6 @@ public final class Constants {
   public static final double l4 = 7;
   public static final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
   public static final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-  public static final int dropperMotorID = 16;
+  public static final int dropperMotorID = 2;
   
 }
