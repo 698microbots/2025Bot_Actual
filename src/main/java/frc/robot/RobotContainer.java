@@ -17,7 +17,10 @@ import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.ReactedLED_Subsystem;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -45,8 +48,16 @@ public class RobotContainer {
   public CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
   public ReactedLED_Subsystem reactedLED_Subsystem = new ReactedLED_Subsystem();
 
+
+    /* Path follower */
+    private final SendableChooser<Command> autoChooser;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+        autoChooser = AutoBuilder.buildAutoChooser("New Auto");
+        SmartDashboard.putData("Auto Mode", autoChooser);    
+
     configureBindings();
   }
 
@@ -79,6 +90,10 @@ public class RobotContainer {
       )
   );
   
+      // reset the field-centric heading on left bumper press
+      joystick_1.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+ 
   }
 
   /**
@@ -88,6 +103,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    // return Autos.exampleAuto(m_exampleSubsystem);
+    return autoChooser.getSelected();
   }
 }
