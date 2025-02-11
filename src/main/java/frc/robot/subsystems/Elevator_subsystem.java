@@ -7,19 +7,24 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elevator_subsystem extends SubsystemBase {
-  public TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
-  public TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
-  public DigitalInput revEncoder = new DigitalInput(Constants.revId);
+  private TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
+  private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
+  private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.revId);
   /** Creates a new slevator. */
   public Elevator_subsystem() {}
 
   public void setspeed(double speed) {
     motor1.set(speed);
     motor2.set(speed);
+  }
+
+  public double getPosition(){
+    return revEncoder.get();
   }
 
   @Override

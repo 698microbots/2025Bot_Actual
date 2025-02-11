@@ -7,13 +7,14 @@ package frc.robot;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExElevator;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.LiftCommand;
+import frc.robot.commands.TagAlign_Command;
+import frc.robot.commands.ElevatorLift_Command;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Dropper;
+import frc.robot.subsystems.Swerve_Subsystem;
+import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.LimeLightSubsystem;
+import frc.robot.subsystems.LimeLight_Subsystem;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -41,10 +42,10 @@ public class RobotContainer {
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
   
   
-  public Dropper dropper = new Dropper();
+  public Dropper_Subsystem dropper = new Dropper_Subsystem();
   public Elevator_subsystem elevator = new Elevator_subsystem();
-  public LimeLightSubsystem limelight = new LimeLightSubsystem();
-  public CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+  public LimeLight_Subsystem limelight = new LimeLight_Subsystem();
+  public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
 
 
     /* Path follower */

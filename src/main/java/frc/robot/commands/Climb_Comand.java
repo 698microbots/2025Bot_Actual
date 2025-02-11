@@ -4,18 +4,19 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.Climber_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class RobotClimber extends Command {
+public class Climb_Comand extends Command {
   /** Creates a new RobotClimber. */
-private double speed; 
-  ClimberSubsystem newRobotClimberSubsystem = new ClimberSubsystem();//making an object of subsystem 
-  public RobotClimber(double speed) {
-   this.speed = speed;
-  }
+  private Climber_Subsystem climber = new Climber_Subsystem();//making an object of subsystem 
+  public Climb_Comand(Climber_Subsystem climber) {
+      this.climber = climber;
+      addRequirements(climber);
+    }
 
   // Called when the command is initially scheduled.
   @Override
@@ -23,8 +24,8 @@ private double speed;
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {//running the subsystem
-    newRobotClimberSubsystem.motorSpeed(speed);// when a is pressed, it runs this code
+  public void execute() {
+    climber.motorSpeed(.1);// when a is pressed, it runs this code
   }
   
   public void climberDown() {
@@ -33,7 +34,10 @@ private double speed;
 
       // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    climber.motorSpeed(0);// when a is pressed, it runs this code
+
+  }
 
   // Returns true when the command should end.
   @Override
