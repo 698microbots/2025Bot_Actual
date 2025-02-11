@@ -29,7 +29,7 @@ public class ReactedLED_Subsystem extends SubsystemBase {
     CANdleConfiguration configCANdle = new CANdleConfiguration();
     CANrangeConfiguration configCANrange = new CANrangeConfiguration();
 
-    configCANdle.stripType = LEDStripType.RGB; //set strip type RGB
+    configCANdle.stripType = LEDStripType.RGB;
     configCANdle.brightnessScalar = 0.5;
     CANdle.configAllSettings(configCANdle);
     CANrange.getConfigurator().apply(configCANrange);
@@ -39,7 +39,7 @@ public class ReactedLED_Subsystem extends SubsystemBase {
     return CANrange.getDistance().getValueAsDouble();
   }
 
-
+  //TODO : Figure out how many lights is the end index (count paramter)
   public void setColor(int r, int g, int b) {
     CANdle.setLEDs(r, g, b, 0, 0, 50);
   }
@@ -55,26 +55,18 @@ public class ReactedLED_Subsystem extends SubsystemBase {
   }
 
   public boolean visibleTarget(){
+    //"tv" key is if target exists(1 = yes, 0 = no)
     if (limelight.getEntry("tv").getDouble(0) == 1){
       return true;
     } else{
       return false;
-
     }
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //this all might need to be put into a command
-    if (returnDistance() < .25 && visibleTarget()) {
-      setColorWithString("Red");
-    } else if (returnDistance() < .25 ){
-      setColorWithString("Yellow");
-    } else {
-      setColorWithString("Green");
-     
-    }
+
     
   }
 

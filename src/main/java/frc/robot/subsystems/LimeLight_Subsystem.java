@@ -13,7 +13,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class LimeLightSubsystem extends SubsystemBase {
+public class LimeLight_Subsystem extends SubsystemBase {
   /** Creates a new LimeLightSubsystem. */
   private NetworkTableEntry V_angle, H_angle, TwoH_angle, hasTargets, botPose, aprilID, targetPose;
   private double[] poseList;
@@ -21,7 +21,7 @@ public class LimeLightSubsystem extends SubsystemBase {
   private NetworkTable limeLight = NetworkTableInstance.getDefault().getTable("limelight");
   private NetworkTable limeLight2 = NetworkTableInstance.getDefault().getTable("limelight2");
 
-  public LimeLightSubsystem() {
+  public LimeLight_Subsystem() {
     
     V_angle = limeLight.getEntry("ty");
     H_angle = limeLight.getEntry("tx");
@@ -71,6 +71,13 @@ public class LimeLightSubsystem extends SubsystemBase {
 
   public double getAprilTagID() {
     return aprilID.getDouble(0);
+  }
+
+  public boolean getHasTargets(){
+    if (hasTargets.getDouble(0) == 0){
+      return false;
+    }
+    return true;
   }
 
   @Override
