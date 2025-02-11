@@ -13,13 +13,13 @@ import com.revrobotics.spark.SparkClosedLoopController;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Dropper extends SubsystemBase {
+public class Dropper_Subsystem extends SubsystemBase {
   /** Creates a new Dropper. */
   // SparkMax max = new SparkMax(1, MotorType.kBrushless);
   // SparkFlex flex = new SparkFlex(2, MotorType.kBrushless);
   // SparkClosedLoopController maxPid = max.getClosedLoopController();
   private final SparkMax dropperMotor = new SparkMax(Constants.dropperMotorID, MotorType.kBrushless); 
-  public Dropper() {}
+  public Dropper_Subsystem() {}
 
   public void dropCoral(){
     dropperMotor.set(0.2);
