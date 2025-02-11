@@ -14,17 +14,17 @@ import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.LimeLightSubsystem;
+import frc.robot.subsystems.Swerve_Subsystem;
+import frc.robot.subsystems.LimeLight_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class GeneratePathAndNav extends Command {
 
-  LimeLightSubsystem limeLightSubsystem;
-  CommandSwerveDrivetrain drivetrain;
+  LimeLight_Subsystem limeLightSubsystem;
+  Swerve_Subsystem drivetrain;
 
   /** Creates a new GeneratePathAndNav. */
-  public GeneratePathAndNav(LimeLightSubsystem limeLightSubsystem, CommandSwerveDrivetrain drivetrain) {
+  public GeneratePathAndNav(LimeLight_Subsystem limeLightSubsystem, Swerve_Subsystem drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLightSubsystem = limeLightSubsystem;
     this.drivetrain = drivetrain;
@@ -37,13 +37,13 @@ public class GeneratePathAndNav extends Command {
   public void initialize() {
     // get the pose of the limelight
     Pose2d aprilTagPose = limeLightSubsystem.getRelative3dBotPose().toPose2d();
-    // Pose2d robotPose2d = drivetrain.getR
+    // Pose2d robotPose2d = 
 
     // Create a list of waypoints from poses. Each pose represents one waypoint.
     // The rotation component of the pose should be the direction of travel. Do not
     // use holonomic rotation.
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        /*robot pose */ aprilTagPose);
+        /*robotPose2d ,*/ aprilTagPose);
 
     PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this
                                                                                            // path.
