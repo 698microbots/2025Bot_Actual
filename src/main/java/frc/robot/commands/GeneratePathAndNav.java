@@ -37,13 +37,13 @@ public class GeneratePathAndNav extends Command {
   public void initialize() {
     // get the pose of the limelight
     Pose2d robotPose2d = limeLightSubsystem.getRelative3dBotPose().toPose2d();
-    // Pose2d aprilTagPose2d = limeLightSubsystem.getAprilTagID()
+    Pose2d aprilTagPose2d = limeLightSubsystem.getAprilTagPose3d().toPose2d();
 
     // Create a list of waypoints from poses. Each pose represents one waypoint.
     // The rotation component of the pose should be the direction of travel. Do not
     // use holonomic rotation.
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        robotPose2d /*, aprilTagPose2d */);
+        robotPose2d , aprilTagPose2d);
 
     PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this
                                                                                            // path.
@@ -64,6 +64,8 @@ public class GeneratePathAndNav extends Command {
 
     // Prevent the path from being flipped if the coordinates are already correct
     path.preventFlipping = true;
+
+    drivetrain.followPathCommand(path.name);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
