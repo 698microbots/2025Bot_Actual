@@ -4,29 +4,52 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import com.pathplanner.lib.config.RobotConfig;
+
+import frc.robot.generated.TunerConstants;
+
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants
+ * should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  //test
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-  public static final int elevator_motor_1 = 1;
-  public static final int elevator_motor_2 = 2;
-  public static final int dropper_id = 3;
-  public static final int lidar_id = 4;
-  public static final int revId = 5;
+
+  public static double numSeconds(double seconds) { // does the calculations for how many 20ms are in a second, compare
+                                                    // it to a counter adds every 20ms
+    return seconds * 50;
+  }
+
+  public static final int elevator_motor_1 = 20;
+  public static final int elevator_motor_2 = 21;
+  public static final int dropper_id = 22;
+  public static final int lidar_id = 23;
+  public static final int revId = 4;
   public static final int rotation_sensor = 6;
-  public static final int joystick_1 = 7;
-  public static final int joystick_2 = 8;
-  public static double l2 = 5;
-  public static double l3 = 6;
-  public static double l4 = 7;
+  public static final int joystick_1 = 0;
+  public static final int joystick_2 = 1;
+  public static final double l2 = 5; // change this to say like coralL2 to not get confused
+  public static final double l3 = 6;
+  public static final double l4 = 7;
+  public static final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired
+                                                                                            // top speed
+  public static final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per
+                                                                                                // second max angular
+                                                                                                // velocity
+  public static final int dropperMotorID = 2;
+
 }
-//hello

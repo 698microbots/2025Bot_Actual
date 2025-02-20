@@ -8,18 +8,17 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Dropper;
+import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class LiftCommand extends Command {
-  private PIDController pidcontroller = new PIDController(.5, 0, 0);
-  private final DutyCycleEncoder encoder = new DutyCycleEncoder(Constants.rotation_sensor);
-  private Elevator_subsystem elevator = new Elevator_subsystem();
-  double output = 0;
+public class ElevatorLift_Command extends Command {
+  private final PIDController pidcontroller = new PIDController(.5, 0, 0);
+  private final Elevator_subsystem elevator;
+  private double output = 0;
   private double level = 0;
   /** Creates a new l1_lift_command. */
-  public LiftCommand(Elevator_subsystem elevator, Dropper dropper, double level) {
+  public ElevatorLift_Command(Elevator_subsystem elevator, Dropper_Subsystem dropper, double level) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.elevator = elevator;
     this.level = level;
@@ -32,7 +31,7 @@ public class LiftCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    output = pidcontroller.calculate(encoder.get(), level);
+    output = pidcontroller.calculate(elevator.getPosition(), level);
     elevator.setspeed(output);
   }
 

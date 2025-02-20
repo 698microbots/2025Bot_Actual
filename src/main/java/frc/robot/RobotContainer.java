@@ -5,14 +5,22 @@
 package frc.robot;
 
 import frc.robot.commands.Autos;
+import frc.robot.commands.ExElevator;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.LiftCommand;
-import frc.robot.subsystems.Dropper;
+import frc.robot.commands.TagAlign_Command;
+import frc.robot.commands.ElevatorLift_Command;
+import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Swerve_Subsystem;
+import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.LimeLightSubsystem;
-import frc.robot.subsystems.light_subsystem;
-import frc.robot.subsystems.sensor_subsystem;
+import frc.robot.subsystems.LimeLight_Subsystem;
+
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -27,17 +35,28 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  // private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+  .withDeadband(Constants.MaxSpeed * 0.1).withRotationalDeadband(Constants.MaxAngularRate * 0.1); // Add a 10% deadband
+// Use open-loop control for drive motors
+  
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
-  public Dropper dropper = new Dropper();
+  
+  
+  public Dropper_Subsystem dropper = new Dropper_Subsystem();
   public Elevator_subsystem elevator = new Elevator_subsystem();
-  public light_subsystem light = new light_subsystem();
-  public sensor_subsystem sensor = new sensor_subsystem();
-  public LimeLightSubsystem limelight = new LimeLightSubsystem();
+  public LimeLight_Subsystem limelight = new LimeLight_Subsystem();
+  public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
+
+
+    /* Path follower */
+    private final SendableChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+        autoChooser = AutoBuilder.buildAutoChooser("New Auto");
+        SmartDashboard.putData("Auto Mode", autoChooser);    
+
     configureBindings();
   }
 
@@ -57,9 +76,23 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    joystick_1.a().whileTrue(new LiftCommand(elevator, dropper,Constants.l2));
-    joystick_1.b().whileTrue(new LiftCommand(elevator, dropper,Constants.l3));
-    joystick_1.y().whileTrue(new LiftCommand(elevator, dropper,Constants.l4));
+    // joystick_1.a().whileTrue(new LiftCommand(elevator, dropper,Constants.l2));
+    // joystick_1.b().whileTrue(new LiftCommand(elevator, dropper,Constants.l3));
+    // joystick_1.y().whileTrue(new LiftCommand(elevator, dropper,Constants.l4));
+    drivetrain.setDefaultCommand(
+      // Drivetrain will execute this command periodically
+      drivetrain.applyRequest(() ->
+          drive.withVelocityX(-joystick_1.getLeftY() * Constants.MaxSpeed) // Drive forward with negative Y (forward)
+              .withVelocityY(-joystick_1.getLeftX() * Constants.MaxSpeed) // Drive left with negative X (left)
+              .withRotationalRate(-joystick_1.getRightX() * Constants.MaxAngularRate) // Drive counterclockwise with negative X (left)
+      )
+  );
+  
+      // reset the field-centric heading on left bumper press
+      joystick_1.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+      joystick_1.b().whileTrue(new ExElevator());
+
+ 
   }
 
   /**
@@ -69,6 +102,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    // return Autos.exampleAuto(m_exampleSubsystem);
+    return autoChooser.getSelected();
   }
 }

@@ -10,6 +10,8 @@ import com.ctre.phoenix.led.CANdleConfiguration;
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.hardware.CANrange;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -17,44 +19,55 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ReactedLED_Subsystem extends SubsystemBase {
 
   /** Creates a new LED. */
-  CANdle candle = new CANdle(0);
+  CANdle CANdle = new CANdle(0);
   CANrange CANrange = new CANrange(0);
+  NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
+  
 
-  double distance = CANrange.getDistance().getValueAsDouble();
   
   public ReactedLED_Subsystem() {
-    CANdleConfiguration config = new CANdleConfiguration();
-    config.stripType = LEDStripType.RGB; //set strip type RGB
-    config.brightnessScalar = 0.5;
-    CANrangeConfiguration configs = new CANrangeConfiguration();
-    config.configAllSettings(config);
+    CANdleConfiguration configCANdle = new CANdleConfiguration();
+    CANrangeConfiguration configCANrange = new CANrangeConfiguration();
+
+    configCANdle.stripType = LEDStripType.RGB;
+    configCANdle.brightnessScalar = 0.5;
+    CANdle.configAllSettings(configCANdle);
+    CANrange.getConfigurator().apply(configCANrange);
   }
 
   public double returnDistance(){
     return CANrange.getDistance().getValueAsDouble();
   }
 
-  public void setBrightness() {
-    candle.setLEDs(0,0,0);
-  }
-
+  //TODO : Figure out how many lights is the end index (count paramter)
   public void setColor(int r, int g, int b) {
-    candle.setLEDs(r,g,b);
+    CANdle.setLEDs(r, g, b, 0, 0, 50);
   }
 
-  /*public void setColorWithString(String chosenColor) {
+  public void setColorWithString(String chosenColor) {
     if (chosenColor == "Yellow") {
-      candle.setLEDs(255,255,0);
+      CANdle.setLEDs(255,255,0, 0, 0, 50);
     }else if (chosenColor == "Green") {
-      candle.setLEDs(0,255,0);
-    }else{
-      candle.setLEDs(255,0,0);
+      CANdle.setLEDs(0,255,0, 0, 0, 50);
+    }else if (chosenColor == "Red"){
+      CANdle.setLEDs(255,0,0, 0, 0, 50);
     }
-  }*/
+  }
+
+  public boolean visibleTarget(){
+    //"tv" key is if target exists(1 = yes, 0 = no)
+    if (limelight.getEntry("tv").getDouble(0) == 1){
+      return true;
+    } else{
+      return false;
+    }
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    
   }
 
 }
