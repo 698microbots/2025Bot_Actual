@@ -18,13 +18,13 @@ import frc.robot.subsystems.Swerve_Subsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class GeneratePathAndNav extends Command {
+public class GeneratePath_Cmd extends Command {
 
   LimeLight_Subsystem limeLightSubsystem;
   Swerve_Subsystem drivetrain;
 
   /** Creates a new GeneratePathAndNav. */
-  public GeneratePathAndNav(LimeLight_Subsystem limeLightSubsystem, Swerve_Subsystem drivetrain) {
+  public GeneratePath_Cmd(LimeLight_Subsystem limeLightSubsystem, Swerve_Subsystem drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLightSubsystem = limeLightSubsystem;
     this.drivetrain = drivetrain;
