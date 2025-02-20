@@ -391,22 +391,20 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
-    public Command followPathCommand(String pathName) {
+    public <T, U> Command followPathCommand(String pathhName) {
         LimeLight_Subsystem limelight = new LimeLight_Subsystem();
 
         RobotConfig robotConfig = RobotConfig.fromGUISettings();
         int swerveNumModules = robotConfig.numModules;
         // BiConsumer<ChassisSpeeds, DriveFeedforwards> output = new 
-        BiConsumer<driveRobotRelative(getState().Speeds), DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules)>
 
         try {
-            PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-
-            return new FollowPathCommand(
-                    path,
-                    () -> getState().Pose, // Robot pose supplier
-                    () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                    BiConsumer<driveRobotRelative(getState().Speeds),DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules)> // Method that will drive the
+                        return new FollowPathCommand(
+                            pathhName,
+                                () -> getState().Pose, // Robot pose supplier
+                                () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                                // BiConsumer(driveRobotRelative(getState().Speeds),DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules), /*out*/ // Method that will drive the
+                                BiConsumer(driveRobotRelative(getState().Speeds),DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules), // Method that will drive the
                                                                                         // robot given ROBOT RELATIVE
                                                                                         // ChassisSpeeds, AND
                     // feedforwards
@@ -430,7 +428,7 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
                         return false;
                     },
                     this // Reference to this subsystem to set requirements
-            );
+                        ));
        } catch (Exception e) {
             DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
             return Commands.none();
