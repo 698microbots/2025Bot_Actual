@@ -391,49 +391,49 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
-    public <T, U> Command followPathCommand(String pathhName) {
-        LimeLight_Subsystem limelight = new LimeLight_Subsystem();
+    // public <T, U> Command followPathCommand(String pathhName) {
+    //     LimeLight_Subsystem limelight = new LimeLight_Subsystem();
 
-        RobotConfig robotConfig = RobotConfig.fromGUISettings();
-        int swerveNumModules = robotConfig.numModules;
-        // BiConsumer<ChassisSpeeds, DriveFeedforwards> output = new 
+    //     RobotConfig robotConfig = RobotConfig.fromGUISettings();
+    //     int swerveNumModules = robotConfig.numModules;
+    //     // BiConsumer<ChassisSpeeds, DriveFeedforwards> output = new 
 
-        try {
-                        return new FollowPathCommand(
-                            pathhName,
-                                () -> getState().Pose, // Robot pose supplier
-                                () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                                // BiConsumer(driveRobotRelative(getState().Speeds),DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules), /*out*/ // Method that will drive the
-                                BiConsumer(driveRobotRelative(getState().Speeds),DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules), // Method that will drive the
-                                                                                        // robot given ROBOT RELATIVE
-                                                                                        // ChassisSpeeds, AND
-                    // feedforwards
-                            new PPHolonomicDriveController( // PPHolonomicController is the built in path following
-                                                            // controller
-                                                            // for holonomic drive trains
-                                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-                            ),
-                    robotConfig, // The robot configuration
-                    () -> {
-                        // Boolean supplier that controls when the path will be mirrored for the red
-                        // alliance
-                        // This will flip the path being followed to the red side of the field.
-                        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    //     try {
+    //                     return new FollowPathCommand(
+    //                         pathhName,
+    //                             () -> getState().Pose, // Robot pose supplier
+    //                             () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+    //                             // BiConsumer(driveRobotRelative(getState().Speeds),DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules), /*out*/ // Method that will drive the
+    //                             BiConsumer(driveRobotRelative(getState().Speeds),DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules), // Method that will drive the
+    //                                                                                     // robot given ROBOT RELATIVE
+    //                                                                                     // ChassisSpeeds, AND
+    //                 // feedforwards
+    //                         new PPHolonomicDriveController( // PPHolonomicController is the built in path following
+    //                                                         // controller
+    //                                                         // for holonomic drive trains
+    //                                 new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+    //                                 new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+    //                         ),
+    //                 robotConfig, // The robot configuration
+    //                 () -> {
+    //                     // Boolean supplier that controls when the path will be mirrored for the red
+    //                     // alliance
+    //                     // This will flip the path being followed to the red side of the field.
+    //                     // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                        var alliance = DriverStation.getAlliance();
-                        if (alliance.isPresent()) {
-                            return alliance.get() == DriverStation.Alliance.Red;
-                        }
-                        return false;
-                    },
-                    this // Reference to this subsystem to set requirements
-                        ));
-       } catch (Exception e) {
-            DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
-            return Commands.none();
-        }
-    }
+    //                     var alliance = DriverStation.getAlliance();
+    //                     if (alliance.isPresent()) {
+    //                         return alliance.get() == DriverStation.Alliance.Red;
+    //                     }
+    //                     return false;
+    //                 },
+    //                 this // Reference to this subsystem to set requirements
+    //                     ));
+    //    } catch (Exception e) {
+    //         DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+    //         return Commands.none();
+    //     }
+    // }
 
     public void driveRobotRelative(ChassisSpeeds speeds) {
         // Note: it is important to not discretize speeds before or after
