@@ -6,15 +6,16 @@ package frc.robot;
 
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.TagAlign_Command;
-import frc.robot.commands.ElevatorLift_Command;
+import frc.robot.commands.TagAlign_Cmd;
 import frc.robot.generated.TunerConstants;
+import frc.robot.generated.TunerConstantsOLD;
 import frc.robot.subsystems.Swerve_Subsystem;
 import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
 
+import com.ctre.phoenix.Logger;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -39,7 +40,8 @@ public class RobotContainer {
 // Use open-loop control for drive motors
   
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
-  
+  private final CommandXboxController joystick_3 = new CommandXboxController(Constants.joystick_3);
+
   
   public Dropper_Subsystem dropper = new Dropper_Subsystem();
   public Elevator_subsystem elevator = new Elevator_subsystem();
@@ -75,9 +77,7 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    // joystick_1.a().whileTrue(new LiftCommand(elevator, dropper,Constants.l2));
-    // joystick_1.b().whileTrue(new LiftCommand(elevator, dropper,Constants.l3));
-    // joystick_1.y().whileTrue(new LiftCommand(elevator, dropper,Constants.l4));
+
     drivetrain.setDefaultCommand(
       // Drivetrain will execute this command periodically
       drivetrain.applyRequest(() ->
@@ -88,9 +88,9 @@ public class RobotContainer {
   );
   
       // reset the field-centric heading on left bumper press
-      joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+    joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    joystick_1.b().whileTrue(new TagAlign_Command(limelight, drivetrain));
+    joystick_1.b().whileTrue(new TagAlign_Cmd(limelight, drivetrain));
   }
 
   /**

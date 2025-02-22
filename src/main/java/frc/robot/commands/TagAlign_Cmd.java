@@ -13,7 +13,7 @@ import frc.robot.subsystems.Swerve_Subsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TagAlign_Command extends Command {
+public class TagAlign_Cmd extends Command {
   /** Creates a new LineUpToTag. */
   private int counter = 0;
   private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric();
@@ -26,7 +26,7 @@ public class TagAlign_Command extends Command {
 
   private LimeLight_Subsystem limelight;
   private Swerve_Subsystem drivetrain;
-  public TagAlign_Command(LimeLight_Subsystem limelight, Swerve_Subsystem drivetrain) {
+  public TagAlign_Cmd(LimeLight_Subsystem limelight, Swerve_Subsystem drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limelight = limelight;
     this.drivetrain = drivetrain;

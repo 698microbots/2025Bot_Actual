@@ -9,8 +9,10 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.jni.SwerveJNI.ModuleState;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -19,6 +21,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -29,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
-import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.generated.TunerConstantsOLD.TunerSwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -50,8 +53,8 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
     private TalonFX Tmotor4 = new TalonFX(7);      
 
     //need to find supplyThreshold equivalent
-    private CurrentLimitsConfigs config1 = new CurrentLimitsConfigs().withStatorCurrentLimit(40);
-    private CurrentLimitsConfigs config2 = new CurrentLimitsConfigs().withStatorCurrentLimit(30);
+    private CurrentLimitsConfigs config1 = new CurrentLimitsConfigs().withSupplyCurrentLimit(40);
+    private CurrentLimitsConfigs config2 = new CurrentLimitsConfigs().withSupplyCurrentLimit(30);
     
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
@@ -247,6 +250,15 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
         }
     }  
 
+    public SwerveModuleState[] getSwerveModTarget(){
+        SwerveModuleState[] states = new SwerveModuleState[4];
+        for (int i = 0; i < 4 ; i++){
+            states[i] = getState().ModuleTargets[i];
+        }
+        return states;
+        
+
+    }
 
     public void setPowerLimits(){
         config1.withStatorCurrentLimitEnable(true);
