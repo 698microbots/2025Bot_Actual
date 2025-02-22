@@ -396,19 +396,17 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
 
     //     RobotConfig robotConfig = RobotConfig.fromGUISettings();
     //     int swerveNumModules = robotConfig.numModules;
-    //     // BiConsumer<ChassisSpeeds, DriveFeedforwards> output = new 
 
     //     try {
     //                     return new FollowPathCommand(
     //                         pathhName,
     //                             () -> getState().Pose, // Robot pose supplier
     //                             () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    //                             // BiConsumer(driveRobotRelative(getState().Speeds),DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules), /*out*/ // Method that will drive the
-    //                             BiConsumer(driveRobotRelative(getState().Speeds),DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules), // Method that will drive the
+    //                             (driveRobotRelative(getState().Speeds), DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules))// Method that will drive the
     //                                                                                     // robot given ROBOT RELATIVE
     //                                                                                     // ChassisSpeeds, AND
     //                 // feedforwards
-    //                         new PPHolonomicDriveController( // PPHolonomicController is the built in path following
+    //                         ,new PPHolonomicDriveController( // PPHolonomicController is the built in path following
     //                                                         // controller
     //                                                         // for holonomic drive trains
     //                                 new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
@@ -428,7 +426,7 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
     //                     return false;
     //                 },
     //                 this // Reference to this subsystem to set requirements
-    //                     ));
+    //                     );
     //    } catch (Exception e) {
     //         DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
     //         return Commands.none();
