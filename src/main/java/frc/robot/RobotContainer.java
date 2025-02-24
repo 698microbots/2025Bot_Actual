@@ -55,13 +55,13 @@ public class RobotContainer {
   public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
   public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
     /* Path follower */
-    // private final SendableChooser<Command> autoChooser;
+    private final SendableChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     
-        // autoChooser = AutoBuilder.buildAutoChooser("New Auto");
-        // SmartDashboard.putData("Auto Mode", autoChooser);    
+        autoChooser = AutoBuilder.buildAutoChooser("New Auto");
+        SmartDashboard.putData("Auto Mode", autoChooser);    
 
     configureBindings();
   }
@@ -112,7 +112,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return Autos.exampleAuto(m_exampleSubsystem);
-    // return autoChooser.getSelected();
-    return new PathPlannerAuto("New Auto");
+    return autoChooser.getSelected();
+    // return new PathPlannerAuto("New Auto");
   }
 }
