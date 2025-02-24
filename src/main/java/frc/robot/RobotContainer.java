@@ -5,8 +5,11 @@
 package frc.robot;
 
 import frc.robot.commands.Autos;
+import frc.robot.commands.Drop_Cmd;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ManualLift_Cmd;
 import frc.robot.commands.TagAlign_Cmd;
+import frc.robot.commands.testReleaseCoral;
 import frc.robot.generated.TunerConstants;
 import frc.robot.generated.TunerConstantsOLD;
 import frc.robot.subsystems.Swerve_Subsystem;
@@ -14,10 +17,12 @@ import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
+import frc.robot.subsystems.ReactedLED_Subsystem;
 
 import com.ctre.phoenix.Logger;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,6 +45,7 @@ public class RobotContainer {
 // Use open-loop control for drive motors
   
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
+  private final CommandXboxController joystick_2 = new CommandXboxController(Constants.joystick_2);
   private final CommandXboxController joystick_3 = new CommandXboxController(Constants.joystick_3);
 
   
@@ -47,16 +53,15 @@ public class RobotContainer {
   public Elevator_subsystem elevator = new Elevator_subsystem();
   public LimeLight_Subsystem limelight = new LimeLight_Subsystem();
   public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
-
-
+  public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
     /* Path follower */
-    private final SendableChooser<Command> autoChooser;
+    // private final SendableChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
-        autoChooser = AutoBuilder.buildAutoChooser("New Auto");
-        SmartDashboard.putData("Auto Mode", autoChooser);    
+    
+        // autoChooser = AutoBuilder.buildAutoChooser("New Auto");
+        // SmartDashboard.putData("Auto Mode", autoChooser);    
 
     configureBindings();
   }
@@ -77,6 +82,9 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
+    dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
+
+    elevator.setDefaultCommand(new ManualLift_Cmd(elevator, () -> -joystick_2.getLeftY()));
 
     drivetrain.setDefaultCommand(
       // Drivetrain will execute this command periodically
@@ -91,6 +99,9 @@ public class RobotContainer {
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
     joystick_1.b().whileTrue(new TagAlign_Cmd(limelight, drivetrain));
+
+    joystick_2.a().whileTrue(new Drop_Cmd(dropper));
+
   }
 
   /**
@@ -101,6 +112,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return Autos.exampleAuto(m_exampleSubsystem);
-    return autoChooser.getSelected();
+    // return autoChooser.getSelected();
+    return new PathPlannerAuto("New Auto");
   }
 }

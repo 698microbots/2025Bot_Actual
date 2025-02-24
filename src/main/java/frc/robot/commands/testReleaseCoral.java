@@ -4,17 +4,22 @@
 
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Dropper_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Drop_Cmd extends Command {
-  /** Creates a new DropCoral. */
-  private Dropper_Subsystem dropperSubsystem;
-  public Drop_Cmd(Dropper_Subsystem dropperSubsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.\
-    this.dropperSubsystem = dropperSubsystem;
-    addRequirements(dropperSubsystem);
+public class testReleaseCoral extends Command {
+  /** Creates a new testReleaseCoral. */
+  private Dropper_Subsystem dropper;
+  private Supplier<Double> x;
+  public testReleaseCoral(Dropper_Subsystem dropper, Supplier<Double> x) {
+    // Use addRequirements() here to declare subsystem dependencies.
+  this.dropper = dropper;
+  this.x = x;
+  addRequirements(dropper);
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +29,7 @@ public class Drop_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    dropperSubsystem.dropCoral();
+    dropper.testDropCoral(x.get());
   }
 
   // Called once the command ends or is interrupted.
@@ -35,6 +40,5 @@ public class Drop_Cmd extends Command {
   @Override
   public boolean isFinished() {
     return false;
-    
   }
 }
