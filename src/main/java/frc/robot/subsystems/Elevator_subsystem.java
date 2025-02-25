@@ -15,15 +15,31 @@ public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
   private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.revId);
-  /** Creates a new slevator. */
-  public Elevator_subsystem() {}
+  DigitalInput toplimitSwitch = new DigitalInput(0);
+  DigitalInput bottomlimitSwitch = new DigitalInput(1);
 
-  public void setspeed(double speed) {
-    motor1.set(speed);
-    motor2.set(speed);
+  /** Creates a new slevator. */
+  public Elevator_subsystem() {
   }
 
-  public double getPosition(){
+  public void setspeed(double speed) {
+    if (toplimitSwitch.get()) {
+      motor1.set(0);
+      motor2.set(0);
+    } else {
+      motor1.set(speed);
+      motor2.set(speed);
+    }
+    if (bottomlimitSwitch.get()) {
+      motor1.set(0);
+      motor2.set(0);
+    } else {
+      motor1.set(speed);
+      motor2.set(speed);
+    }
+  }
+
+  public double getPosition() {
     return revEncoder.get();
   }
 
