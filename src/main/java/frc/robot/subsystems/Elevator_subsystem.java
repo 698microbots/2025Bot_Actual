@@ -14,7 +14,7 @@ import frc.robot.Constants;
 public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
-  private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.revId);
+  private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.revId, 2, 0);
   DigitalInput toplimitSwitch = new DigitalInput(0);
   DigitalInput bottomlimitSwitch = new DigitalInput(1);
 
