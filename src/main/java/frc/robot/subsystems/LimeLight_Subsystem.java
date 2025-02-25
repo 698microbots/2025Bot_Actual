@@ -80,6 +80,29 @@ public class LimeLight_Subsystem extends SubsystemBase {
     return true;
   }
 
+  public Pose3d getAprilTagPose3d(){
+    targetPose.getDoubleArray(new double[6]);
+    //position
+    double x = poseList[0];
+    double y = poseList[1];
+    double z = poseList[2];
+    //rotation
+    double roll = poseList[3];
+    double pitch = poseList[4];
+    double yaw = poseList[5];
+
+    Pose3d pose3d = new Pose3d(
+    x,
+    y,
+    z,
+    new Rotation3d(
+      roll,
+      pitch,
+      yaw
+    ));
+    return pose3d;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

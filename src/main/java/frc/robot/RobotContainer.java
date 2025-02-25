@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.Autos;
+import frc.robot.commands.ExElevator;
 import frc.robot.commands.Drop_Command;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TagAlign_Command;
@@ -117,7 +118,7 @@ public class RobotContainer {
     // reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    joystick_1.b().whileTrue(new TagAlign_Command(limelight, drivetrain));
+ 
   }
 
   /**
