@@ -13,20 +13,20 @@ import frc.robot.subsystems.Swerve_Subsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TagAlign_Command extends Command {
+public class TagAlign_Cmd extends Command {
   /** Creates a new LineUpToTag. */
   private int counter = 0;
   private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric();
   private final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
 
   //pid and constants
-  private final PIDController pidControllerX = new PIDController(1, 0.1, 0);
-  private final PIDController pidControllerY = new PIDController(1, 0.1, 0);
+  private final PIDController pidControllerX = new PIDController(.3, 0.01, 0);
+  private final PIDController pidControllerY = new PIDController(.03, 0.01, 0);
   private final PIDController pidControllerOmega = new PIDController(.05, .01, 0);
 
   private LimeLight_Subsystem limelight;
   private Swerve_Subsystem drivetrain;
-  public TagAlign_Command(LimeLight_Subsystem limelight, Swerve_Subsystem drivetrain) {
+  public TagAlign_Cmd(LimeLight_Subsystem limelight, Swerve_Subsystem drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limelight = limelight;
     this.drivetrain = drivetrain;
@@ -46,7 +46,7 @@ public class TagAlign_Command extends Command {
     double omegaSpeed = pidControllerOmega.calculate(limelight.getH_angle(), 0);
 
     //if there are any visible targets 
-    if (limelight.getHasTargets()){
+    if (!limelight.getHasTargets()){
 
       //counter will increment every 20ms camera does not see apriltag
       counter++;
@@ -65,11 +65,24 @@ public class TagAlign_Command extends Command {
 
       //PID setpoint for robot to be 1.3 meters away from the tag in the x direction
       double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -1.3);
-      //PID setpoint for robot to be 0 meters away from the tag in the y direction
+      // System.out.println("xSpeed " + xSpeed);
+      // //PID setpoint for robot to be 0 meters away from the tag in the y direction
       double ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
+      // System.out.println("ySpeed " + ySpeed);
+      System.out.println("Rotational Rate" + omegaSpeed);
+      // //set all the calculated speeds to the robot 
 
-      //set all the calculated speeds to the robot 
-      drivetrain.setControl(robotCentric.withVelocityX(-xSpeed).withVelocityY(ySpeed).withRotationalRate(omegaSpeed));
+      if (Math.abs(xSpeed) < .02) {
+        xSpeed = 0;
+      }
+
+      if (Math.abs(ySpeed) < .02){
+        ySpeed = 0;
+      }
+
+       ySpeed = 0;
+       omegaSpeed = 0;      
+      drivetrain.setControl(robotCentric.withVelocityX(xSpeed).withVelocityY(-ySpeed).withRotationalRate(omegaSpeed));
   }
 }
 

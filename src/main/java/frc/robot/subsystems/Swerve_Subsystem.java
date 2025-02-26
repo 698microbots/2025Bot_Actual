@@ -10,8 +10,10 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.jni.SwerveJNI.ModuleState;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.config.PIDConstants;
@@ -26,8 +28,6 @@ import com.pathplanner.lib.util.DriveFeedforwards;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -39,7 +39,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants;
+
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -60,10 +60,10 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
     private TalonFX Tmotor3 = new TalonFX(4);
     private TalonFX Tmotor4 = new TalonFX(7);
 
-    // need to find supplyThreshold equivalent
+    //need to find supplyThreshold equivalent
     private CurrentLimitsConfigs config1 = new CurrentLimitsConfigs().withStatorCurrentLimit(40);
     private CurrentLimitsConfigs config2 = new CurrentLimitsConfigs().withStatorCurrentLimit(30);
-
+    
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -168,26 +168,6 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
             }
             configureAutoBuilder();
             setPowerLimits();
-            RobotConfig config = null;
-            try {
-                config = RobotConfig.fromGUISettings();
-            } catch (Exception e) {
-                // Handle exception as needed
-                e.printStackTrace();
-            }
-    
-            setpointGenerator = new SwerveSetpointGenerator(
-                config, // The robot configuration. This is the same config used for generating
-                        // trajectories and running path following commands.
-                Units.rotationsToRadians(10.0) // The max rotation velocity of a swerve module in radians per second.
-                                               // This should probably be stored in your Constants file
-        );
-
-        // Initialize the previous setpoint to the robot's current speeds & module
-        // states
-        ChassisSpeeds currentSpeeds = getState().Speeds; // Method to get current robot-relative chassis speeds
-        SwerveModuleState[] currentStates = getState().ModuleStates; // Method to get the current swerve module states
-        previousSetpoint = new SwerveSetpoint(currentSpeeds, currentStates, DriveFeedforwards.zeros(config.numModules));
     }
 
     /**
@@ -289,7 +269,8 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
         }
     }
 
-    public void setPowerLimits() {
+
+    public void setPowerLimits(){
         config1.withStatorCurrentLimitEnable(true);
         config2.withStatorCurrentLimitEnable(true); // causes the current limits to set
 
@@ -391,64 +372,22 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
-    // public <T, U> Command followPathCommand(String pathhName) {
-    //     LimeLight_Subsystem limelight = new LimeLight_Subsystem();
+ 
 
-    //     RobotConfig robotConfig = RobotConfig.fromGUISettings();
-    //     int swerveNumModules = robotConfig.numModules;
-    //     // BiConsumer<ChassisSpeeds, DriveFeedforwards> output = new 
-
-    //     try {
-    //                     return new FollowPathCommand(
-    //                         pathhName,
-    //                             () -> getState().Pose, // Robot pose supplier
-    //                             () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    //                             // BiConsumer(driveRobotRelative(getState().Speeds),DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules), /*out*/ // Method that will drive the
-    //                             BiConsumer(driveRobotRelative(getState().Speeds),DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules), // Method that will drive the
-    //                                                                                     // robot given ROBOT RELATIVE
-    //                                                                                     // ChassisSpeeds, AND
-    //                 // feedforwards
-    //                         new PPHolonomicDriveController( // PPHolonomicController is the built in path following
-    //                                                         // controller
-    //                                                         // for holonomic drive trains
-    //                                 new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-    //                                 new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-    //                         ),
-    //                 robotConfig, // The robot configuration
-    //                 () -> {
-    //                     // Boolean supplier that controls when the path will be mirrored for the red
-    //                     // alliance
-    //                     // This will flip the path being followed to the red side of the field.
-    //                     // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-    //                     var alliance = DriverStation.getAlliance();
-    //                     if (alliance.isPresent()) {
-    //                         return alliance.get() == DriverStation.Alliance.Red;
-    //                     }
-    //                     return false;
-    //                 },
-    //                 this // Reference to this subsystem to set requirements
-    //                     ));
-    //    } catch (Exception e) {
-    //         DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
-    //         return Commands.none();
-    //     }
+    // public void driveRobotRelative(ChassisSpeeds speeds) {
+    //     // Note: it is important to not discretize speeds before or after
+    //     // using the setpoint generator, as it will discretize them for you
+    //     previousSetpoint = setpointGenerator.generateSetpoint(
+    //             previousSetpoint, // The previous setpoint
+    //             speeds, // The desired target speeds
+    //             0.02 // The loop time of the robot code, in seconds
+    //     );
+    //     setModuleStates(previousSetpoint.moduleStates()); // Method that will drive the robot given target module states
     // }
 
-    public void driveRobotRelative(ChassisSpeeds speeds) {
-        // Note: it is important to not discretize speeds before or after
-        // using the setpoint generator, as it will discretize them for you
-        previousSetpoint = setpointGenerator.generateSetpoint(
-                previousSetpoint, // The previous setpoint
-                speeds, // The desired target speeds
-                0.02 // The loop time of the robot code, in seconds
-        );
-        setModuleStates(previousSetpoint.moduleStates()); // Method that will drive the robot given target module states
-    }
-
-    public void setModuleStates(SwerveModuleState[] moduleStates) {
-        // TODO - implement this
-    }
+    // public void setModuleStates(SwerveModuleState[] moduleStates) {
+    //     // TODO - implement this
+    // }
 
     /**
      * Adds a vision measurement to the Kalman Filter. This will correct the

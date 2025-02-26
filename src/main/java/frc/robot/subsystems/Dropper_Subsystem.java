@@ -22,7 +22,11 @@ public class Dropper_Subsystem extends SubsystemBase {
   public Dropper_Subsystem() {}
 
   public void dropCoral(){
-    dropperMotor.set(0.2);
+    dropperMotor.set(-.7);
+  }
+
+  public void testDropCoral(double speed){
+    dropperMotor.set(speed);
   }
 
   @Override

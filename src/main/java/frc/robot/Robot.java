@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -38,6 +39,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("Elevator Position", m_robotContainer.elevator.getPosition());
+    SmartDashboard.putNumber("Sensor Distance", m_robotContainer.reactedLeds.returnDistance());
+    SmartDashboard.putNumber("speed", Constants.MaxSpeed);
+
+    SmartDashboard.putNumber("Robot Pose X", m_robotContainer.limelight.getRelative3dBotPose().getX());
+    SmartDashboard.putNumber("Robot Pose Z", m_robotContainer.limelight.getRelative3dBotPose().getZ());
+    SmartDashboard.putBoolean("Has Target", m_robotContainer.limelight.getHasTargets());
+    SmartDashboard.putNumber("Angle", m_robotContainer.limelight.getH_angle());
+
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
