@@ -53,8 +53,8 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
     private TalonFX Tmotor4 = new TalonFX(7);      
 
     //need to find supplyThreshold equivalent
-    private CurrentLimitsConfigs config1 = new CurrentLimitsConfigs().withSupplyCurrentLimit(40).withSupplyCurrentLowerLimit(2);
-    private CurrentLimitsConfigs config2 = new CurrentLimitsConfigs().withSupplyCurrentLimit(30).withSupplyCurrentLowerLimit(2);
+    private CurrentLimitsConfigs config1 = new CurrentLimitsConfigs().withStatorCurrentLimit(40).withSupplyCurrentLowerLimit(30).withSupplyCurrentLowerTime(2);
+    private CurrentLimitsConfigs config2 = new CurrentLimitsConfigs().withStatorCurrentLimit(30).withSupplyCurrentLowerLimit(30).withSupplyCurrentLowerTime(2);
     
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;

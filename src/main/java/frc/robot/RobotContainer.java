@@ -55,9 +55,9 @@ public class RobotContainer {
   public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
   public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
     /* Path follower */
-    private final SendableChooser<Command> autoChooser;
+    private  SendableChooser<Command> autoChooser;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  // /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     
         autoChooser = AutoBuilder.buildAutoChooser("New Auto");
@@ -89,16 +89,16 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
       // Drivetrain will execute this command periodically
       drivetrain.applyRequest(() ->
-          drive.withVelocityX(-joystick_1.getLeftY() * Constants.MaxSpeed) // Drive forward with negative Y (forward)
-              .withVelocityY(-joystick_1.getLeftX() * Constants.MaxSpeed) // Drive left with negative X (left)
-              .withRotationalRate(-joystick_1.getRightX() * Constants.MaxAngularRate) // Drive counterclockwise with negative X (left)
+          drive.withVelocityX(-joystick_1.getLeftY() * Constants.MaxSpeed * .5) // Drive forward with negative Y (forward)
+              .withVelocityY(-joystick_1.getLeftX() * Constants.MaxSpeed * .5) // Drive left with negative X (left)
+              .withRotationalRate(-joystick_1.getRightX() * Constants.MaxAngularRate * .8) // Drive counterclockwise with negative X (left)
       )
   );
   
       // reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    joystick_1.b().whileTrue(new TagAlign_Cmd(limelight, drivetrain));
+    joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain));
 
     joystick_2.a().whileTrue(new Drop_Cmd(dropper));
 

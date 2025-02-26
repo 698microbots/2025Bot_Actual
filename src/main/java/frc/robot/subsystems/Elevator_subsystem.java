@@ -14,8 +14,10 @@ import frc.robot.Constants;
 public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
-  private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId);
+  // private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId);
+  private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId, 15, 2.7);
   /** Creates a new slevator. */
+  
   public Elevator_subsystem() {}
 
   public void setspeed(double speed) {
