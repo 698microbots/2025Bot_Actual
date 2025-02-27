@@ -5,16 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Dropper_Subsystem;
+import frc.robot.subsystems.Elevator_subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Drop_Command extends Command {
-  /** Creates a new DropCoral. */
-  private Dropper_Subsystem dropperSubsystem;
-  private int counter = 0;
-  public Drop_Command(Dropper_Subsystem dropper) {
-    // Use addRequirements() here to declare subsystem dependencies.\
-    this.dropperSubsystem = dropper;
+public class ExElevator extends Command {
+
+  Elevator_subsystem elevator = new Elevator_subsystem();
+  /** Creates a new ExElevator. */
+  public ExElevator() {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(elevator);
   }
 
   // Called when the command is initially scheduled.
@@ -24,8 +24,7 @@ public class Drop_Command extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    dropperSubsystem.dropCoral();
-    counter++;
+    elevator.setspeed(0.1);
   }
 
   // Called once the command ends or is interrupted.
@@ -35,11 +34,6 @@ public class Drop_Command extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (counter >= 5){
-      return true;
-    } else {
-      return false;
-    }
-    
+    return false;
   }
 }
