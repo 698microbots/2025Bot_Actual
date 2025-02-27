@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
@@ -394,29 +395,28 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
     public Command followPathCommand(String pathName) {
         LimeLight_Subsystem limelight = new LimeLight_Subsystem();
 
-        RobotConfig robotConfig = RobotConfig.fromGUISettings();
-        int swerveNumModules = robotConfig.numModules;
+        DriveFeedforwards driveFeedforwards = DriveFeedforwards.zeros(8);
         // BiConsumer<ChassisSpeeds, DriveFeedforwards> output = new 
-        BiConsumer<driveRobotRelative(getState().Speeds), DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules)>
+        BiConsumer<ChassisSpeeds, DriveFeedforwards> output = (speed, feedforward) -> {
+            driveRobotRelative(speed);
+        };
+        output.accept(getState().Speeds, driveFeedforwards);
+
 
         try {
             PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-
             return new FollowPathCommand(
                     path,
                     () -> getState().Pose, // Robot pose supplier
                     () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                    BiConsumer<driveRobotRelative(getState().Speeds),DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules)> // Method that will drive the
-                                                                                        // robot given ROBOT RELATIVE
-                                                                                        // ChassisSpeeds, AND
-                    // feedforwards
+                    output, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds, AND feedforwards
                             new PPHolonomicDriveController( // PPHolonomicController is the built in path following
                                                             // controller
                                                             // for holonomic drive trains
                                     new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
                                     new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
                             ),
-                    robotConfig, // The robot configuration
+                    RobotConfig.fromGUISettings(), // The robot configuration
                     () -> {
                         // Boolean supplier that controls when the path will be mirrored for the red
                         // alliance
