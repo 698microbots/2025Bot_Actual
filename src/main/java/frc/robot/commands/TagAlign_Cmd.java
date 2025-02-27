@@ -20,9 +20,12 @@ public class TagAlign_Cmd extends Command {
   private final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
 
   //pid and constants
-  private final PIDController pidControllerX = new PIDController(.3, 0.01, 0);
-  private final PIDController pidControllerY = new PIDController(.03, 0.01, 0);
-  private final PIDController pidControllerOmega = new PIDController(.05, .01, 0);
+  // private final PIDController pidControllerX = new PIDController(.3, 0.01, 0);
+  // private final PIDController pidControllerY = new PIDController(.03, 0.01, 0);
+  // private final PIDController pidControllerOmega = new PIDController(.05, .01, 0);
+  private final PIDController pidControllerX = new PIDController(.55, 0.1, 0);
+  private final PIDController pidControllerY = new PIDController(.55, 0.1, 0);
+  private final PIDController pidControllerOmega = new PIDController(.04, .01, 0);
 
   private LimeLight_Subsystem limelight;
   private Swerve_Subsystem drivetrain;
@@ -64,24 +67,28 @@ public class TagAlign_Cmd extends Command {
       //if the robot sees any apriltag (might have to change settings to get closest apriltag), do calculations
 
       //PID setpoint for robot to be 1.3 meters away from the tag in the x direction
-      double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -1.3);
-      // System.out.println("xSpeed " + xSpeed);
+      double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.7);
+      System.out.println("xSpeed " + xSpeed);
       // //PID setpoint for robot to be 0 meters away from the tag in the y direction
       double ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
-      // System.out.println("ySpeed " + ySpeed);
+      System.out.println("ySpeed " + ySpeed);
       System.out.println("Rotational Rate" + omegaSpeed);
       // //set all the calculated speeds to the robot 
 
-      if (Math.abs(xSpeed) < .02) {
+      if (Math.abs(pidControllerX.getError()) < .2) {
         xSpeed = 0;
       }
 
-      if (Math.abs(ySpeed) < .02){
+      if (Math.abs(pidControllerY.getError()) < .2){
         ySpeed = 0;
       }
 
-       ySpeed = 0;
-       omegaSpeed = 0;      
+      if (Math.abs(pidControllerOmega.getError()) < .5){
+        omegaSpeed = 0;
+      }
+
+      //  ySpeed = 0;
+      //  omegaSpeed = 0;      
       drivetrain.setControl(robotCentric.withVelocityX(xSpeed).withVelocityY(-ySpeed).withRotationalRate(omegaSpeed));
   }
 }
