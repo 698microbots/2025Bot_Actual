@@ -9,11 +9,11 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.LimeLightSubsystem;
+import frc.robot.subsystems.Swerve_Subsystem;
+import frc.robot.subsystems.LimeLight_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class LineUpToTag extends Command {
+public class TagAlign_Command extends Command {
   /** Creates a new LineUpToTag. */
   private int counter = 0;
   private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric();
@@ -24,13 +24,13 @@ public class LineUpToTag extends Command {
   private final PIDController pidControllerY = new PIDController(1, 0.1, 0);
   private final PIDController pidControllerOmega = new PIDController(.05, .01, 0);
 
-  private LimeLightSubsystem limeLightSubsystem;
-  private CommandSwerveDrivetrain drivetrain;
-  public LineUpToTag(LimeLightSubsystem limeLightSubsystem, CommandSwerveDrivetrain drivetrain) {
+  private LimeLight_Subsystem limelight;
+  private Swerve_Subsystem drivetrain;
+  public TagAlign_Command(LimeLight_Subsystem limelight, Swerve_Subsystem drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.limeLightSubsystem = limeLightSubsystem;
+    this.limelight = limelight;
     this.drivetrain = drivetrain;
-    addRequirements(limeLightSubsystem);
+    addRequirements(limelight);
     addRequirements(drivetrain);    
   }
 
@@ -43,10 +43,10 @@ public class LineUpToTag extends Command {
   public void execute() {
 
     //PID setpoint for the robot to be 0 degrees away from the apriltag
-    double omegaSpeed = pidControllerOmega.calculate(limeLightSubsystem.getH_angle(), 0);
+    double omegaSpeed = pidControllerOmega.calculate(limelight.getH_angle(), 0);
 
-    //if sees not see apriltag (ID = -1) start a timer, else do pid calculations
-    if (limeLightSubsystem.getAprilTagID() == -1){
+    //if there are any visible targets 
+    if (limelight.getHasTargets()){
 
       //counter will increment every 20ms camera does not see apriltag
       counter++;
@@ -64,9 +64,9 @@ public class LineUpToTag extends Command {
       //if the robot sees any apriltag (might have to change settings to get closest apriltag), do calculations
 
       //PID setpoint for robot to be 1.3 meters away from the tag in the x direction
-      double xSpeed = pidControllerX.calculate(limeLightSubsystem.getRelative3dBotPose().getZ(), -1.3);
+      double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -1.3);
       //PID setpoint for robot to be 0 meters away from the tag in the y direction
-      double ySpeed = pidControllerY.calculate(limeLightSubsystem.getRelative3dBotPose().getX(), 0);
+      double ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
 
       //set all the calculated speeds to the robot 
       drivetrain.setControl(robotCentric.withVelocityX(-xSpeed).withVelocityY(ySpeed).withRotationalRate(omegaSpeed));
@@ -75,7 +75,10 @@ public class LineUpToTag extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
+    
+  }
 
   // Returns true when the command should end.
   @Override

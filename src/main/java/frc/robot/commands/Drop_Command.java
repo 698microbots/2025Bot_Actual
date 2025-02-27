@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Dropper_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class DropCoralCommand extends Command {
+public class Drop_Command extends Command {
   /** Creates a new DropCoral. */
   private Dropper_Subsystem dropperSubsystem;
-  private int counter;
-  public DropCoralCommand(Dropper_Subsystem dropper) {
+  private int counter = 0;
+  public Drop_Command(Dropper_Subsystem dropper) {
     // Use addRequirements() here to declare subsystem dependencies.\
     this.dropperSubsystem = dropper;
   }
