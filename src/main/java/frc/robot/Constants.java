@@ -36,6 +36,7 @@ public final class Constants {
   public static final int elevator_motor_1 = 15;
   public static final int elevator_motor_2 = 14;
   public static final int lidar_id = 0;
+  public static final int revId = 4;
   public static final int dropperMotorID = 17;
   public static final int boreEncoderId = 0;
   public static final int joystick_1 = 0;
