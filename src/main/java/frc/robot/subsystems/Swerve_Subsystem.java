@@ -10,8 +10,10 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.jni.SwerveJNI.ModuleState;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.config.PIDConstants;
@@ -26,8 +28,6 @@ import com.pathplanner.lib.util.DriveFeedforwards;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -39,7 +39,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants;
+
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -61,10 +61,10 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain
     private TalonFX Tmotor3 = new TalonFX(4);
     private TalonFX Tmotor4 = new TalonFX(7);
 
-    // need to find supplyThreshold equivalent
+    //need to find supplyThreshold equivalent
     private CurrentLimitsConfigs config1 = new CurrentLimitsConfigs().withStatorCurrentLimit(40);
     private CurrentLimitsConfigs config2 = new CurrentLimitsConfigs().withStatorCurrentLimit(30);
-
+    
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -290,7 +290,8 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain
         }
     }
 
-    public void setPowerLimits() {
+
+    public void setPowerLimits(){
         config1.withStatorCurrentLimitEnable(true);
         config2.withStatorCurrentLimitEnable(true); // causes the current limits to set
 
@@ -448,9 +449,9 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain
         setModuleStates(previousSetpoint.moduleStates()); // Method that will drive the robot given target module states
     }
 
-    public void setModuleStates(SwerveModuleState[] moduleStates) {
-        // TODO - implement this
-    }
+    // public void setModuleStates(SwerveModuleState[] moduleStates) {
+    //     // TODO - implement this
+    // }
 
     /**
      * Adds a vision measurement to the Kalman Filter. This will correct the
