@@ -1,19 +1,22 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import java.lang.Math;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.core.CoreTalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule;
+import com.ctre.phoenix6.swerve.SwerveModule.ModuleRequest;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.ctre.phoenix6.swerve.jni.SwerveJNI.ModuleState;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.config.PIDConstants;
@@ -23,11 +26,14 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
-import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -39,7 +45,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
+import frc.robot.Constants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -61,10 +67,10 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain
     private TalonFX Tmotor3 = new TalonFX(4);
     private TalonFX Tmotor4 = new TalonFX(7);
 
-    //need to find supplyThreshold equivalent
+    // need to find supplyThreshold equivalent
     private CurrentLimitsConfigs config1 = new CurrentLimitsConfigs().withStatorCurrentLimit(40);
     private CurrentLimitsConfigs config2 = new CurrentLimitsConfigs().withStatorCurrentLimit(30);
-    
+
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -290,8 +296,7 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain
         }
     }
 
-
-    public void setPowerLimits(){
+    public void setPowerLimits() {
         config1.withStatorCurrentLimitEnable(true);
         config2.withStatorCurrentLimitEnable(true); // causes the current limits to set
 
@@ -393,31 +398,29 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
-    public <T, U> Command followPathCommand(String pathName) {
-        LimeLight_Subsystem limelight = new LimeLight_Subsystem();
+    public <T, U> Command followPathCommand(PathPlannerPath pathName) {
 
-        RobotConfig robotConfig = RobotConfig.fromGUISettings();
-        int swerveNumModules = robotConfig.numModules;
-
-        BiConsumer<ChassisSpeeds, DriveFeedforwards> outputs;
-        outputs.accept((getState().Speeds), DriveFeedforwards.zeros(RobotConfig.fromGUISettings().numModules));
+        BiConsumer<ChassisSpeeds, DriveFeedforwards> outputs = (speed, forwards) -> {
+            driveRobotRelative(speed);
+        };
+        outputs.accept((getState().Speeds), DriveFeedforwards.zeros(8));
 
         try {
-                        return new FollowPathCommand(
-                            pathName,
-                                () -> getState().Pose, // Robot pose supplier
-                                () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                                outputs// Method that will drive the
-                                                                                        // robot given ROBOT RELATIVE
-                                                                                        // ChassisSpeeds, AND
+            return new FollowPathCommand(
+                    pathName,
+                    () -> getState().Pose, // Robot pose supplier
+                    () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                    outputs// Method that will drive the
+                           // robot given ROBOT RELATIVE
+                           // ChassisSpeeds, AND
                     // feedforwards
-                            ,new PPHolonomicDriveController( // PPHolonomicController is the built in path following
-                                                            // controller
-                                                            // for holonomic drive trains
-                                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-                            ),
-                    robotConfig, // The robot configuration
+                    , new PPHolonomicDriveController( // PPHolonomicController is the built in path following
+                                                      // controller
+                                                      // for holonomic drive trains
+                            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                            new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+                    ),
+                    RobotConfig.fromGUISettings(), // The robot configuration
                     () -> {
                         // Boolean supplier that controls when the path will be mirrored for the red
                         // alliance
@@ -431,8 +434,8 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain
                         return false;
                     },
                     this // Reference to this subsystem to set requirements
-                        );
-       } catch (Exception e) {
+            );
+        } catch (Exception e) {
             DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
             return Commands.none();
         }
@@ -450,8 +453,47 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain
     }
 
     // public void setModuleStates(SwerveModuleState[] moduleStates) {
-    //     // TODO - implement this
+    // SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
+    // LimeLight_Subsystem limelight = new LimeLight_Subsystem();
+    // SwerveModuleState moduleState = new SwerveModuleState();
+    // double speed = moduleState.speedMetersPerSecond;
+    // Rotation2d angle = moduleState.angle;
+    // PIDController drivePID = new PIDController(.03, 0.01, 0); // TODO-tune thid
+    // PIDController pidControllerOmega = new PIDController(.05, .01, 0);
+    // feedforwards feedforwards = new Feedf
+    // setControl(m_pathApplyRobotSpeeds.withSpeeds(new ChassisSpeeds(cos(speed),
+    // sin(speed), Constants.MaxAngularRate))
+    // .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+    // .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons()))
+
+    // // tryparse
+
+    // // while (limelight.getH_angle().to != angle.v) {
+
+    // // }
     // }
+
+    public void setModuleStates(SwerveModuleState[] moduleStates) {
+        // SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates,
+        // Constants.MaxSpeed);
+
+        // for (SwerveModule mod : SwerveModule) {
+        // mod.setDesiredState(desiredStates[mod.moduleNumber], false);
+        // }
+        // SwerveModule.ModuleRequest moduleRequest = new ModuleRequest();
+
+        SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
+        SwerveModuleState moduleState = moduleStates[0];
+        double speed = moduleState.speedMetersPerSecond;
+        Rotation2d angle = moduleState.angle;
+        for (SwerveModule mod : getModules()){
+            mod.setDesiredState(moduleStates[mod], false);
+
+        }
+
+        setControl(robotCentric.withVelocityX(speed*cos(angle)).withVelocityY(0).withRotationalRate(0));
+
+    }
 
     /**
      * Adds a vision measurement to the Kalman Filter. This will correct the
