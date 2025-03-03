@@ -13,7 +13,7 @@ import frc.robot.subsystems.Elevator_subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorLift_Cmd extends Command {
-  private final PIDController pidcontroller = new PIDController(.5, 0, 0);
+  private final PIDController pidcontroller = new PIDController(.05, 0, 0);
   private final Elevator_subsystem elevator;
   private double output = 0;
   private double level = 0;
@@ -37,7 +37,9 @@ public class ElevatorLift_Cmd extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+  }
 
   // Returns true when the command should end.
   @Override

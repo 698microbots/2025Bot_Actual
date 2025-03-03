@@ -83,7 +83,7 @@ public class TagAlign_Cmd extends Command {
         ySpeed = 0;
       }
 
-      if (Math.abs(pidControllerOmega.getError()) < .5){
+      if (Math.abs(pidControllerOmega.getError()) < .25){
         omegaSpeed = 0;
       }
 
