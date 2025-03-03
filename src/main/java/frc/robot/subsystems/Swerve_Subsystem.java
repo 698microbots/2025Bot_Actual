@@ -486,11 +486,12 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain
         SwerveModuleState moduleState = moduleStates[0];
         double speed = moduleState.speedMetersPerSecond;
         Rotation2d angle = moduleState.angle;
+
         for (SwerveModule mod : getModules()){
 
         }
 
-        setControl(robotCentric.withVelocityX(speed*cos(angle)).withVelocityY(0).withRotationalRate(0));
+        setControl(robotCentric.withVelocityX(speed*angle.getCos()).withVelocityY(0).withRotationalRate(0));
 
     }
 
