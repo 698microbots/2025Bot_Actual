@@ -26,14 +26,15 @@ import com.ctre.phoenix.Logger;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -57,14 +58,15 @@ public class RobotContainer {
   private final CommandXboxController joystick_2 = new CommandXboxController(Constants.joystick_2);
   private final CommandXboxController joystick_3 = new CommandXboxController(Constants.joystick_3);
 
-  
   public Dropper_Subsystem dropper = new Dropper_Subsystem();
   public Elevator_subsystem elevator = new Elevator_subsystem();
   public LimeLight_Subsystem limelight = new LimeLight_Subsystem();
   public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
   public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
-    /* Path follower */
-    private  SendableChooser<Command> autoChooser;
+  /* Path follower */
+  private SendableChooser<Command> autoChooser;
+
+  private final Field2d field;
 
   public RobotContainer() {
 
@@ -76,14 +78,44 @@ public class RobotContainer {
 
     // Register Named Commands
     // TODO - do the commands
-    // NamedCommands.registerCommand("autoBalance", drivetrain.autoBalanceCommand());
-    // NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
+    // NamedCommands.registerCommand("autoBalance",
+    // drivetrain.autoBalanceCommand());
+    // NamedCommands.registerCommand("exampleCommand",
+    // exampleSubsystem.exampleCommand());
     NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
     NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain));
-    NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO - change the level  later if needed
-    NamedCommands.registerCommand("EX", new ExampleCommand(m_exampleSubsystem));
+    NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO -
+                                                                                                           // change the
+                                                                                                           // level
+                                                                                                           // later if
+                                                                                                           // needed
+    // NamedCommands.registerCommand("EX", new ExampleCommand(m_exampleSubsystem));
 
-    configureBindings();
+    // code for PathPlanner logging
+
+    field = new Field2d();
+    SmartDashboard.putData("Field", field);
+
+    // Logging callback for current robot pose
+    PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+      // Do whatever you want with the pose here
+      field.setRobotPose(pose);
+    });
+
+    // Logging callback for target robot pose
+    PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+      // Do whatever you want with the pose here
+      field.getObject("target pose").setPose(pose);
+    });
+
+    // Logging callback for the active path, this is sent as a list of poses
+    PathPlannerLogging.setLogActivePathCallback((poses) -> {
+      // Do whatever you want with the poses here
+      field.getObject("path").setPoses(poses);
+    });
+
+  configureBindings();
+
   }
 
   /**
@@ -113,21 +145,24 @@ public class RobotContainer {
     elevator.setDefaultCommand(new ManualLift_Cmd(elevator, () -> -joystick_2.getLeftY()));
 
     drivetrain.setDefaultCommand(
-      // Drivetrain will execute this command periodically
-      drivetrain.applyRequest(() ->
-          drive.withVelocityX(-joystick_1.getLeftY() * Constants.MaxSpeed * .5) // Drive forward with negative Y (forward)
-              .withVelocityY(-joystick_1.getLeftX() * Constants.MaxSpeed * .5) // Drive left with negative X (left)
-              .withRotationalRate(-joystick_1.getRightX() * Constants.MaxAngularRate * .8) // Drive counterclockwise with negative X (left)
-      )
-  );
-  
-      // reset the field-centric heading on left bumper press
+        // Drivetrain will execute this command periodically
+        drivetrain.applyRequest(() -> drive.withVelocityX(-joystick_1.getLeftY() * Constants.MaxSpeed * .5) // Drive
+                                                                                                            // forward
+                                                                                                            // with
+                                                                                                            // negative
+                                                                                                            // Y
+                                                                                                            // (forward)
+            .withVelocityY(-joystick_1.getLeftX() * Constants.MaxSpeed * .5) // Drive left with negative X (left)
+            .withRotationalRate(-joystick_1.getRightX() * Constants.MaxAngularRate * .8) // Drive counterclockwise with
+                                                                                         // negative X (left)
+        ));
+
+    // reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
     joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain));
 
     joystick_2.a().whileTrue(new Drop_Cmd(dropper));
-
 
   }
 
