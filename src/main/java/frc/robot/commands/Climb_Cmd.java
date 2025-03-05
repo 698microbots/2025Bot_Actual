@@ -35,7 +35,7 @@ public class Climb_Cmd extends Command {
       // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.motorSpeed(0);// when a is pressed, it runs this code
+    climber.motorSpeed(0); // when a is pressed, it runs this code
 
   }
 

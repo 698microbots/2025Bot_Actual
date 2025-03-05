@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.commands.Autos;
 import frc.robot.commands.Drop_Cmd;
 
 import frc.robot.commands.ExElevator;
@@ -80,7 +79,7 @@ public class RobotContainer {
     // NamedCommands.registerCommand("autoBalance", drivetrain.autoBalanceCommand());
     // NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
     NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
-    NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain));
+    NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right Score"));
     NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO - change the level  later if needed
     NamedCommands.registerCommand("EX", new ExampleCommand(m_exampleSubsystem));
 
@@ -89,7 +88,7 @@ public class RobotContainer {
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be
-   * created via the
+   * created via the\
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
    * an arbitrary
    * predicate, or via the named factories in {@link
@@ -116,19 +115,22 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
       // Drivetrain will execute this command periodically
       drivetrain.applyRequest(() ->
-          drive.withVelocityX(-joystick_1.getLeftY() * Constants.MaxSpeed * .5) // Drive forward with negative Y (forward)
-              .withVelocityY(-joystick_1.getLeftX() * Constants.MaxSpeed * .5) // Drive left with negative X (left)
-              .withRotationalRate(-joystick_1.getRightX() * Constants.MaxAngularRate * .8) // Drive counterclockwise with negative X (left)
+          drive.withVelocityX(-joystick_1.getLeftY() * Constants.MaxSpeed * .3) // Drive forward with negative Y (forward)
+              .withVelocityY(-joystick_1.getLeftX() * Constants.MaxSpeed * .3) // Drive left with negative X (left)
+              .withRotationalRate(-joystick_1.getRightX() * Constants.MaxAngularRate * .1) // Drive counterclockwise with negative X (left)
       )
   );
   
       // reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain));
+    joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "Right"));
 
-    joystick_2.a().whileTrue(new Drop_Cmd(dropper));
+    joystick_2.x().whileTrue(new Drop_Cmd(dropper));
 
+    joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2));
+    joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3));
+    joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4));
 
   }
 

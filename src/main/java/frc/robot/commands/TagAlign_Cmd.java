@@ -23,16 +23,21 @@ public class TagAlign_Cmd extends Command {
   // private final PIDController pidControllerX = new PIDController(.3, 0.01, 0);
   // private final PIDController pidControllerY = new PIDController(.03, 0.01, 0);
   // private final PIDController pidControllerOmega = new PIDController(.05, .01, 0);
-  private final PIDController pidControllerX = new PIDController(.55, 0.1, 0);
-  private final PIDController pidControllerY = new PIDController(.55, 0.1, 0);
+  private final PIDController pidControllerX = new PIDController(.35, 0.1, 0); //original p: .55 i: .1 d: 0
+  private final PIDController pidControllerY = new PIDController(.35, 0.1, 0);
   private final PIDController pidControllerOmega = new PIDController(.04, .01, 0);
 
   private LimeLight_Subsystem limelight;
   private Swerve_Subsystem drivetrain;
-  public TagAlign_Cmd(LimeLight_Subsystem limelight, Swerve_Subsystem drivetrain) {
+  private String direction;
+
+  //if the bot is lined up center to the apriltag, before it moves left or right
+  private boolean middleLinedUp = false;
+  public TagAlign_Cmd(LimeLight_Subsystem limelight, Swerve_Subsystem drivetrain, String direction) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limelight = limelight;
     this.drivetrain = drivetrain;
+    this.direction = direction;
     addRequirements(limelight);
     addRequirements(drivetrain);    
   }
@@ -44,7 +49,7 @@ public class TagAlign_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+   
     //PID setpoint for the robot to be 0 degrees away from the apriltag
     double omegaSpeed = pidControllerOmega.calculate(limelight.getH_angle(), 0);
 
@@ -67,12 +72,12 @@ public class TagAlign_Cmd extends Command {
       //if the robot sees any apriltag (might have to change settings to get closest apriltag), do calculations
 
       //PID setpoint for robot to be 1.3 meters away from the tag in the x direction
-      double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.7);
-      System.out.println("xSpeed " + xSpeed);
+      double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.5);
+      // System.out.println("xSpeed " + xSpeed);
       // //PID setpoint for robot to be 0 meters away from the tag in the y direction
       double ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
-      System.out.println("ySpeed " + ySpeed);
-      System.out.println("Rotational Rate" + omegaSpeed);
+      // System.out.println("ySpeed " + ySpeed);
+      // System.out.println("Rotational Rate" + omegaSpeed);
       // //set all the calculated speeds to the robot 
 
       if (Math.abs(pidControllerX.getError()) < .2) {
@@ -83,19 +88,28 @@ public class TagAlign_Cmd extends Command {
         ySpeed = 0;
       }
 
-      if (Math.abs(pidControllerOmega.getError()) < .25){
+      if (Math.abs(pidControllerOmega.getError()) < .5){
         omegaSpeed = 0;
       }
 
-      //  ySpeed = 0;
-      //  omegaSpeed = 0;      
+      //if the bot is at the position right in front of the reef, stop running the pid (other if statement runs)
+      if (Math.abs(pidControllerX.getError()) < .05 && Math.abs(pidControllerY.getError()) < .05){
+        middleLinedUp = true;
+      }
+
+ 
       drivetrain.setControl(robotCentric.withVelocityX(xSpeed).withVelocityY(-ySpeed).withRotationalRate(omegaSpeed));
-  }
+      } 
+    
+      System.out.println("angle error " + pidControllerOmega.getError());
+    
+    
 }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    middleLinedUp = false;
     drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
     
   }
