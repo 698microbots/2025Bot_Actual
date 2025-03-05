@@ -77,7 +77,6 @@ public class RobotContainer {
     // exampleSubsystem = new ExampleSubsystem();
 
     // Register Named Commands
-    // TODO - do the commands
     // NamedCommands.registerCommand("autoBalance",
     // drivetrain.autoBalanceCommand());
     // NamedCommands.registerCommand("exampleCommand",

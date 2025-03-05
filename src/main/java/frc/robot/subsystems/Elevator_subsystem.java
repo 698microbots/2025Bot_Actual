@@ -18,6 +18,7 @@ public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
   // private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId);
   private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId, 1000, 0);
+  
   /** Creates a new slevator. */
   
   public Elevator_subsystem() {
@@ -25,33 +26,33 @@ public class Elevator_subsystem extends SubsystemBase {
     motor2.setNeutralMode(NeutralModeValue.Coast);
   }
 
-  public void setspeed(double speed) {
-    //values of 5 and 1000 are made up for now, use the actual encoder values you get from testing for this
-    if (getPosition() < 5 && speed < 0){
-      speed = 0;
-    } else if (getPosition() > 1000 && speed > 0){
-      speed = 0;
-    }
-
-    motor1.set(-speed);
-    motor2.set(-speed); // without direction changes, pushing up on the joystick goes down   
-  }
-
   // public void setspeed(double speed) {
-  //   if (toplimitSwitch.get()) {
-  //     motor1.set(0);
-  //     motor2.set(0);
-  //   } else {
-  //     motor1.set(speed);
-  //     motor2.set(speed);
+  //   //values of 5 and 1000 are made up for now, use the actual encoder values you get from testing for this
+  //   if (getPosition() < 5 && speed < 0){
+  //     speed = 0;
+  //   } else if (getPosition() > 1000 && speed > 0){
+  //     speed = 0;
   //   }
-  //   if (bottomlimitSwitch.get()) {
-  //     motor1.set(0);
-  //     motor2.set(0);
-  //   } else {
-  //     motor1.set(speed);
-  //     motor2.set(speed);
-  //   }
+
+  //   motor1.set(-speed);
+  //   motor2.set(-speed); // without direction changes, pushing up on the joystick goes down   
+  // }
+
+  public void setspeed(double speed) {
+    if (toplimitSwitch.get()) {
+      motor1.set(0);
+      motor2.set(0);
+    } else {
+      motor1.set(speed);
+      motor2.set(speed);
+    }
+    if (bottomlimitSwitch.get()) {
+      motor1.set(0);
+      motor2.set(0);
+    } else {
+      motor1.set(speed);
+      motor2.set(speed);
+    }
  
   public double getPosition() {
     return revEncoder.get();

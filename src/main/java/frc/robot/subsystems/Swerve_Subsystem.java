@@ -489,9 +489,6 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain
         for (SwerveModule mod : getModules()){
 
         }
-
-        setControl(robotCentric.withVelocityX(speed*cos(angle)).withVelocityY(0).withRotationalRate(0));
-
     }
 
     /**
