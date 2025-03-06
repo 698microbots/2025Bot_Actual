@@ -70,9 +70,6 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    autoChooser = AutoBuilder.buildAutoChooser("New Auto");
-    SmartDashboard.putData("Auto Mode", autoChooser);
-
     // Subsystem initialization
     // exampleSubsystem = new ExampleSubsystem();
 
@@ -81,14 +78,18 @@ public class RobotContainer {
     // drivetrain.autoBalanceCommand());
     // NamedCommands.registerCommand("exampleCommand",
     // exampleSubsystem.exampleCommand());
-    NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
+
     NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain));
     NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO -
                                                                                                            // change the
                                                                                                            // level
                                                                                                            // later if
                                                                                                            // needed
+    NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
     // NamedCommands.registerCommand("EX", new ExampleCommand(m_exampleSubsystem));
+
+    autoChooser = AutoBuilder.buildAutoChooser("New Auto");
+    SmartDashboard.putData("Auto Mode", autoChooser);
 
     // code for PathPlanner logging
 
@@ -113,7 +114,7 @@ public class RobotContainer {
       field.getObject("path").setPoses(poses);
     });
 
-  configureBindings();
+    configureBindings();
 
   }
 
