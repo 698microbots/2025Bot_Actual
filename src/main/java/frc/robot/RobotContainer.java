@@ -88,6 +88,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
     // NamedCommands.registerCommand("EX", new ExampleCommand(m_exampleSubsystem));
 
+    //
+    // MOVED THIS DOWN BELOW THE NamedCommands REGISTRATIONS
+    // SUPPOSED TO FIX NamedCommands ERROR WE WERE GETTING
+    //
     autoChooser = AutoBuilder.buildAutoChooser("New Auto");
     SmartDashboard.putData("Auto Mode", autoChooser);
 
