@@ -34,11 +34,9 @@ public class Elevator_subsystem extends SubsystemBase {
 
   public void setspeed(double speed) {
     //Max Encoder: 8.077
-    if (getPressed()){
-      revEncoder.reset();
-    }
+
     
-    if (getPosition() < .7 && speed < 0){
+    if (getPosition() < .3 && speed < 0){
       speed = 0;
     } else if (getPosition() > 7.7 && speed > 0){
       speed = 0;
@@ -75,6 +73,11 @@ public class Elevator_subsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (getPressed()){
+      revEncoder.reset();
+    } 
+  
+  
   }
 
 

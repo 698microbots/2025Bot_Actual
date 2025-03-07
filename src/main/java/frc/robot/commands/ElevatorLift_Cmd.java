@@ -13,15 +13,18 @@ import frc.robot.subsystems.Elevator_subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorLift_Cmd extends Command {
-  private final PIDController pidcontroller = new PIDController(.06, 0.003, 0);
+  private final PIDController pidcontroller = new PIDController(.08, 0.003, 0);
   private final Elevator_subsystem elevator;
+  private final Dropper_Subsystem dropper;
   private double level = 0;
   private double output = 0;
+  private int counter = 0;
   /** Creates a new l1_lift_command. */
   public ElevatorLift_Cmd(Elevator_subsystem elevator, Dropper_Subsystem dropper, double level) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.elevator = elevator;
     this.level = level;
+    this.dropper = dropper;
     addRequirements(elevator,dropper);
   }
 
@@ -42,14 +45,20 @@ public class ElevatorLift_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    counter++;
+
+    if (counter < Constants.numSeconds(.75)){
+      dropper.driveUp();
+    }
+
     if (level == 2){
-      output = pidcontroller.calculate(elevator.getPosition(), 2.913);
+      output = pidcontroller.calculate(elevator.getPosition(), 3);
 
     } else if (level == 3){
-      output = pidcontroller.calculate(elevator.getPosition(), 4.74);
+      output = pidcontroller.calculate(elevator.getPosition(), 4.85);
 
     } else if (level == 4){
-     output = pidcontroller.calculate(elevator.getPosition(), 7.750);
+     output = pidcontroller.calculate(elevator.getPosition(), 7.85);
 
     }
     // System.out.println(output);
@@ -59,7 +68,7 @@ public class ElevatorLift_Cmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    counter = 0;
   }
 
   // Returns true when the command should end.

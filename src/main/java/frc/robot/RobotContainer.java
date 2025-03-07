@@ -30,6 +30,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -54,7 +55,6 @@ public class RobotContainer {
 
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
   private final CommandXboxController joystick_2 = new CommandXboxController(Constants.joystick_2);
-  private final CommandXboxController joystick_3 = new CommandXboxController(Constants.joystick_3);
 
   
   public Dropper_Subsystem dropper = new Dropper_Subsystem();
@@ -71,17 +71,19 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser("New Auto");
     SmartDashboard.putData("Auto Mode", autoChooser);
 
-    // Subsystem initialization
-    // exampleSubsystem = new ExampleSubsystem();
 
     // Register Named Commands
     // TODO - do the commands
-    // NamedCommands.registerCommand("autoBalance", drivetrain.autoBalanceCommand());
     // NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
-    NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
-    NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right Score"));
-    NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO - change the level  later if needed
-    NamedCommands.registerCommand("EX", new ExampleCommand(m_exampleSubsystem));
+    // NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
+
+
+    NamedCommands.registerCommand("dropCommand", Commands.runOnce(()-> new Drop_Cmd(dropper)));
+
+
+    // NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
+    // NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO - change the level  later if needed
+    // NamedCommands.registerCommand("EX", new ExampleCommand(m_exampleSubsystem));
 
     configureBindings();
   }
@@ -117,14 +119,14 @@ public class RobotContainer {
       drivetrain.applyRequest(() ->
           drive.withVelocityX(-joystick_1.getLeftY() * Constants.MaxSpeed * .3) // Drive forward with negative Y (forward)
               .withVelocityY(-joystick_1.getLeftX() * Constants.MaxSpeed * .3) // Drive left with negative X (left)
-              .withRotationalRate(-joystick_1.getRightX() * Constants.MaxAngularRate * .1) // Drive counterclockwise with negative X (left)
+              .withRotationalRate(-joystick_1.getRightX() * Constants.MaxAngularRate * .5) // Drive counterclockwise with negative X (left)
       )
   );
   
       // reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "Right"));
+    joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "Left"));
 
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
 
