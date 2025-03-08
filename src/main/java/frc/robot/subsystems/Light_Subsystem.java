@@ -11,19 +11,19 @@ import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdleConfiguration;
 public class Light_Subsystem extends SubsystemBase {
   /** Creates a new LightSubsystem. */
-  // private final CANdle candle = new CANdle(0);
+  private final CANdle candle = new CANdle(0);
   // private final CANdleConfiguration config = new CANdleConfiguration();
 
   public Light_Subsystem() {
     CANdleConfiguration config = new CANdleConfiguration();
     config.stripType = LEDStripType.RGB; // set the strip type to RGB
     config.brightnessScalar = 1; // dim the LEDs to half brightness
-    // candle.configAllSettings(config);    
+    candle.configAllSettings(config);    
   }
 
   public void setLights(int r, int b, int g){
-    // candle.setLEDs(r, g, b);
-    // candle.setLEDs(r, g, b, 100, 0, 150); THERE ARE 300 LIGHTS
+    candle.setLEDs(r, g, b);
+    candle.setLEDs(r, g, b, 100, 0, 150); //THERE ARE 300 LIGHTS
   }
   @Override
   public void periodic() {
