@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.AutoSetLEDS_cmd;
 import frc.robot.commands.Autos;
 import frc.robot.commands.Drop_Cmd;
 
@@ -19,6 +20,7 @@ import frc.robot.subsystems.Swerve_Subsystem;
 import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Light_Subsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
 import frc.robot.subsystems.ReactedLED_Subsystem;
 
@@ -63,6 +65,7 @@ public class RobotContainer {
   public LimeLight_Subsystem limelight = new LimeLight_Subsystem();
   public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
   public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
+  private Light_Subsystem lights = new Light_Subsystem();
   /* Path follower */
   private SendableChooser<Command> autoChooser;
 
@@ -144,6 +147,8 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
+    lights.setDefaultCommand(new AutoSetLEDS_cmd(lights));
+
     dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
 
     elevator.setDefaultCommand(new ManualLift_Cmd(elevator, () -> -joystick_2.getLeftY()));
