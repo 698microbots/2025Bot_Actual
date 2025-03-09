@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdleConfiguration;
+import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.hardware.CANrange;
 
@@ -41,7 +42,7 @@ public class ReactedLED_Subsystem extends SubsystemBase {
 
   //TODO : Figure out how many lights is the end index (count paramter)
   public void setColor(int r, int g, int b) {
-    CANdle.setLEDs(r, g, b, 0, 0, 50);
+    CANdle.setLEDs(r, g, b, 0, 0, 100);
   }
 
   public void setColorWithString(String chosenColor) {
@@ -61,6 +62,24 @@ public class ReactedLED_Subsystem extends SubsystemBase {
     } else{
       return false;
     }
+  }
+
+  public void rainbowLED(){
+    RainbowAnimation rainbowAnim = new RainbowAnimation(1, 1, 100);
+    CANdle.animate(rainbowAnim);
+  }
+
+  public void turnOnLEDs(boolean on){
+    if (on){
+      CANdle.configBrightnessScalar(1);
+    } else {
+      CANdle.configBrightnessScalar(0);
+
+    }
+  }
+
+  public void clearLEDAnimation(){
+    CANdle.clearAnimation(0);
   }
 
   @Override

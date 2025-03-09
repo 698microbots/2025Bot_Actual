@@ -17,7 +17,6 @@ import frc.robot.Constants;
 public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
-  // private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId);
   private Encoder revEncoder = new Encoder(0, 1);
   private DigitalInput limitSwitch = new DigitalInput(2);
   /** Creates a new slevator. */
@@ -46,22 +45,6 @@ public class Elevator_subsystem extends SubsystemBase {
     motor2.set(-speed); // without direction changes, pushing up on the joystick goes down   
   }
 
-  // public void setspeed(double speed) {
-  //   if (toplimitSwitch.get()) {
-  //     motor1.set(0);
-  //     motor2.set(0);
-  //   } else {
-  //     motor1.set(speed);
-  //     motor2.set(speed);
-  //   }
-  //   if (bottomlimitSwitch.get()) {
-  //     motor1.set(0);
-  //     motor2.set(0);
-  //   } else {
-  //     motor1.set(speed);
-  //     motor2.set(speed);
-  //   }
- 
   public double getPosition() {
     return revEncoder.get() * -.001;
   }
@@ -76,8 +59,6 @@ public class Elevator_subsystem extends SubsystemBase {
     if (getPressed()){
       revEncoder.reset();
     } 
-  
-  
   }
 
 

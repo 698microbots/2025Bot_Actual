@@ -10,6 +10,9 @@ import frc.robot.commands.ExElevator;
 import frc.robot.commands.ElevatorLift_Cmd;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualLift_Cmd;
+import frc.robot.commands.SetLeds_Cmd;
+import frc.robot.commands.TagAlign2024_Cmd;
+import frc.robot.commands.TagAlignTest_Cmd;
 import frc.robot.commands.TagAlign_Cmd;
 import frc.robot.commands.testReleaseCoral;
 import frc.robot.generated.TunerConstants;
@@ -64,26 +67,28 @@ public class RobotContainer {
   public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
     
   /* Path follower */
-    private  SendableChooser<Command> autoChooser;
+    private SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
 
-    autoChooser = AutoBuilder.buildAutoChooser("New Auto");
-    SmartDashboard.putData("Auto Mode", autoChooser);
+
 
 
     // Register Named Commands
     // TODO - do the commands
     // NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
-    // NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
+    NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
 
 
-    NamedCommands.registerCommand("dropCommand", Commands.runOnce(()-> new Drop_Cmd(dropper)));
+    // NamedCommands.registerCommand("dropCommand", Commands.runOnce(()-> new Drop_Cmd(dropper)));
 
 
-    // NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
-    // NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO - change the level  later if needed
+    NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
+    NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO - change the level  later if needed
     // NamedCommands.registerCommand("EX", new ExampleCommand(m_exampleSubsystem));
+
+    autoChooser = AutoBuilder.buildAutoChooser("New Auto");
+    SmartDashboard.putData("Auto Mode", autoChooser);
 
     configureBindings();
   }
@@ -110,7 +115,9 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
+    // dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
+
+    reactedLeds.setDefaultCommand(new SetLeds_Cmd(reactedLeds));
 
     elevator.setDefaultCommand(new ManualLift_Cmd(elevator, () -> -joystick_2.getLeftY()));
 
@@ -126,10 +133,11 @@ public class RobotContainer {
       // reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "Left"));
-
+    // joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "Left"));
+    // joystick_1.x().whileTrue(new TagAlign2024_Cmd(limelight, drivetrain));
+    joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "left"));
+    
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
-
     joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2));
     joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3));
     joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4));
