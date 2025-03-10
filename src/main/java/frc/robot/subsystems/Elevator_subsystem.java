@@ -52,9 +52,9 @@ public class Elevator_subsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (getPressed()){
-      revEncoder.reset();
-    } 
+    // if (getPressed()){
+    //   revEncoder.reset();
+    // } 
   }
 
 
