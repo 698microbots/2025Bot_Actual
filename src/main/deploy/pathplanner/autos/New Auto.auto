@@ -9,6 +9,18 @@
           "data": {
             "pathName": "Dotd Path"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "dropCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "New New Path"
+          }
         }
       ]
     }

@@ -61,8 +61,8 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
     private TalonFX Tmotor4 = new TalonFX(7);
 
     //need to find supplyThreshold equivalent
-    private CurrentLimitsConfigs config1 = new CurrentLimitsConfigs().withStatorCurrentLimit(40);
-    private CurrentLimitsConfigs config2 = new CurrentLimitsConfigs().withStatorCurrentLimit(30);
+    private CurrentLimitsConfigs config1 = new CurrentLimitsConfigs().withStatorCurrentLimit(40).withSupplyCurrentLowerLimit(30).withSupplyCurrentLowerTime(2);
+    private CurrentLimitsConfigs config2 = new CurrentLimitsConfigs().withStatorCurrentLimit(30).withSupplyCurrentLowerLimit(20).withSupplyCurrentLimit(2);
     
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
@@ -274,6 +274,9 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
         config1.withStatorCurrentLimitEnable(true);
         config2.withStatorCurrentLimitEnable(true); // causes the current limits to set
 
+        config1.withSupplyCurrentLimitEnable(true);
+        config2.withSupplyCurrentLimitEnable(true);
+        
         motor1.getConfigurator().apply(config1);
         motor2.getConfigurator().apply(config1);
         motor3.getConfigurator().apply(config1);
@@ -317,6 +320,8 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineToApply.dynamic(direction);
     }
+
+
 
     @Override
     public void periodic() {
