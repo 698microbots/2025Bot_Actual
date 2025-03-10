@@ -4,39 +4,42 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.AddressableLED;
+import java.nio.channels.ReadPendingException;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.Climber_Subsystem;
+import frc.robot.subsystems.ReactedLED_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Climb_Cmd extends Command {
-  /** Creates a new RobotClimber. */
-  private Climber_Subsystem climber = new Climber_Subsystem();//making an object of subsystem 
-  public Climb_Cmd(Climber_Subsystem climber) {
-      this.climber = climber;
-      addRequirements(climber);
-    }
+public class SetLeds_Cmd extends Command {
+  /** Creates a new SetLeds_Cmd. */
+  private int counter = 0;
+  private final ReactedLED_Subsystem reactedLeds;
+  public SetLeds_Cmd(ReactedLED_Subsystem reactedLeds) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.reactedLeds = reactedLeds;
+    addRequirements(reactedLeds);
+  }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    reactedLeds.turnOnLEDs(true);
+    // reactedLeds.clearLEDAnimation();
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.motorSpeed(.1);// when a is pressed, it runs this code
-  }
-  
-  public void climberDown() {
 
+    reactedLeds.rainbowLED();
+    reactedLeds.setColor(255, 0, 20);
   }
 
-      // Called once the command ends or is interrupted.
+  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.motorSpeed(0); // when a is pressed, it runs this code
-
+    reactedLeds.turnOnLEDs(false);
   }
 
   // Returns true when the command should end.

@@ -5,11 +5,14 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -34,11 +37,9 @@ public class Elevator_subsystem extends SubsystemBase {
 
   public void setspeed(double speed) {
     //Max Encoder: 8.077
-    if (getPressed()){
-      revEncoder.reset();
-    }
+
     
-    if (getPosition() < .7 && speed < 0){
+    if (getPosition() < .3 && speed < 0){
       speed = 0;
     } else if (getPosition() > 7.7 && speed > 0){
       speed = 0;
@@ -48,22 +49,6 @@ public class Elevator_subsystem extends SubsystemBase {
     motor2.set(-speed); // without direction changes, pushing up on the joystick goes down   
   }
 
-  // public void setspeed(double speed) {
-  //   if (toplimitSwitch.get()) {
-  //     motor1.set(0);
-  //     motor2.set(0);
-  //   } else {
-  //     motor1.set(speed);
-  //     motor2.set(speed);
-  //   }
-  //   if (bottomlimitSwitch.get()) {
-  //     motor1.set(0);
-  //     motor2.set(0);
-  //   } else {
-  //     motor1.set(speed);
-  //     motor2.set(speed);
-  //   }
- 
   public double getPosition() {
     return revEncoder.get() * -.001;
   }
@@ -75,5 +60,8 @@ public class Elevator_subsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (getPressed()){
+      revEncoder.reset();
+    } 
   }
 }

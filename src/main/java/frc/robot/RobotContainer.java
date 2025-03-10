@@ -13,6 +13,9 @@ import frc.robot.commands.ElevatorLift_Cmd;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.GeneratePath_Cmd;
 import frc.robot.commands.ManualLift_Cmd;
+import frc.robot.commands.SetLeds_Cmd;
+import frc.robot.commands.TagAlign2024_Cmd;
+import frc.robot.commands.TagAlignTest_Cmd;
 import frc.robot.commands.TagAlign_Cmd;
 import frc.robot.commands.testReleaseCoral;
 import frc.robot.generated.TunerConstants;
@@ -36,6 +39,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -59,8 +63,8 @@ public class RobotContainer {
 
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
   private final CommandXboxController joystick_2 = new CommandXboxController(Constants.joystick_2);
-  private final CommandXboxController joystick_3 = new CommandXboxController(Constants.joystick_3);
 
+  
   public Dropper_Subsystem dropper = new Dropper_Subsystem();
   public Elevator_subsystem elevator = new Elevator_subsystem();
   public LimeLight_Subsystem limelight = new LimeLight_Subsystem();
@@ -74,8 +78,6 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    // Subsystem initialization
-    // exampleSubsystem = new ExampleSubsystem();
 
     // Register Named Commands
     // NamedCommands.registerCommand("autoBalance",
@@ -128,7 +130,7 @@ public class RobotContainer {
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be
-   * created via the
+   * created via the\
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
    * an arbitrary
    * predicate, or via the named factories in {@link
@@ -150,7 +152,9 @@ public class RobotContainer {
     // cancelling on release.
     lights.setDefaultCommand(new AutoSetLEDS_cmd(lights));
 
-    dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
+    // dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
+
+    reactedLeds.setDefaultCommand(new SetLeds_Cmd(reactedLeds));
 
     elevator.setDefaultCommand(new ManualLift_Cmd(elevator, () -> -joystick_2.getLeftY()));
 

@@ -25,6 +25,10 @@ public class Dropper_Subsystem extends SubsystemBase {
     dropperMotor.set(-.7);
   }
 
+  public void driveUp(){
+    dropperMotor.set(.7);
+  }
+
   public void testDropCoral(double speed){
     dropperMotor.set(speed);
   }

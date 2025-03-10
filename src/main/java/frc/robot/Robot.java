@@ -52,7 +52,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Module 1 Angle", m_robotContainer.drivetrain.getAngle(1));
     SmartDashboard.putNumber("Module 2 Angle", m_robotContainer.drivetrain.getAngle(2));
     SmartDashboard.putNumber("Module 3 Angle", m_robotContainer.drivetrain.getAngle(3));
+    // SmartDashboard.putNumber("Angle", m_robotContainer.limelight.getRelative3dBotPose().getRotation().getMeasureY());
 
+    SmartDashboard.putBoolean("limit switch", m_robotContainer.elevator.getPressed());
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
