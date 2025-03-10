@@ -40,7 +40,7 @@ public class GeneratePath_Cmd extends Command {
     Pose2d robotPose2d = limeLightSubsystem.getRelative3dBotPose().toPose2d();
     Pose2d aprilTagPose2d = limeLightSubsystem.getAprilTagPose3d().toPose2d();
 
-    Pose2d finalAprilTagPose = new Pose2d(aprilTagPose2d.getX() + offset, aprilTagPose2d.getY(), aprilTagPose2d.getRotation());
+    Pose2d finalAprilTagPose = new Pose2d(-aprilTagPose2d.getX() + offset, -aprilTagPose2d.getY(), aprilTagPose2d.getRotation());
 
     // Create a list of waypoints from poses. Each pose represents one waypoint.
     // The rotation component of the pose should be the direction of travel. Do not
