@@ -24,11 +24,15 @@ public class TagAlignTest_Cmd extends Command {
   // private final PIDController pidControllerY = new PIDController(.55, 0.1, 0);
   // private final PIDController pidControllerOmega = new PIDController(.04, .01, 0);
   
+  //pid on carpet worked well
+  // private final PIDController pidControllerX = new PIDController(.35, 0.0005, .0000095); //original p: .35 i: .0005 d: 0.00005
+  // private final PIDController pidControllerY = new PIDController(.2, 0.0005, .0000095); //original p: .2 i: .0005 d: 0.00005
+  // private final PIDController pidControllerOmega = new PIDController(.06, .0005, 0.0000095); //original p: .05 i:.01 d: .0
 
   //try making I different for x and y controllers
-  private final PIDController pidControllerX = new PIDController(.35, 0.1, 0); //original p: .35 i: .1 d: 0
-  private final PIDController pidControllerY = new PIDController(.2, 0.001, 0); //original p: .2 i: .001 d: 0
-  private final PIDController pidControllerOmega = new PIDController(.05, .01, 0);
+  private final PIDController pidControllerX = new PIDController(.35, 0.0, 0.1); //original p: .35 i: .0005 d: 0.00005
+  private final PIDController pidControllerY = new PIDController(.2, 0.0, .1); //original p: .2 i: .0005 d: 0.00005
+  private final PIDController pidControllerOmega = new PIDController(.06, .0005, 0.0); //original p: .05 i:.01 d: .0
 
 
   //1) make the x I pid term very small
@@ -38,8 +42,8 @@ public class TagAlignTest_Cmd extends Command {
   //5) tune tunerConstants PID on cart
   //6) try using a PD controller (use derivative gains and add i term if it doesnt reach what its supposed to) D > P >> I
   // there could be a problem with the p and i terms being so close in value (right now specifically for omegaController)
-  private double xErrorBound = 0;
-  private double yErrorBound = 0;
+  private double xErrorBound = 0.0;
+  private double yErrorBound = 0.0;
   private double omegaErrorBound = 0;
 
 
@@ -83,7 +87,7 @@ public class TagAlignTest_Cmd extends Command {
 
         // Monitor
         if (counter % 50 == 0){
-          System.out.println(xSpeed);      
+          // System.out.println(xSpeed);      
           // System.out.println(ySpeed);
           // System.out.println(omegaSpeed);
 
@@ -117,7 +121,7 @@ public class TagAlignTest_Cmd extends Command {
         // ySpeed = 0
         // omegaSpeed = 0;
 
-        drivetrain.setControl(robotCentric.withVelocityX(xSpeed).withVelocityY(-ySpeed).withRotationalRate(0));
+        drivetrain.setControl(robotCentric.withVelocityX(xSpeed).withVelocityY(-0).withRotationalRate(0));
       
 
      

@@ -19,19 +19,19 @@ public class TagAlign_Cmd extends Command {
   private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric();
   private final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
 
-  //pid and constants original
-  // private final PIDController pidControllerX = new PIDController(.55, 0.1, 0);
-  // private final PIDController pidControllerY = new PIDController(.55, 0.1, 0);
-  // private final PIDController pidControllerOmega = new PIDController(.04, .01, 0);
-  
 
   //try making I different for x and y controllers
-  private final PIDController pidControllerX = new PIDController(.35, 0.1, 0); //original p: .35 i: .1 d: 0
-  private final PIDController pidControllerY = new PIDController(.02, 0.1, 0); //original p: .2 i: .05 d: 0
-  private final PIDController pidControllerOmega = new PIDController(.05, .01, 0);
+  // private final PIDController pidControllerX = new PIDController(.35, 0.1, 0); //original p: .35 i: .1 d: 0
+  // private final PIDController pidControllerY = new PIDController(.02, 0.1, 0); //original p: .2 i: .05 d: 0
+  // private final PIDController pidControllerOmega = new PIDController(.05, .01, 0);
 
-  private double xErrorBound = .15;
-  private double yErrorBound = .08;
+  private final PIDController pidControllerX = new PIDController(.35, 0.0005, .0000095); //original p: .35 i: .0005 d: 0.00005
+  private final PIDController pidControllerY = new PIDController(.2, 0.0005, .0000095); //original p: .2 i: .0005 d: 0.00005
+  private final PIDController pidControllerOmega = new PIDController(.06, .0005, 0.0000095); //original p: .05 i:.01 d: .0
+
+
+  private double xErrorBound = .1;
+  private double yErrorBound = .1;
   private double omegaErrorBound = .3;
 
 
@@ -74,12 +74,7 @@ public class TagAlign_Cmd extends Command {
           //PID setpoint for the robot to be 0 degrees away from the apriltag
         double omegaSpeed = pidControllerOmega.calculate(limelight.getH_angle(), 0);
 
-        // Speed Monitor
-        System.out.println(xSpeed);      
-        System.out.println(ySpeed);
-        // System.out.println("Rotational Rate" + omegaSpeed);
-      
-      
+  
       
 
 
