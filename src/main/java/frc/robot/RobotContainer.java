@@ -4,13 +4,15 @@
 
 package frc.robot;
 
-import frc.robot.commands.Autos;
 import frc.robot.commands.Drop_Cmd;
 
 import frc.robot.commands.ExElevator;
 import frc.robot.commands.ElevatorLift_Cmd;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualLift_Cmd;
+import frc.robot.commands.SetLeds_Cmd;
+import frc.robot.commands.TagAlign2024_Cmd;
+import frc.robot.commands.TagAlignTest_Cmd;
 import frc.robot.commands.TagAlign_Cmd;
 import frc.robot.commands.testReleaseCoral;
 import frc.robot.generated.TunerConstants;
@@ -56,7 +58,6 @@ public class RobotContainer {
 
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
   private final CommandXboxController joystick_2 = new CommandXboxController(Constants.joystick_2);
-  private final CommandXboxController joystick_3 = new CommandXboxController(Constants.joystick_3);
 
   
   public Dropper_Subsystem dropper = new Dropper_Subsystem();
@@ -64,33 +65,38 @@ public class RobotContainer {
   public LimeLight_Subsystem limelight = new LimeLight_Subsystem();
   public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
   public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
-    /* Path follower */
-    private  SendableChooser<Command> autoChooser;
+    
+  /* Path follower */
+    private SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
 
-    autoChooser = AutoBuilder.buildAutoChooser("New Auto");
-    SmartDashboard.putData("Auto Mode", autoChooser);
 
-    // Subsystem initialization
-    // exampleSubsystem = new ExampleSubsystem();
+
 
     // Register Named Commands
     // TODO - do the commands
-    // NamedCommands.registerCommand("autoBalance", drivetrain.autoBalanceCommand());
     // NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
     NamedCommands.registerCommand("dropCommand", Commands.runOnce(()-> new Drop_Cmd(dropper)));
     NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
-    NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain));
+
+
+    // NamedCommands.registerCommand("dropCommand", Commands.runOnce(()-> new Drop_Cmd(dropper)));
+
+
+    NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
     NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO - change the level  later if needed
-    NamedCommands.registerCommand("EX", new ExampleCommand(m_exampleSubsystem));
+    // NamedCommands.registerCommand("EX", new ExampleCommand(m_exampleSubsystem));
+
+    autoChooser = AutoBuilder.buildAutoChooser("New Auto");
+    SmartDashboard.putData("Auto Mode", autoChooser);
 
     configureBindings();
   }
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be
-   * created via the
+   * created via the\
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
    * an arbitrary
    * predicate, or via the named factories in {@link
@@ -110,26 +116,32 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
+    // dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
+
+    reactedLeds.setDefaultCommand(new SetLeds_Cmd(reactedLeds));
 
     elevator.setDefaultCommand(new ManualLift_Cmd(elevator, () -> -joystick_2.getLeftY()));
 
     drivetrain.setDefaultCommand(
       // Drivetrain will execute this command periodically
       drivetrain.applyRequest(() ->
-          drive.withVelocityX(-joystick_1.getLeftY() * Constants.MaxSpeed * .5) // Drive forward with negative Y (forward)
-              .withVelocityY(-joystick_1.getLeftX() * Constants.MaxSpeed * .5) // Drive left with negative X (left)
-              .withRotationalRate(-joystick_1.getRightX() * Constants.MaxAngularRate * .8) // Drive counterclockwise with negative X (left)
+          drive.withVelocityX(-joystick_1.getLeftY() * Constants.MaxSpeed * .3) // Drive forward with negative Y (forward)
+              .withVelocityY(-joystick_1.getLeftX() * Constants.MaxSpeed * .3) // Drive left with negative X (left)
+              .withRotationalRate(-joystick_1.getRightX() * Constants.MaxAngularRate * .5) // Drive counterclockwise with negative X (left)
       )
   );
   
       // reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain));
-
-    joystick_2.a().whileTrue(new Drop_Cmd(dropper));
-
+    joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "Left"));
+    // joystick_1.x().whileTrue(new TagAlign2024_Cmd(limelight, drivetrain));
+    // joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "left"));
+    
+    joystick_2.x().whileTrue(new Drop_Cmd(dropper));
+    joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2));
+    joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3));
+    joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4));
 
   }
 

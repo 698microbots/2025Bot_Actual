@@ -5,12 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Dropper_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Drop_Cmd extends Command {
   /** Creates a new DropCoral. */
   private Dropper_Subsystem dropperSubsystem;
+  private int counter = 0;
   public Drop_Cmd(Dropper_Subsystem dropperSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.\
     this.dropperSubsystem = dropperSubsystem;
@@ -24,17 +26,24 @@ public class Drop_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    counter++;
+    System.out.println("running");
     dropperSubsystem.dropCoral();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    counter = 0;
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-    
+    if (counter > Constants.numSeconds(20)){
+      return true;
+    } else {
+      return false;
+    }
   }
 }
