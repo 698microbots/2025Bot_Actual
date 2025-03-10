@@ -15,15 +15,15 @@ public class Light_Subsystem extends SubsystemBase {
   // private final CANdleConfiguration config = new CANdleConfiguration();
 
   public Light_Subsystem() {
-    CANdleConfiguration config = new CANdleConfiguration();
-    config.stripType = LEDStripType.RGB; // set the strip type to RGB
-    config.brightnessScalar = 1; // dim the LEDs to half brightness
-    candle.configAllSettings(config);    
+    CANdleConfiguration configCANdle = new CANdleConfiguration();
+    configCANdle.stripType = LEDStripType.RGB;
+    configCANdle.brightnessScalar = 0.5;
+    candle.configAllSettings(configCANdle);  
   }
 
   public void setLights(int r, int b, int g){
-    candle.setLEDs(r, g, b);
-    candle.setLEDs(r, g, b, 100, 0, 150); //THERE ARE 300 LIGHTS
+    // candle.setLEDs(r, g, b);
+    candle.setLEDs(r, g, b, 0, 0, 8); //THERE ARE 300 LIGHTS
   }
   @Override
   public void periodic() {

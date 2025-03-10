@@ -4,11 +4,14 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.led.Animation;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Light_Subsystem;
 
 public class AutoSetLEDS_cmd extends Command {
   /** Creates a new AutoSetLEDS. */
+  // Animation animation = new Animation(0,2.00,0,8);
   private final Light_Subsystem lightSubsystem;
   public AutoSetLEDS_cmd(Light_Subsystem lightSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
