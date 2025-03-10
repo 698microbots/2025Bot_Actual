@@ -31,6 +31,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -78,6 +79,7 @@ public class RobotContainer {
     // TODO - do the commands
     // NamedCommands.registerCommand("autoBalance", drivetrain.autoBalanceCommand());
     // NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
+    NamedCommands.registerCommand("dropCommand", Commands.runOnce(()-> new Drop_Cmd(dropper)));
     NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
     NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain));
     NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO - change the level  later if needed

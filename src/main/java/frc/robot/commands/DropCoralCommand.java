@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Dropper_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -30,12 +31,14 @@ public class DropCoralCommand extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    dropperSubsystem.testDropCoral(0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (counter >= 5){
+    if (counter >= Constants.numSeconds(.5)){
       return true;
     } else {
       return false;
