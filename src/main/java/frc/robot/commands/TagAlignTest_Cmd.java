@@ -77,7 +77,8 @@ public class TagAlignTest_Cmd extends Command {
       if (limelight.getHasTargets()){
 
         //PID setpoint for robot to be 1 meters away from the tag in the x direction
-        double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.85);
+        // double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.85);
+        double xSpeed = pidControllerX.calculate(limelight.getH_angle(), -.85);
 
         // //PID setpoint for robot to be 0 meters away from the tag in the y direction
         double ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
