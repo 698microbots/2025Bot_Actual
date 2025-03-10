@@ -459,26 +459,6 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain
         setModuleStates(previousSetpoint.moduleStates()); // Method that will drive the robot given target module states
     }
 
-    // public void setModuleStates(SwerveModuleState[] moduleStates) {
-    // SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
-    // LimeLight_Subsystem limelight = new LimeLight_Subsystem();
-    // SwerveModuleState moduleState = new SwerveModuleState();
-    // double speed = moduleState.speedMetersPerSecond;
-    // Rotation2d angle = moduleState.angle;
-    // PIDController drivePID = new PIDController(.03, 0.01, 0); // TODO-tune thid
-    // PIDController pidControllerOmega = new PIDController(.05, .01, 0);
-    // feedforwards feedforwards = new Feedf
-    // setControl(m_pathApplyRobotSpeeds.withSpeeds(new ChassisSpeeds(cos(speed),
-    // sin(speed), Constants.MaxAngularRate))
-    // .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
-    // .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons()))
-
-    // // tryparse
-
-    // // while (limelight.getH_angle().to != angle.v) {
-
-    // // }
-    // }
 
     public void setModuleStates(SwerveModuleState[] moduleStates) {
         // SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates,
