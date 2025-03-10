@@ -11,6 +11,7 @@ import frc.robot.commands.Drop_Cmd;
 import frc.robot.commands.ExElevator;
 import frc.robot.commands.ElevatorLift_Cmd;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.GeneratePath_Cmd;
 import frc.robot.commands.ManualLift_Cmd;
 import frc.robot.commands.TagAlign_Cmd;
 import frc.robot.commands.testReleaseCoral;
@@ -170,6 +171,8 @@ public class RobotContainer {
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
     joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain));
+
+    joystick_1.y().whileTrue(new GeneratePath_Cmd(limelight, drivetrain));
 
     joystick_2.a().whileTrue(new Drop_Cmd(dropper));
 
