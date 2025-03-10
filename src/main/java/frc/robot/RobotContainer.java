@@ -5,7 +5,6 @@
 package frc.robot;
 
 import frc.robot.commands.AutoSetLEDS_cmd;
-import frc.robot.commands.Autos;
 import frc.robot.commands.Drop_Cmd;
 
 import frc.robot.commands.ExElevator;
@@ -85,7 +84,7 @@ public class RobotContainer {
     // NamedCommands.registerCommand("exampleCommand",
     // exampleSubsystem.exampleCommand());
 
-    NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain));
+    NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
     NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO -
                                                                                                            // change the
                                                                                                            // level
@@ -174,7 +173,7 @@ public class RobotContainer {
     // reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain));
+    NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
 
     joystick_1.y().whileTrue(new GeneratePath_Cmd(limelight, drivetrain));
 
