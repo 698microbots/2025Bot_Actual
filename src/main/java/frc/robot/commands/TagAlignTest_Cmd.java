@@ -32,7 +32,7 @@ public class TagAlignTest_Cmd extends Command {
   // 0);
 
   // pid on carpet worked well
-  // private final PIDController pidControllerX = new PIDController(.35, 0.0005,
+  //private final PIDController pidControllerX = new PIDController(.35, 0.0005,
   // .0000095); //original p: .35 i: .0005 d: 0.00005
   // private final PIDController pidControllerY = new PIDController(.2, 0.0005,
   // .0000095); //original p: .2 i: .0005 d: 0.00005
@@ -77,6 +77,8 @@ public class TagAlignTest_Cmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+  
+    // drivetrain.addVisionMeasurement(limelight.getRelative3dBotPose().toPose2d(), .02);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -86,22 +88,36 @@ public class TagAlignTest_Cmd extends Command {
     // if there are any visible targets
     if (limelight.getHasTargets()) {
 
+        // double ySpeed = 0;
+
+        // if (direction == "right"){
+        //   ySpeed = pidControllerY.calculate(limelight.getH_angle(), -0);
+        // } else {
+        //   ySpeed = pidControllerY.calculate(limelight.getH_angle(), 0);
+        // }
+
+        //double ySpeed = pidControllerY.calculate(limelight.getH_angle(), 0);
       // PID setpoint for robot to be 1 meters away from the tag in the x direction
       // double xSpeed =
       // pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.85);
       double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.85);
+        
 
       // //PID setpoint for robot to be 0 meters away from the tag in the y direction
       double ySpeed = pidControllerY.calculate(limelight.getH_angle(), 0);
 
       // PID setpoint for the robot to be 0 degrees away from the apriltag
-      double omegaSpeed = pidControllerOmega.calculate(limelight.getH_angle(), 0);
+      double omegaSpeed = pidControllerOmega.calculate(limelight.getCameraPose3d().getX(), 0);
 
-      // Monitor
-      if (counter % 50 == 0) {
-        // System.out.println(xSpeed);
-        // System.out.println(ySpeed);
-        // System.out.println(omegaSpeed);
+        // Monitor
+        if (counter % 50 == 0){
+          
+          System.out.println();
+
+          System.out.println(limelight.gethvratio());  
+            
+          // System.out.println(-ySpeed);
+          // System.out.println(omegaSpeed);
 
         // System.out.println(pidControllerOmega.getError());
         // System.out.println(pidControllerX.getError());
@@ -140,6 +156,7 @@ public class TagAlignTest_Cmd extends Command {
 
     middleLinedUp = false;
     counter = 0;
+
     drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
 
   }

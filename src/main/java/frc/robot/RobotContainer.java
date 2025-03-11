@@ -8,13 +8,14 @@ import frc.robot.commands.AutoSetLEDS_cmd;
 import frc.robot.commands.Drop_Cmd;
 
 import frc.robot.commands.ExElevator;
+import frc.robot.commands.Slow_Cmd;
 import frc.robot.commands.ElevatorLift_Cmd;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.GeneratePath_Cmd;
 import frc.robot.commands.ManualLift_Cmd;
 import frc.robot.commands.SetLeds_Cmd;
 import frc.robot.commands.Slow_Cmd;
-import frc.robot.commands.TagAlign2024_Cmd;
+import frc.robot.commands.TagAlignPP_Cmd;
 import frc.robot.commands.TagAlignTest_Cmd;
 import frc.robot.commands.TagAlign_Cmd;
 import frc.robot.commands.Whisker_Cmd;
@@ -58,6 +59,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(Constants.MaxSpeed * 0.1).withRotationalDeadband(Constants.MaxAngularRate * 0.1); // Add a 10%
@@ -86,6 +88,7 @@ public class RobotContainer {
     // drivetrain.autoBalanceCommand());
     // NamedCommands.registerCommand("exampleCommand",
     // exampleSubsystem.exampleCommand());
+    NamedCommands.registerCommand("dropCommand", Commands.runOnce(()-> new Drop_Cmd(dropper)));
 
     NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
     NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO -
@@ -154,7 +157,7 @@ public class RobotContainer {
     // cancelling on release.
     lights.setDefaultCommand(new AutoSetLEDS_cmd(lights));
 
-    // dropper.setDefaultCommand(new testReleaseCoral(dropper, () ->
+    dropper.setDefaultCommand(new testReleaseCoral(dropper, () ->
     // -joystick_2.getRightY()));
 
     reactedLeds.setDefaultCommand(new SetLeds_Cmd(reactedLeds));
@@ -193,22 +196,38 @@ public class RobotContainer {
     joystick_1.y().whileTrue(new GeneratePath_Cmd(limelight, drivetrain));
 
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
-    joystick_2.a()
+    // joystick_2.a()
         .whileTrue(
             new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
                 () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()),
                 new ElevatorLift_Cmd(elevator, dropper, 2)));
-    joystick_2.b()
+    // joystick_2.b()
         .whileTrue(
             new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
                 () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()),
                 new ElevatorLift_Cmd(elevator, dropper, 3)));
-    joystick_2.y()
+    // joystick_2.y()
         .whileTrue(
             new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
                 () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()),
                 new ElevatorLift_Cmd(elevator, dropper, 4)));
 
+    //makeshift driver slow speeds
+    joystick_2.a().whileTrue(new ParallelCommandGroup(
+      new ElevatorLift_Cmd(elevator, dropper, 2),
+      new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(),  () -> -joystick_1.getRightX())
+    ));
+
+    joystick_2.b().whileTrue(new ParallelCommandGroup(
+      new ElevatorLift_Cmd(elevator, dropper, 3),
+      new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(),  () -> -joystick_1.getRightX())
+    ));
+
+    joystick_2.y().whileTrue(new ParallelCommandGroup(
+      new ElevatorLift_Cmd(elevator, dropper, 4),
+      new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(),  () -> -joystick_1.getRightX())
+    ));
+    
   }
 
   /**
@@ -223,3 +242,5 @@ public class RobotContainer {
     // return new PathPlannerAuto("New Auto");
   }
 }
+
+

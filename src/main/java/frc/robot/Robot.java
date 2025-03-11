@@ -4,11 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.LimeLight_Subsystem;
 
 /**
  * The methods in this class are called automatically corresponding to each
@@ -19,8 +26,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  public final CommandXboxController xboxController = new CommandXboxController(0);
+  
   private final RobotContainer m_robotContainer;
+
+  // Create a PID controller whose setpoint's change is subject to maximum
+  // velocity and acceleration constraints.
+  
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -45,7 +56,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("Elevator Position", m_robotContainer.elevator.getPosition());
     SmartDashboard.putNumber("Sensor Distance", m_robotContainer.reactedLeds.returnDistance());
-    SmartDashboard.putNumber("speed", Constants.MaxSpeed);
+    // SmartDashboard.putNumber("speed", Constants.MaxSpeed);
 
     SmartDashboard.putNumber("Robot Pose X", m_robotContainer.limelight.getRelative3dBotPose().getX());
     SmartDashboard.putNumber("Robot Pose Z", m_robotContainer.limelight.getRelative3dBotPose().getZ());
@@ -56,7 +67,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Module 1 Angle", m_robotContainer.drivetrain.getAngle(1));
     SmartDashboard.putNumber("Module 2 Angle", m_robotContainer.drivetrain.getAngle(2));
     SmartDashboard.putNumber("Module 3 Angle", m_robotContainer.drivetrain.getAngle(3));
-    // SmartDashboard.putNumber("Angle", m_robotContainer.limelight.getRelative3dBotPose().getRotation().getMeasureY());
+    SmartDashboard.putNumber("Yaw", m_robotContainer.limelight.getYaw());
 
     SmartDashboard.putBoolean("limit switch", m_robotContainer.elevator.getPressed());
 
@@ -137,6 +148,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+  
+    
   }
 
   @Override
