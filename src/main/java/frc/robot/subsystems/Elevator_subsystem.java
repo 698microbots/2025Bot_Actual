@@ -22,7 +22,7 @@ public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
   // private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId);
   private Encoder revEncoder = new Encoder(0, 1);
-  private DigitalInput limitSwitch = new DigitalInput(2);
+  private DigitalInput limitSwitch = new DigitalInput(Constants.bottomlimitSwitchID);
   // private DigitalInput limitSwitchTop = new DigitalInput(3); // TODO - change later
   /** Creates a new slevator. */
   
