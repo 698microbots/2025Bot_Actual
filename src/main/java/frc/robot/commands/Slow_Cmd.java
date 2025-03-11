@@ -18,10 +18,16 @@ public class Slow_Cmd extends Command {
   private Swerve_Subsystem drivetrain;
   private final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
+  Supplier<Double> xspeed;
+Supplier<Double> yspeed;
+Supplier<Double> rotateSpeed;
 
   /** Creates a new Slow_Cmd. */
-  public Slow_Cmd(Swerve_Subsystem drivetrain) {
+  public Slow_Cmd(Swerve_Subsystem drivetrain, Supplier<Double> xspeed, Supplier<Double> yspeed, Supplier<Double> rotateSpeed) {
     this.drivetrain = drivetrain;
+    this.xspeed = xspeed;
+    this.yspeed = yspeed;
+    this.rotateSpeed = rotateSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -34,11 +40,7 @@ public class Slow_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Supplier<Double> xspeed = () -> joystick_1.getLeftX();
-    Supplier<Double> yspeed = () -> joystick_1.getLeftY();
-    Supplier<Double> rotateSpeed = () -> joystick_1.getRightX();
-
-    drivetrain.setControl(robotCentric.withVelocityX(xspeed.get()).withVelocityY(yspeed.get()).withRotationalRate(rotateSpeed.get()));
+    drivetrain.setControl(robotCentric.withVelocityX(xspeed.get()*.1).withVelocityY(yspeed.get()*.1).withRotationalRate(rotateSpeed.get()*.5));
   }
 
   // Called once the command ends or is interrupted.
