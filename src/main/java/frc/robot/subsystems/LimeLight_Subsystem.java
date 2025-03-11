@@ -64,6 +64,15 @@ public class LimeLight_Subsystem extends SubsystemBase {
     return pose3d;
   }   
 
+  public double getYaw(){
+    poseList = botPose.getDoubleArray(new double[6]);
+
+    double yaw = poseList[5];
+    return yaw;
+    //Negative yaw is when robot is turned to left of aprilTag
+    //Positive yaw is when robot is turned to right of aprilTag
+  }
+
   
   public double getH_angle() {
     return H_angle.getDouble(0);

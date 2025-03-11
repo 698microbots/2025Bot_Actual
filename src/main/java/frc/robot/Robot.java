@@ -4,11 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.LimeLight_Subsystem;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -20,6 +27,27 @@ public class Robot extends TimedRobot {
   public final CommandXboxController xboxController = new CommandXboxController(0);
   private final RobotContainer m_robotContainer;
 
+  private static double kDt = 0.02;
+  private static double kMaxVelocity = 1.75;
+  private static double kMaxAcceleration = 0.75;
+  private static double kP = 1.3;
+  private static double kI = 0.0;
+  private static double kD = 0.7;
+  private static double kS = 1.1;
+  private static double kG = 1.2;
+  private static double kV = 1.3;
+  private final Joystick m_joystick = new Joystick(1);
+  private final Encoder m_encoder = new Encoder(1, 2);
+  private final PWMSparkMax m_motor = new PWMSparkMax(1);
+
+  // Create a PID controller whose setpoint's change is subject to maximum
+  // velocity and acceleration constraints.
+  private final TrapezoidProfile.Constraints m_constraints =
+      new TrapezoidProfile.Constraints(kMaxVelocity, kMaxAcceleration);
+  private final ProfiledPIDController m_controller =
+      new ProfiledPIDController(kP, kI, kD, m_constraints, kDt);
+  private final ElevatorFeedforward m_feedforward = new ElevatorFeedforward(kS, kG, kV);
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -28,6 +56,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    m_encoder.setDistancePerPulse(1.0 / 360.0 * 2.0 * Math.PI * 1.5);
   }
 
   /**
@@ -47,6 +76,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Robot Pose Z", m_robotContainer.limelight.getRelative3dBotPose().getZ());
     SmartDashboard.putBoolean("Has Target", m_robotContainer.limelight.getHasTargets());
     SmartDashboard.putNumber("Angle", m_robotContainer.limelight.getH_angle());
+    SmartDashboard.putNumber("Yaw", m_robotContainer.limelight.getYaw());
 
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
@@ -90,7 +120,18 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    if (m_joystick.getRawButtonPressed(2)) {
+      m_controller.setGoal(5);
+    } else if (m_joystick.getRawButtonPressed(3)) {
+      m_controller.setGoal(0);
+    }
+
+    // Run controller and update motor output
+    m_motor.setVoltage(
+        m_controller.calculate(m_encoder.getDistance())
+            + m_feedforward.calculate(m_controller.getSetpoint().velocity));
+  }
 
   @Override
   public void testInit() {

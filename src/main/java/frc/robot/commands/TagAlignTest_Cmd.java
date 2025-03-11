@@ -29,10 +29,13 @@ public class TagAlignTest_Cmd extends Command {
   // private final PIDController pidControllerY = new PIDController(.2, 0.0005, .0000095); //original p: .2 i: .0005 d: 0.00005
   // private final PIDController pidControllerOmega = new PIDController(.06, .0005, 0.0000095); //original p: .05 i:.01 d: .0
 
+  //pid when using y with horizontal angle:
+  //private final PIDController pidControllerY = new PIDController(.01, 0.0, 0.0);
+
   //try making I different for x and y controllers
   private final PIDController pidControllerX = new PIDController(.35, 0.0, 0.1); //original p: .35 i: .0005 d: 0.00005
-  private final PIDController pidControllerY = new PIDController(.2, 0.0, .1); //original p: .2 i: .0005 d: 0.00005
-  private final PIDController pidControllerOmega = new PIDController(.06, .0005, 0.0); //original p: .05 i:.01 d: .0
+  private final PIDController pidControllerY = new PIDController(.5, 0.0, 0.0); //original p: .2 i: .0005 d: 0.00005
+  private final PIDController pidControllerOmega = new PIDController(.01, .01, 0.0); //original p: .05 i:.01 d: .0
 
 
   //1) make the x I pid term very small
@@ -43,7 +46,7 @@ public class TagAlignTest_Cmd extends Command {
   //6) try using a PD controller (use derivative gains and add i term if it doesnt reach what its supposed to) D > P >> I
   // there could be a problem with the p and i terms being so close in value (right now specifically for omegaController)
   private double xErrorBound = 0.0;
-  private double yErrorBound = 0.0;
+  private double yErrorBound = 0.1;
   private double omegaErrorBound = 0;
 
 
@@ -80,7 +83,10 @@ public class TagAlignTest_Cmd extends Command {
         double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.85);
 
         // //PID setpoint for robot to be 0 meters away from the tag in the y direction
-        double ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
+        //double ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
+        //double ySpeed = pidControllerY.calculate(limelight.getH_angle(), 0);
+
+        double ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), -.1);
 
           //PID setpoint for the robot to be 0 degrees away from the apriltag
         double omegaSpeed = pidControllerOmega.calculate(limelight.getH_angle(), 0);
@@ -103,17 +109,19 @@ public class TagAlignTest_Cmd extends Command {
 
 
         //Error Threshold for X, Y, Omega
-        if (Math.abs(pidControllerX.getError()) < xErrorBound) {
-          xSpeed = 0;
-        }
+        // if (Math.abs(pidControllerX.getError()) < xErrorBound) {
+        //   xSpeed = 0;
+        // }
+        
 
         if (Math.abs(pidControllerY.getError()) < yErrorBound){ //was .1
           ySpeed = 0;
+          
         }
 
-        if (Math.abs(pidControllerOmega.getError()) < omegaErrorBound){
-          omegaSpeed = 0;
-        }
+        // if (Math.abs(pidControllerOmega.getError()) < omegaErrorBound){
+        //   omegaSpeed = 0;
+        // }
 
 
 
@@ -121,11 +129,13 @@ public class TagAlignTest_Cmd extends Command {
         // ySpeed = 0
         // omegaSpeed = 0;
 
-        drivetrain.setControl(robotCentric.withVelocityX(xSpeed).withVelocityY(-0).withRotationalRate(0));
+        drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(-ySpeed).withRotationalRate(omegaSpeed));
       
 
      
     
+    } else {
+      drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
     } 
     
 
