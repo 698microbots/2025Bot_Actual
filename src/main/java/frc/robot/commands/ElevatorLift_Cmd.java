@@ -66,9 +66,10 @@ public class ElevatorLift_Cmd extends Command {
      output = pidController.calculate(elevator.getPosition(), 7.85);
 
     }
-    if (output > .25){
-      output = .25;
+    if (output > .1){
+      output = .1;
     }
+    // System.out.println(output);
     elevator.setspeed(output);
  
   }

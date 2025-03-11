@@ -5,11 +5,14 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,8 +20,10 @@ import frc.robot.Constants;
 public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
+  // private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId);
+  private DigitalInput limitSwitch = new DigitalInput(Constants.bottomlimitSwitchID);
   private Encoder revEncoder = new Encoder(0, 1);
-  private DigitalInput limitSwitch = new DigitalInput(2);
+  
   /** Creates a new slevator. */
   
   public Elevator_subsystem() {
@@ -29,11 +34,8 @@ public class Elevator_subsystem extends SubsystemBase {
     motor2.setNeutralMode(NeutralModeValue.Brake);
   }
 
-
-
   public void setspeed(double speed) {
     //Max Encoder: 8.077
-
     
     if (getPosition() < .3 && speed < 0){
       speed = 0;
@@ -53,6 +55,10 @@ public class Elevator_subsystem extends SubsystemBase {
     return limitSwitch.get();
   }
 
+  // public boolean getPressed2(){
+  //   return limitSwitchTop.get();
+  // }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -60,10 +66,4 @@ public class Elevator_subsystem extends SubsystemBase {
       revEncoder.reset();
     } 
   }
-
-
-
 }
-
-
-

@@ -23,18 +23,18 @@ public class LimeLight_Subsystem extends SubsystemBase {
   private NetworkTable limeLight2 = NetworkTableInstance.getDefault().getTable("limelight2");
 
   public LimeLight_Subsystem() {
-    
+
     V_angle = limeLight.getEntry("ty");
     H_angle = limeLight.getEntry("tx");
     TwoH_angle = limeLight2.getEntry("tx");
     cameraPose = limeLight.getEntry("targetpose_cameraspace");
-    
+
     hasTargets = limeLight.getEntry("tv");
     botPose = limeLight.getEntry("botpose_targetspace");
     targetPose = limeLight.getEntry("targetpose_robotspace");
 
     aprilID = limeLight.getEntry("tid");
- 
+
   }
 
   public Pose3d getRelative3dBotPose() {
@@ -42,31 +42,47 @@ public class LimeLight_Subsystem extends SubsystemBase {
      * Its specific because it determines what type of botpose we need
      * For example, we may need the botpose, botpose_wpiblue, botpose_wpired, etc
      * in order to tell our distance from the apriltag.
-     * This method should give us an x and y position to the april tag as well as a rotaiton angle to it
+     * This method should give us an x and y position to the april tag as well as a
+     * rotaiton angle to it
      */
     poseList = botPose.getDoubleArray(new double[6]);
-    //position
+    // position
     double x = poseList[0];
     double y = poseList[1];
     double z = poseList[2];
-    //rotation
+    // rotation
     double roll = poseList[3];
     double pitch = poseList[4];
     double yaw = poseList[5];
 
     Pose3d pose3d = new Pose3d(
-    x,
-    y,
-    z,
-    new Rotation3d(
-      roll,
-      pitch,
-      yaw
-    ));
+        x,
+        y,
+        z,
+        new Rotation3d(
+            roll,
+            pitch,
+            yaw));
     return pose3d;
-  }   
+  }  
 
-  
+  public double getYaw(){
+    poseList = botPose.getDoubleArray(new double[6]);
+
+    double yaw = poseList[5];
+    return yaw;
+    //Negative yaw is when robot is turned to left of aprilTag
+    //Positive yaw is when robot is turned to right of aprilTag
+  }
+
+  // public double getPitch() {
+  //   return botPose.getDoubleArray(new double[4])[4];
+  // }
+
+  public double getRoll() {
+    return botPose.getDoubleArray(new double[6])[3];
+  }
+
   public double getH_angle() {
     return H_angle.getDouble(0);
   }
@@ -78,7 +94,6 @@ public class LimeLight_Subsystem extends SubsystemBase {
   public double getAprilTagID() {
     return aprilID.getDouble(0);
   }
-
   public double gethvratio(){
     return H_angle.getDouble(0) / V_angle.getDouble(0);
   }
@@ -87,8 +102,8 @@ public class LimeLight_Subsystem extends SubsystemBase {
     return V_angle.getDouble(0) / H_angle.getDouble(0);
   }  
 
-  public boolean getHasTargets(){
-    if (hasTargets.getDouble(0) == 0){
+  public boolean getHasTargets() {
+    if (hasTargets.getDouble(0) == 0) {
       return false;
     }
     return true;
@@ -123,24 +138,23 @@ public class LimeLight_Subsystem extends SubsystemBase {
 
   public Pose3d getCameraPose3d(){
     cameraPoseList = cameraPose.getDoubleArray(new double[6]);
-    //position
+    // position
     double x = cameraPoseList[0];
     double y = cameraPoseList[1];
     double z = cameraPoseList[2];
-    //rotation
+    // rotation
     double roll = cameraPoseList[3];
     double pitch = cameraPoseList[4];
     double yaw = cameraPoseList[5];
 
     Pose3d pose3d = new Pose3d(
-    x,
-    y,
-    z,
-    new Rotation3d(
-      roll,
-      pitch,
-      yaw
-    ));
+        x,
+        y,
+        z,
+        new Rotation3d(
+            roll,
+            pitch,
+            yaw));
     return pose3d;
   }
 
