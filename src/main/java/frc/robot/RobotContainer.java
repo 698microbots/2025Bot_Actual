@@ -65,7 +65,6 @@ public class RobotContainer {
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
   private final CommandXboxController joystick_2 = new CommandXboxController(Constants.joystick_2);
 
-  
   public Dropper_Subsystem dropper = new Dropper_Subsystem();
   public Elevator_subsystem elevator = new Elevator_subsystem();
   public LimeLight_Subsystem limelight = new LimeLight_Subsystem();
@@ -78,7 +77,6 @@ public class RobotContainer {
   private final Field2d field;
 
   public RobotContainer() {
-
 
     // Register Named Commands
     // NamedCommands.registerCommand("autoBalance",
@@ -153,7 +151,8 @@ public class RobotContainer {
     // cancelling on release.
     lights.setDefaultCommand(new AutoSetLEDS_cmd(lights));
 
-    // dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
+    // dropper.setDefaultCommand(new testReleaseCoral(dropper, () ->
+    // -joystick_2.getRightY()));
 
     reactedLeds.setDefaultCommand(new SetLeds_Cmd(reactedLeds));
 
@@ -175,8 +174,11 @@ public class RobotContainer {
     // reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    // joystick_1.rightBumper().whileTrue(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()));
-    joystick_2.rightBumper().whileTrue(new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 4));
+    // joystick_1.rightBumper().whileTrue(new Slow_Cmd(drivetrain, () ->
+    // -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () ->
+    // -joystick_1.getRightX()));
+    joystick_2.rightBumper().whileTrue(new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
+        () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 4)));
 
     NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
 
@@ -185,9 +187,21 @@ public class RobotContainer {
     joystick_1.y().whileTrue(new GeneratePath_Cmd(limelight, drivetrain));
 
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
-    joystick_2.a().whileTrue(new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 2));
-    joystick_2.b().whileTrue(new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 3));
-    joystick_2.y().whileTrue(new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 4));
+    joystick_2.a()
+        .whileTrue(
+            new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
+                () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()),
+            new ElevatorLift_Cmd(elevator, dropper, 2)));
+    joystick_2.b()
+        .whileTrue(
+            new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
+                () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()),
+            new ElevatorLift_Cmd(elevator, dropper, 3)));
+    joystick_2.y()
+        .whileTrue(
+            new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
+                () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()),
+            new ElevatorLift_Cmd(elevator, dropper, 4)));
 
   }
 

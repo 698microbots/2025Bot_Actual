@@ -23,7 +23,7 @@ public class Elevator_subsystem extends SubsystemBase {
   // private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId);
   private Encoder revEncoder = new Encoder(0, 1);
   private DigitalInput limitSwitch = new DigitalInput(2);
-  private DigitalInput limitSwitchTop = new DigitalInput(3); // TODO - change later
+  // private DigitalInput limitSwitchTop = new DigitalInput(3); // TODO - change later
   /** Creates a new slevator. */
   
   public Elevator_subsystem() {
@@ -58,9 +58,9 @@ public class Elevator_subsystem extends SubsystemBase {
     return limitSwitch.get();
   }
 
-  public boolean getPressed2(){
-    return limitSwitchTop.get();
-  }
+  // public boolean getPressed2(){
+  //   return limitSwitchTop.get();
+  // }
 
   @Override
   public void periodic() {
