@@ -135,7 +135,7 @@ public class TagAlignTest_Cmd extends Command {
         Supplier<Double> xspeed = () -> joystick_1.getLeftX();
         Supplier<Double> yspeed = () -> joystick_1.getLeftY();
 
-        drivetrain.setControl(robotCentric.withVelocityX(xspeed.get())).withVelocityY(yspeed.get()).withRotationalRate(omegaSpeed));
+        drivetrain.setControl(robotCentric.withVelocityX(xspeed.get()).withVelocityY(yspeed.get()).withRotationalRate(omegaSpeed));
       
 
      
