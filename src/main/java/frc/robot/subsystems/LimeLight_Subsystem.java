@@ -68,9 +68,9 @@ public class LimeLight_Subsystem extends SubsystemBase {
     return botPose.getDoubleArray(new double[6])[5];
   }
 
-  public double getPitch() {
-    return botPose.getDoubleArray(new double[4])[4];
-  }
+  // public double getPitch() {
+  //   return botPose.getDoubleArray(new double[4])[4];
+  // }
 
   public double getRoll() {
     return botPose.getDoubleArray(new double[6])[3];

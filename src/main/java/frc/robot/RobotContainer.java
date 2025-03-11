@@ -21,6 +21,7 @@ import frc.robot.commands.testReleaseCoral;
 import frc.robot.generated.TunerConstants;
 import frc.robot.generated.TunerConstantsOLD;
 import frc.robot.subsystems.Swerve_Subsystem;
+import frc.robot.subsystems.Whisker_Subsystem;
 import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -70,7 +71,8 @@ public class RobotContainer {
   public LimeLight_Subsystem limelight = new LimeLight_Subsystem();
   public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
   public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
-  private Light_Subsystem lights = new Light_Subsystem();
+  public Light_Subsystem lights = new Light_Subsystem();
+  public Whisker_Subsystem whisker = new Whisker_Subsystem();
   /* Path follower */
   private SendableChooser<Command> autoChooser;
 
