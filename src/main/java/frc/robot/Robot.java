@@ -71,19 +71,6 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("limit switch", m_robotContainer.elevator.getPressed());
 
-    SmartDashboard.putNumber("Robot Pose Botpose_orb Y ", m_robotContainer.limelight.getBotpose_orb().getY());
-    SmartDashboard.putNumber("Robot Pose Botpose_orb_wpiblue Y ", m_robotContainer.limelight.getBotpose_orb_wpiblue().getY());
-    SmartDashboard.putNumber("Robot Pose Botpose_orb_wpired Y ", m_robotContainer.limelight.getBotpose_orb_wpired().getY());
-    SmartDashboard.putNumber("Robot Pose Botpose_targetspace Y ", m_robotContainer.limelight.getBotpose_targetspace().getY());
-    SmartDashboard.putNumber("Robot Pose Botpose_wpiblue Y ", m_robotContainer.limelight.getBotpose_wpiblue().getY());
-    SmartDashboard.putNumber("Robot Pose Botpose_wpired Y ", m_robotContainer.limelight.getBotpose_wpired().getY());
-    SmartDashboard.putNumber("Robot Pose TargetPose_CameraSpace Y ", m_robotContainer.limelight.getTargetPose_CameraSpace().getY());
-    SmartDashboard.putNumber("Robot Pose Targetpose_robotspace Y ", m_robotContainer.limelight.getTargetpose_robotspace().getY());
-    // SmartDashboard.putNumber("Robot Pose TargetPose_CameraSpace Z ", m_robotContainer.limelight.getTargetPose_CameraSpace().getZ());
-    // SmartDashboard.putNumber("Robot Pose Targetpose_robotspace Z ", m_robotContainer.limelight.getTargetpose_robotspace().getZ());
-    SmartDashboard.putNumber("Robot Pose TargetPose_CameraSpace X ", m_robotContainer.limelight.getTargetPose_CameraSpace().getX());
-    SmartDashboard.putNumber("Robot Pose Targetpose_robotspace X ", m_robotContainer.limelight.getTargetpose_robotspace().getX());
-    SmartDashboard.putNumber("Robot Pose Camerapose_robotspace Y ", m_robotContainer.limelight.getCamerapose_robotspace().getY());
 
     SmartDashboard.putNumber("yaw", m_robotContainer.limelight.getYaw());    
     // SmartDashboard.putNumber("pitch", m_robotContainer.limelight.getPitch());    
