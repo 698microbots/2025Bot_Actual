@@ -172,18 +172,13 @@ public class RobotContainer {
     // reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    // joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "Left"));
     joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "left"));
-    // joystick_1.x().whileTrue(new TagAlignPP_Cmd(drivetrain, limelight, 2));
-      // joystick_1.x().whileTrue(drivetrain.alginToTag(() -> limelight.getRelative3dBotPose().toPose2d()));
-    // joystick_1.x().whileTrue(new TagAlignFinal_Cmd(limelight, drivetrain, "left"));
+
 
     // joystick_1.rightTrigger().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "right"));
     
     
-    // joystick_1.rightBumper().whileTrue(new Slow_Cmd(drivetrain, () ->
-    // -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () ->
-    // -joystick_1.getRightX()));
+
     joystick_2.rightBumper().whileTrue(new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
         () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 4)));
 
