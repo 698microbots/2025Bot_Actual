@@ -25,7 +25,7 @@ public class TagAlignTest_Cmd extends Command {
   // private final PIDController pidControllerOmega = new PIDController(.04, .01, 0);
   
   //pid on carpet worked well
-  private final PIDController pidControllerX = new PIDController(.35, 0.0005, .0000095); //original p: .35 i: .0005 d: 0.00005
+  //private final PIDController pidControllerX = new PIDController(.35, 0.0005, .0000095); //original p: .35 i: .0005 d: 0.00005
   // private final PIDController pidControllerY = new PIDController(.2, 0.0005, .0000095); //original p: .2 i: .0005 d: 0.00005
   // private final PIDController pidControllerOmega = new PIDController(.06, .0005, 0.0000095); //original p: .05 i:.01 d: .0
 
@@ -86,7 +86,7 @@ public class TagAlignTest_Cmd extends Command {
         //   ySpeed = pidControllerY.calculate(limelight.getH_angle(), 0);
         // }
 
-        double ySpeed = pidControllerY.calculate(limelight.getH_angle(), 0);
+        //double ySpeed = pidControllerY.calculate(limelight.getH_angle(), 0);
         //PID setpoint for robot to be 1 meters away from the tag in the x direction
         double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.85);
         

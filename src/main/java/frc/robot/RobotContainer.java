@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.commands.Drop_Cmd;
 
 import frc.robot.commands.ExElevator;
+import frc.robot.commands.Slow_Cmd;
 import frc.robot.commands.ElevatorLift_Cmd;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualLift_Cmd;
@@ -34,6 +35,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -139,10 +141,25 @@ public class RobotContainer {
     // joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "left"));
     
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
-    joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2));
-    joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3));
-    joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4));
+    // joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2));
+    // joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3));
+    // joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4));
 
+    joystick_2.a().whileTrue(new ParallelCommandGroup(
+      new ElevatorLift_Cmd(elevator, dropper, 2),
+      new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(),  () -> -joystick_1.getRightX())
+    ));
+
+    joystick_2.b().whileTrue(new ParallelCommandGroup(
+      new ElevatorLift_Cmd(elevator, dropper, 3),
+      new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(),  () -> -joystick_1.getRightX())
+    ));
+
+    joystick_2.y().whileTrue(new ParallelCommandGroup(
+      new ElevatorLift_Cmd(elevator, dropper, 4),
+      new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(),  () -> -joystick_1.getRightX())
+    ));
+    
   }
 
   /**
@@ -157,3 +174,5 @@ public class RobotContainer {
     // return new PathPlannerAuto("New Auto");
   }
 }
+
+
