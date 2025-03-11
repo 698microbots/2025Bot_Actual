@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("Elevator Position", m_robotContainer.elevator.getPosition());
     SmartDashboard.putNumber("Sensor Distance", m_robotContainer.reactedLeds.returnDistance());
-    SmartDashboard.putNumber("speed", Constants.MaxSpeed);
+    // SmartDashboard.putNumber("speed", Constants.MaxSpeed);
 
     SmartDashboard.putNumber("Robot Pose X", m_robotContainer.limelight.getRelative3dBotPose().getX());
     SmartDashboard.putNumber("Robot Pose Z", m_robotContainer.limelight.getRelative3dBotPose().getZ());
@@ -49,6 +49,27 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Angle", m_robotContainer.limelight.getH_angle());
     // SmartDashboard.putNumber("Angle", m_robotContainer.limelight.getRelative3dBotPose().getRotation().getMeasureY());
 
+    // SmartDashboard.putNumber("Camera Pose X", m_robotContainer.limelight.getAprilTagPose3d().getX());
+    // SmartDashboard.putNumber("Camera Pose Z", m_robotContainer.limelight.getAprilTagPose3d().getZ());
+
+    SmartDashboard.putNumber("Target Pose X", m_robotContainer.limelight.getCameraPose3d().getX());
+    SmartDashboard.putNumber("Target Pose Z", m_robotContainer.limelight.getCameraPose3d().getZ());
+
+    SmartDashboard.putNumber("h angle", m_robotContainer.limelight.getH_angle());
+    SmartDashboard.putNumber("v angle", m_robotContainer.limelight.getV_angle());
+    SmartDashboard.putNumber("ratio h/v", m_robotContainer.limelight.gethvratio());
+    SmartDashboard.putNumber("ratio V/h", m_robotContainer.limelight.gethvratio());
+
+
+    // SmartDashboard.putNumber("Relative Pitch", m_robotContainer.limelight.getRelativePitch());
+    // SmartDashboard.putNumber("Relative Yaw", m_robotContainer.limelight.getRelativeYaw());
+    // SmartDashboard.putNumber("Relative Roll", m_robotContainer.limelight.getRelativeRoll());
+    // SmartDashboard.putNumber("Simulated Y", m_robotContainer.limelight.simulatedYDist());
+
+
+
+    // SmartDashboard.putNumber("robotPose X", m_robotContainer.drivetrain.getPose2d().getX());
+    // SmartDashboard.putNumber("robotPose Y", m_robotContainer.drivetrain.getPose2d().getY());
     SmartDashboard.putBoolean("limit switch", m_robotContainer.elevator.getPressed());
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,

@@ -11,7 +11,7 @@ import frc.robot.commands.ElevatorLift_Cmd;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualLift_Cmd;
 import frc.robot.commands.SetLeds_Cmd;
-import frc.robot.commands.TagAlign2024_Cmd;
+import frc.robot.commands.TagAlignPP_Cmd;
 import frc.robot.commands.TagAlignTest_Cmd;
 import frc.robot.commands.TagAlign_Cmd;
 import frc.robot.commands.testReleaseCoral;
@@ -84,7 +84,7 @@ public class RobotContainer {
 
 
     NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
-    NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO - change the level  later if needed
+    // NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO - change the level  later if needed
     // NamedCommands.registerCommand("EX", new ExampleCommand(m_exampleSubsystem));
 
     autoChooser = AutoBuilder.buildAutoChooser("New Auto");
@@ -133,9 +133,15 @@ public class RobotContainer {
       // reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "Left"));
-    // joystick_1.x().whileTrue(new TagAlign2024_Cmd(limelight, drivetrain));
-    // joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "left"));
+    // joystick_1.x().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "Left"));
+    joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "left"));
+    // joystick_1.x().whileTrue(new TagAlignPP_Cmd(drivetrain, limelight, 2));
+      // joystick_1.x().whileTrue(drivetrain.alginToTag(() -> limelight.getRelative3dBotPose().toPose2d()));
+    
+
+    joystick_1.leftTrigger().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "left"));
+    joystick_1.rightTrigger().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "right"));
+    
     
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
     joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2));

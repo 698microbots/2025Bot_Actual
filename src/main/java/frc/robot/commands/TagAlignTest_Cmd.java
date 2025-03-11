@@ -25,14 +25,14 @@ public class TagAlignTest_Cmd extends Command {
   // private final PIDController pidControllerOmega = new PIDController(.04, .01, 0);
   
   //pid on carpet worked well
-  // private final PIDController pidControllerX = new PIDController(.35, 0.0005, .0000095); //original p: .35 i: .0005 d: 0.00005
+  private final PIDController pidControllerX = new PIDController(.35, 0.0005, .0000095); //original p: .35 i: .0005 d: 0.00005
   // private final PIDController pidControllerY = new PIDController(.2, 0.0005, .0000095); //original p: .2 i: .0005 d: 0.00005
-  // private final PIDController pidControllerOmega = new PIDController(.06, .0005, 0.0000095); //original p: .05 i:.01 d: .0
+  private final PIDController pidControllerOmega = new PIDController(.06, .0005, 0.0000095); //original p: .05 i:.01 d: .0
 
   //try making I different for x and y controllers
-  private final PIDController pidControllerX = new PIDController(.35, 0.0, 0.1); //original p: .35 i: .0005 d: 0.00005
-  private final PIDController pidControllerY = new PIDController(.2, 0.0, .1); //original p: .2 i: .0005 d: 0.00005
-  private final PIDController pidControllerOmega = new PIDController(.06, .0005, 0.0); //original p: .05 i:.01 d: .0
+  // private final PIDController pidControllerX = new PIDController(.45, 0.0005, .0000095); //original p: .35 i: .0005 d: 0.00005
+  private final PIDController pidControllerY = new PIDController(.01, 0.0, 0); //original p: .2 i: .0005 d: 0.00005
+  // private final PIDController pidControllerOmega = new PIDController(.009, .005, 0.0000095); //original p: .05 i:.01 d: .0
 
 
   //1) make the x I pid term very small
@@ -43,7 +43,7 @@ public class TagAlignTest_Cmd extends Command {
   //6) try using a PD controller (use derivative gains and add i term if it doesnt reach what its supposed to) D > P >> I
   // there could be a problem with the p and i terms being so close in value (right now specifically for omegaController)
   private double xErrorBound = 0.0;
-  private double yErrorBound = 0.0;
+  private double yErrorBound = 0;
   private double omegaErrorBound = 0;
 
 
@@ -67,7 +67,9 @@ public class TagAlignTest_Cmd extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    // drivetrain.addVisionMeasurement(limelight.getRelative3dBotPose().toPose2d(), .02);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -76,19 +78,32 @@ public class TagAlignTest_Cmd extends Command {
       //if there are any visible targets 
       if (limelight.getHasTargets()){
 
+        // double ySpeed = 0;
+
+        // if (direction == "right"){
+        //   ySpeed = pidControllerY.calculate(limelight.getH_angle(), -0);
+        // } else {
+        //   ySpeed = pidControllerY.calculate(limelight.getH_angle(), 0);
+        // }
+
+        double ySpeed = pidControllerY.calculate(limelight.getH_angle(), 0);
         //PID setpoint for robot to be 1 meters away from the tag in the x direction
         double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.85);
+        
 
         // //PID setpoint for robot to be 0 meters away from the tag in the y direction
-        double ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
 
           //PID setpoint for the robot to be 0 degrees away from the apriltag
-        double omegaSpeed = pidControllerOmega.calculate(limelight.getH_angle(), 0);
+        double omegaSpeed = pidControllerOmega.calculate(limelight.getCameraPose3d().getX(), 0);
 
         // Monitor
         if (counter % 50 == 0){
-          // System.out.println(xSpeed);      
-          // System.out.println(ySpeed);
+          
+          System.out.println();
+
+          System.out.println(limelight.gethvratio());  
+            
+          // System.out.println(-ySpeed);
           // System.out.println(omegaSpeed);
 
           // System.out.println(pidControllerOmega.getError());
@@ -121,12 +136,12 @@ public class TagAlignTest_Cmd extends Command {
         // ySpeed = 0
         // omegaSpeed = 0;
 
-        drivetrain.setControl(robotCentric.withVelocityX(xSpeed).withVelocityY(-0).withRotationalRate(0));
-      
-
-     
+        drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
     
-    } 
+    } else {
+      drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(-0).withRotationalRate(0));
+
+    }
     
 
       
@@ -143,6 +158,7 @@ public class TagAlignTest_Cmd extends Command {
 
     middleLinedUp = false;
     counter = 0;
+
     drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
     
   }
