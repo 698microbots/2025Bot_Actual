@@ -5,6 +5,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -13,7 +15,8 @@ import frc.robot.subsystems.Elevator_subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorLift_Cmd extends Command {
-  private final PIDController pidcontroller = new PIDController(.04, 0.003, 0);
+  // private final PIDController pidcontroller = new PIDController(.04, 0.003, 0);
+  private final ProfiledPIDController pidController = new ProfiledPIDController(0.04, 0.003, 0, new Constraints(0.5, 2));
   private final Elevator_subsystem elevator;
   private final Dropper_Subsystem dropper;
   private double level = 0;
@@ -54,19 +57,20 @@ public class ElevatorLift_Cmd extends Command {
     }
 
     if (level == 2){
-      output = pidcontroller.calculate(elevator.getPosition(), 3);
+      output = pidController.calculate(elevator.getPosition(), 3);
 
     } else if (level == 3){
-      output = pidcontroller.calculate(elevator.getPosition(), 4.85);
+      output = pidController.calculate(elevator.getPosition(), 4.85);
 
     } else if (level == 4){
-     output = pidcontroller.calculate(elevator.getPosition(), 7.85);
+     output = pidController.calculate(elevator.getPosition(), 7.85);
 
     }
     if (output > .25){
       output = .25;
     }
     elevator.setspeed(output);
+ 
   }
 
   // Called once the command ends or is interrupted.

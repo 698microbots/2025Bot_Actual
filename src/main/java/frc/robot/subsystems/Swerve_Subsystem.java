@@ -315,7 +315,9 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
     }
 
     public Command alginToTag(Supplier<Pose2d> current){
-    // this.resetPose(0,0, new Rotation2d(0));
+    
+    resetPose(new Pose2d(0,0, new Rotation2d(0)));
+    
     System.out.println(current.get().getX());
     System.out.println(current.get().getY());
 

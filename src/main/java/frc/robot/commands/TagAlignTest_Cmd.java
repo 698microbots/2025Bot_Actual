@@ -88,7 +88,7 @@ public class TagAlignTest_Cmd extends Command {
         //get the running average of 10 elements in the list
         Ypositions.add(limelight.getRelative3dBotPose().getX());
 
-        if (Ypositions.size() > 27){
+        if (Ypositions.size() > 30){
           Ypositions.remove(0);
         }
         
