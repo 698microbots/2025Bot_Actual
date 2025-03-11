@@ -9,26 +9,29 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants;
 import frc.robot.subsystems.Swerve_Subsystem;
+import frc.robot.subsystems.Whisker_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Slow_Cmd extends Command {
+public class Whisker_Cmd extends Command {
+  // create 2 limit switch objects
+  Whisker_Subsystem whisker;
   private Swerve_Subsystem drivetrain;
-  private final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
-  private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
   Supplier<Double> xspeed;
-Supplier<Double> yspeed;
-Supplier<Double> rotateSpeed;
+  Supplier<Double> yspeed;
+  Supplier<Double> rotateSpeed;
+  private final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
 
-  /** Creates a new Slow_Cmd. */
-  public Slow_Cmd(Swerve_Subsystem drivetrain, Supplier<Double> xspeed, Supplier<Double> yspeed, Supplier<Double> rotateSpeed) {
+  /** Creates a new Whisker_Cmd. */
+  public Whisker_Cmd(Whisker_Subsystem whisker, Swerve_Subsystem drivetrain, Supplier<Double> xspeed,
+      Supplier<Double> yspeed, Supplier<Double> rotateSpeed) {
+    this.whisker = whisker;
+    this.drivetrain = drivetrain;
     this.drivetrain = drivetrain;
     this.xspeed = xspeed;
     this.yspeed = yspeed;
-    this.rotateSpeed = rotateSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(whisker);
     addRequirements(drivetrain);
   }
 
@@ -41,6 +44,18 @@ Supplier<Double> rotateSpeed;
   @Override
   public void execute() {
     drivetrain.setControl(robotCentric.withVelocityX(xspeed.get()*.1).withVelocityY(yspeed.get()*.1).withRotationalRate(rotateSpeed.get()*.5));
+
+    if (whisker.getDirection().equals("Right")) {
+      // get the right LS
+      // if (whisker.getRightWhiskerClicked()) {
+      // drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
+      // }
+    } else {
+      // get the left LS
+      if (whisker.getLeftWhiskerClicked()) {
+        drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
+      }
+    }
   }
 
   // Called once the command ends or is interrupted.
