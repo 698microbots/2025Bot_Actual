@@ -16,7 +16,7 @@ import frc.robot.subsystems.Swerve_Subsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TagAlignTest_Cmd extends Command {
+public class TagAlign_Cmd extends Command {
 
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
 
@@ -65,7 +65,7 @@ public class TagAlignTest_Cmd extends Command {
   // if the bot is lined up center to the apriltag, before it moves left or right
   private boolean middleLinedUp = false;
 
-  public TagAlignTest_Cmd(LimeLight_Subsystem limelight, Swerve_Subsystem drivetrain, String direction) {
+  public TagAlign_Cmd(LimeLight_Subsystem limelight, Swerve_Subsystem drivetrain, String direction) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limelight = limelight;
     this.drivetrain = drivetrain;
@@ -135,11 +135,17 @@ public class TagAlignTest_Cmd extends Command {
         Supplier<Double> xspeed = () -> joystick_1.getLeftX();
         Supplier<Double> yspeed = () -> joystick_1.getLeftY();
 
-        drivetrain.setControl(robotCentric.withVelocityX(xspeed.get())).withVelocityY(yspeed.get()).withRotationalRate(omegaSpeed));
+        drivetrain.setControl(robotCentric.withVelocityX(xspeed.get()).withVelocityY(yspeed.get()).withRotationalRate(omegaSpeed));
       
 
      
     
+    } else {
+      double xSpeed = 0;
+      double ySpeed = 0;
+      double omegaSpeed = 0;
+
+      drivetrain.setControl(robotCentric.withVelocityX(xSpeed).withVelocityY(ySpeed).withRotationalRate(omegaSpeed));
     } 
     
 

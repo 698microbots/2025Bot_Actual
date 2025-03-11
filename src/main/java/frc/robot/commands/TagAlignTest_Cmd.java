@@ -83,73 +83,56 @@ public class TagAlignTest_Cmd extends Command {
   @Override
   public void execute() {
 
-      //if there are any visible targets 
-      if (limelight.getHasTargets()){
+    // if there are any visible targets
+    if (limelight.getHasTargets()) {
 
-        //PID setpoint for robot to be 1 meters away from the tag in the x direction
-        // double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.85);
-        double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.85);
+      // PID setpoint for robot to be 1 meters away from the tag in the x direction
+      // double xSpeed =
+      // pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.85);
+      double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.85);
 
-        // //PID setpoint for robot to be 0 meters away from the tag in the y direction
-        double ySpeed = pidControllerY.calculate(limelight.getH_angle(), 0);
+      // //PID setpoint for robot to be 0 meters away from the tag in the y direction
+      double ySpeed = pidControllerY.calculate(limelight.getH_angle(), 0);
 
-          //PID setpoint for the robot to be 0 degrees away from the apriltag
-        double omegaSpeed = pidControllerOmega.calculate(limelight.getH_angle(), 0);
+      // PID setpoint for the robot to be 0 degrees away from the apriltag
+      double omegaSpeed = pidControllerOmega.calculate(limelight.getH_angle(), 0);
 
-        // Monitor
-        if (counter % 50 == 0){
-          // System.out.println(xSpeed);      
-          // System.out.println(ySpeed);
-          // System.out.println(omegaSpeed);
+      // Monitor
+      if (counter % 50 == 0) {
+        // System.out.println(xSpeed);
+        // System.out.println(ySpeed);
+        // System.out.println(omegaSpeed);
 
-          // System.out.println(pidControllerOmega.getError());
-          // System.out.println(pidControllerX.getError());
-          // System.out.println(pidControllerY.getError());
+        // System.out.println(pidControllerOmega.getError());
+        // System.out.println(pidControllerX.getError());
+        // System.out.println(pidControllerY.getError());
 
-        }
+      }
 
-      
-      
-      
+      // Error Threshold for X, Y, Omega
+      if (Math.abs(pidControllerX.getError()) < xErrorBound) {
+        xSpeed = 0;
+      }
 
+      if (Math.abs(pidControllerY.getError()) < yErrorBound) { // was .1
+        ySpeed = 0;
+      }
 
-        //Error Threshold for X, Y, Omega
-        if (Math.abs(pidControllerX.getError()) < xErrorBound) {
-          xSpeed = 0;
-        }
+      if (Math.abs(pidControllerOmega.getError()) < omegaErrorBound) {
+        omegaSpeed = 0;
+      }
 
-        if (Math.abs(pidControllerY.getError()) < yErrorBound){ //was .1
-          ySpeed = 0;
-        }
+      // xSpeed = 0;
+      // ySpeed = 0
+      // omegaSpeed = 0;
 
-        if (Math.abs(pidControllerOmega.getError()) < omegaErrorBound){
-          omegaSpeed = 0;
-        }
+      Supplier<Double> xspeed = () -> joystick_1.getLeftX();
+      Supplier<Double> yspeed = () -> joystick_1.getLeftY();
 
-
-
-        // xSpeed = 0;
-        // ySpeed = 0
-        // omegaSpeed = 0;
-
-        Supplier<Double> xspeed = () -> joystick_1.getLeftX();
-        Supplier<Double> yspeed = () -> joystick_1.getLeftY();
-
-        drivetrain.setControl(robotCentric.withVelocityX(xspeed.get()).withVelocityY(yspeed.get()).withRotationalRate(omegaSpeed));
-      
-
-     
-    
-    } 
-    
-
-      
-
-   
-   
-   
-    
-}
+      drivetrain.setControl(
+          robotCentric.withVelocityX(xspeed.get()).withVelocityY(yspeed.get()).withRotationalRate(omegaSpeed));
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
