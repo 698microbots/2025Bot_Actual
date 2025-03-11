@@ -29,7 +29,7 @@ public class ManualLift_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevator_subsystem.setspeed(x.get() * .25);
+    elevator_subsystem.setspeed(x.get() * .12);
   }
 
   // Called once the command ends or is interrupted.

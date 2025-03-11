@@ -35,7 +35,7 @@ public class Slow_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.setControl(fieldCentric.withVelocityX(x.get() * 0.1).withVelocityY(y.get() * 0.1).withRotationalRate(rotationalRate.get() * 0.1));
+    drivetrain.setControl(fieldCentric.withVelocityX(x.get() * 0.1).withVelocityY(y.get() * 0.1).withRotationalRate(rotationalRate.get() * 1.0));
   }
 
   // Called once the command ends or is interrupted.

@@ -52,6 +52,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(Constants.MaxSpeed * 0.1).withRotationalDeadband(Constants.MaxAngularRate * 0.1); // Add a 10%
@@ -118,7 +119,7 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    // dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
+    dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
 
     reactedLeds.setDefaultCommand(new SetLeds_Cmd(reactedLeds));
 
@@ -145,6 +146,7 @@ public class RobotContainer {
     // joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3));
     // joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4));
 
+    //makeshift driver slow speeds
     joystick_2.a().whileTrue(new ParallelCommandGroup(
       new ElevatorLift_Cmd(elevator, dropper, 2),
       new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(),  () -> -joystick_1.getRightX())
