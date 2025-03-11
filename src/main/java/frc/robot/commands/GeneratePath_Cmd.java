@@ -22,7 +22,7 @@ public class GeneratePath_Cmd extends Command {
 
   LimeLight_Subsystem limeLightSubsystem;
   Swerve_Subsystem drivetrain;
-  private double offset=-0.85;
+  private double offset=0; // OLD: -0.85
 
   /** Creates a new GeneratePathAndNav. */
   public GeneratePath_Cmd(LimeLight_Subsystem limeLightSubsystem, Swerve_Subsystem drivetrain) {

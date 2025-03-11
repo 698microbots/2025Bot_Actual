@@ -175,6 +175,8 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
 
+    joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "Right"));
+
     joystick_1.y().whileTrue(new GeneratePath_Cmd(limelight, drivetrain));
 
     joystick_2.a().whileTrue(new Drop_Cmd(dropper));
