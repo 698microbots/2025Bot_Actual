@@ -26,24 +26,18 @@ public class Drop_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    counter++;
-    System.out.println("running");
     dropperSubsystem.dropCoral();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    counter = 0;
+    dropperSubsystem.stopDrive();    
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (counter > Constants.numSeconds(20)){
-      return true;
-    } else {
-      return false;
-    }
+    return true;
   }
 }

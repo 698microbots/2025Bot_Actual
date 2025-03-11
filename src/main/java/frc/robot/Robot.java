@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("Elevator Position", m_robotContainer.elevator.getPosition());
     SmartDashboard.putNumber("Sensor Distance", m_robotContainer.reactedLeds.returnDistance());
-    SmartDashboard.putNumber("speed", Constants.MaxSpeed);
+    // SmartDashboard.putNumber("speed", Constants.MaxSpeed);
 
     SmartDashboard.putNumber("Robot Pose X", m_robotContainer.limelight.getRelative3dBotPose().getX());
     SmartDashboard.putNumber("Robot Pose Z", m_robotContainer.limelight.getRelative3dBotPose().getZ());
@@ -78,6 +78,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Angle", m_robotContainer.limelight.getH_angle());
     SmartDashboard.putNumber("Yaw", m_robotContainer.limelight.getYaw());
 
+    SmartDashboard.putBoolean("limit switch", m_robotContainer.elevator.getPressed());
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
