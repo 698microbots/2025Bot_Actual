@@ -188,10 +188,8 @@ public class RobotContainer {
     // joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain,
     // "Right"))
     joystick_1.x()
-        .whileTrue(new ParallelCommandGroup(new Whisker_Cmd(whisker, drivetrain),
-            new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
-                () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 2)));
-
+        .whileTrue(new Whisker_Cmd(whisker, drivetrain, () -> -joystick_1.getLeftY(),
+            () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()));
     joystick_1.y().whileTrue(new GeneratePath_Cmd(limelight, drivetrain));
 
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
