@@ -19,8 +19,8 @@ public class Slow_Cmd extends Command {
   private final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
   Supplier<Double> xspeed;
-Supplier<Double> yspeed;
-Supplier<Double> rotateSpeed;
+  Supplier<Double> yspeed;
+  Supplier<Double> rotateSpeed;
 
   /** Creates a new Slow_Cmd. */
   public Slow_Cmd(Swerve_Subsystem drivetrain, Supplier<Double> xspeed, Supplier<Double> yspeed, Supplier<Double> rotateSpeed) {
