@@ -14,8 +14,8 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.GeneratePath_Cmd;
 import frc.robot.commands.ManualLift_Cmd;
 import frc.robot.commands.SetLeds_Cmd;
+import frc.robot.commands.TagAlignFinal_Cmd;
 import frc.robot.commands.Slow_Cmd;
-import frc.robot.commands.TagAlignPP_Cmd;
 import frc.robot.commands.TagAlignTest_Cmd;
 import frc.robot.commands.TagAlign_Cmd;
 import frc.robot.commands.Whisker_Cmd;
@@ -91,11 +91,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("dropCommand", Commands.runOnce(()-> new Drop_Cmd(dropper)));
 
     NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
-    NamedCommands.registerCommand("raiseElevator", new ElevatorLift_Cmd(elevator, dropper, Constants.l4)); // TODO -
-                                                                                                           // change the
-                                                                                                           // level
-                                                                                                           // later if
-                                                                                                           // needed
     NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
     // NamedCommands.registerCommand("EX", new ExampleCommand(m_exampleSubsystem));
 
@@ -155,10 +150,7 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    lights.setDefaultCommand(new AutoSetLEDS_cmd(lights));
-
-    dropper.setDefaultCommand(new testReleaseCoral(dropper, () ->
-    // -joystick_2.getRightY()));
+    dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
 
     reactedLeds.setDefaultCommand(new SetLeds_Cmd(reactedLeds));
 
@@ -180,13 +172,16 @@ public class RobotContainer {
     // reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    // joystick_1.rightBumper().whileTrue(new Slow_Cmd(drivetrain, () ->
-    // -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () ->
-    // -joystick_1.getRightX()));
+    joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "left"));
+
+
+    // joystick_1.rightTrigger().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "right"));
+    
+    
+
     joystick_2.rightBumper().whileTrue(new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
         () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 4)));
 
-    NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
 
     // joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain,
     // "Right"))
@@ -196,21 +191,6 @@ public class RobotContainer {
     joystick_1.y().whileTrue(new GeneratePath_Cmd(limelight, drivetrain));
 
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
-    // joystick_2.a()
-        .whileTrue(
-            new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
-                () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()),
-                new ElevatorLift_Cmd(elevator, dropper, 2)));
-    // joystick_2.b()
-        .whileTrue(
-            new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
-                () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()),
-                new ElevatorLift_Cmd(elevator, dropper, 3)));
-    // joystick_2.y()
-        .whileTrue(
-            new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
-                () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()),
-                new ElevatorLift_Cmd(elevator, dropper, 4)));
 
     //makeshift driver slow speeds
     joystick_2.a().whileTrue(new ParallelCommandGroup(
