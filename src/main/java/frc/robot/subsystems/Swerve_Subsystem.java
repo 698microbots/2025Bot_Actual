@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
@@ -19,7 +21,10 @@ import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
@@ -288,6 +293,58 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
         Tmotor4.getConfigurator().apply(config2); // also enables current limits
     }
 
+    public Command pathFindToPose(Pose2d pose, PathConstraints constraints, double goalEndVel) {
+        return AutoBuilder.pathfindToPose(pose, constraints, goalEndVel);
+    }
+
+    public Pose2d getPose2d(){
+        return getState().Pose;
+    }
+
+    public void stopModules(){
+        motor1.set(0);
+        motor2.set(0);
+        motor3.set(0);
+        motor4.set(0);
+
+        Tmotor1.set(0);
+        Tmotor2.set(0);
+        Tmotor3.set(0);
+        Tmotor4.set(0);
+
+    }
+
+    public Command alginToTag(Supplier<Pose2d> current){
+    // Create a list of waypoints from poses. Each pose represents one waypoint.
+    // The rotation component of the pose should be the direction of travel. Do not
+    // use holonomic rotation.
+    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+        current.get() , new Pose2d(-.7,0, new Rotation2d(0)));
+
+    PathConstraints constraints = new PathConstraints(1.0, 1.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this
+                                                                                           // path.
+    // PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0); //
+    // You can also use unlimited constraints, only limited by motor torque and
+    // nominal battery voltage
+
+    // Create the path using the waypoints created above
+    PathPlannerPath path = new PathPlannerPath(
+        waypoints,
+        constraints,
+        null, // The ideal starting state, this is only relevant for pre-planned paths, so can
+              // be null for on-the-fly paths.
+        new GoalEndState(0.0, Rotation2d.fromDegrees(180)) // Goal end state. You can set a holonomic rotation here. If
+                                                           // using a differential drivetrain, the rotation will have no
+                                                           // effect.
+    );
+
+    // Prevent the path from being flipped if the coordinates are already correct
+    path.preventFlipping = true;
+
+    return AutoBuilder.followPath(path);
+    // return AutoBuilder.pathfindToPose
+
+    }
     /**
      * Returns a command that applies the specified control request to this swerve
      * drivetrain.
@@ -322,7 +379,6 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
     }
 
 
-
     @Override
     public void periodic() {
         /*
@@ -345,6 +401,9 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+
+
+
     }
 
     private void startSimThread() {

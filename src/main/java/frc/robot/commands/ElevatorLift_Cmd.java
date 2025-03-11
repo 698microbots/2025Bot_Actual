@@ -5,6 +5,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -13,7 +15,8 @@ import frc.robot.subsystems.Elevator_subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorLift_Cmd extends Command {
-  private final PIDController pidcontroller = new PIDController(.08, 0.003, 0);
+  private final PIDController pidcontroller = new PIDController(.04, 0.003, 0);
+  // private final ProfiledPIDController pidcontroller = new ProfiledPIDController(.04, 0.003, 0,  new Constraints(0.5, 2));
   private final Elevator_subsystem elevator;
   private final Dropper_Subsystem dropper;
   private double level = 0;
@@ -49,6 +52,8 @@ public class ElevatorLift_Cmd extends Command {
 
     if (counter < Constants.numSeconds(.75)){
       dropper.driveUp();
+    } else {
+      dropper.stopDrive();
     }
 
     if (level == 2){
@@ -61,6 +66,9 @@ public class ElevatorLift_Cmd extends Command {
      output = pidcontroller.calculate(elevator.getPosition(), 7.85);
 
     }
+    if (output > .1){
+      output = .1;
+    }
     // System.out.println(output);
     elevator.setspeed(output);
   }
@@ -69,6 +77,7 @@ public class ElevatorLift_Cmd extends Command {
   @Override
   public void end(boolean interrupted) {
     counter = 0;
+    dropper.stopDrive();
   }
 
   // Returns true when the command should end.

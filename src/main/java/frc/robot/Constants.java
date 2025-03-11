@@ -10,6 +10,10 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.pathplanner.lib.config.RobotConfig;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.generated.TunerConstants;
 import frc.robot.generated.TunerConstantsOLD;
 
@@ -36,14 +40,13 @@ public final class Constants {
   public static final int elevator_motor_1 = 15;
   public static final int elevator_motor_2 = 14;
   public static final int lidar_id = 0;
+  public static final int revId = 4;
   public static final int dropperMotorID = 17;
   public static final int boreEncoderId = 0;
   public static final int joystick_1 = 0;
   public static final int joystick_2 = 1;
   public static final int joystick_3 = 2;
-  public static final double l2 = 5; // change this to say like coralL2 to not get confused
-  public static final double l3 = 6;
-  public static final double l4 = 7;
+
   public static final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired
                                                                                             // top speed
   public static final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per
@@ -51,5 +54,10 @@ public final class Constants {
                                                                                                 // velocity
   public static final int toplimitSwitchID = 0;
   public static final int bottomlimitSwitchID = 1;
+
+  public static final Transform3d robotToCam = new Transform3d(
+    new Translation3d(Units.inchesToMeters(10), 0, Units.inchesToMeters(2)),
+    new Rotation3d(0, 0, 0)
+  );
   // public static final RobotConfig ROBOT_CONFIG = RobotConfig.fromGUISettings();
 }

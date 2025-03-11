@@ -6,20 +6,26 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.wpilibj.AddressableLED;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Elevator_subsystem;
+import frc.robot.subsystems.Swerve_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ManualLift_Cmd extends Command {
-  /** Creates a new ManualLift_Cmd. */
-  private Elevator_subsystem elevator_subsystem;
+public class Slow_Cmd extends Command {
   private Supplier<Double> x;
-  public ManualLift_Cmd(Elevator_subsystem elevator_subsystem, Supplier<Double> x) {
+  private Supplier<Double> y;
+  private Supplier<Double> rotationalRate;
+  private Swerve_Subsystem drivetrain;
+  private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric();
+  /** Creates a new Slow_Cmd. */
+  public Slow_Cmd(Swerve_Subsystem drivetrain, Supplier<Double> x, Supplier<Double> y, Supplier<Double> rotationalRate) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.elevator_subsystem = elevator_subsystem;
+    this.drivetrain = drivetrain;
     this.x = x;
-    addRequirements(elevator_subsystem);
+    this.y = y;
+    this.rotationalRate = rotationalRate;
+    addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
@@ -29,7 +35,7 @@ public class ManualLift_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevator_subsystem.setspeed(x.get() * .12);
+    drivetrain.setControl(fieldCentric.withVelocityX(x.get() * 0.1).withVelocityY(y.get() * 0.1).withRotationalRate(rotationalRate.get() * 1.0));
   }
 
   // Called once the command ends or is interrupted.

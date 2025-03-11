@@ -31,7 +31,7 @@ public class TagAlign_Cmd extends Command {
 
 
   private double xErrorBound = .1;
-  private double yErrorBound = .1;
+  private double yErrorBound = .2;
   private double omegaErrorBound = .3;
 
 

@@ -17,8 +17,9 @@ import frc.robot.Constants;
 public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
-  private Encoder revEncoder = new Encoder(0, 1);
   private DigitalInput limitSwitch = new DigitalInput(2);
+  private Encoder revEncoder = new Encoder(0, 1);
+  
   /** Creates a new slevator. */
   
   public Elevator_subsystem() {
@@ -29,11 +30,8 @@ public class Elevator_subsystem extends SubsystemBase {
     motor2.setNeutralMode(NeutralModeValue.Brake);
   }
 
-
-
   public void setspeed(double speed) {
     //Max Encoder: 8.077
-
     
     if (getPosition() < .3 && speed < 0){
       speed = 0;
@@ -61,9 +59,4 @@ public class Elevator_subsystem extends SubsystemBase {
     } 
   }
 
-
-
 }
-
-
-
