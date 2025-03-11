@@ -185,9 +185,9 @@ public class RobotContainer {
     joystick_1.y().whileTrue(new GeneratePath_Cmd(limelight, drivetrain));
 
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
-    joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2));
-    joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3));
-    joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4));
+    joystick_2.a().whileTrue(new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 2));
+    joystick_2.b().whileTrue(new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 3));
+    joystick_2.y().whileTrue(new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 4));
 
   }
 
