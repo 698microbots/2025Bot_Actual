@@ -259,9 +259,9 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
                                     .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
                     new PPHolonomicDriveController(
                             // PID constants for translation
-                            new PIDConstants(10, 0, 0),
+                            new PIDConstants(1, 0, 0),
                             // PID constants for rotation
-                            new PIDConstants(7, 0, 0)),
+                            new PIDConstants(0.7, 0, 0)),
                     config,
                     // Assume the path needs to be flipped for Red vs Blue, this is normally the
                     // case
@@ -315,13 +315,18 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
     }
 
     public Command alginToTag(Supplier<Pose2d> current){
+    // this.resetPose(0,0, new Rotation2d(0));
+    System.out.println(current.get().getX());
+    System.out.println(current.get().getY());
+
     // Create a list of waypoints from poses. Each pose represents one waypoint.
     // The rotation component of the pose should be the direction of travel. Do not
     // use holonomic rotation.
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        current.get() , new Pose2d(-.7,0, new Rotation2d(0)));
+        current.get(),//Pose2d(current.get().getX(), current.get().getY(), new Rotation2d(0))
+        new Pose2d(-.7,0, current.get().getRotation()));
 
-    PathConstraints constraints = new PathConstraints(1.0, 1.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this
+    PathConstraints constraints = new PathConstraints(.3, .3, 2 * Math.PI, 4 * Math.PI); // The constraints for this
                                                                                            // path.
     // PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0); //
     // You can also use unlimited constraints, only limited by motor torque and
@@ -333,7 +338,7 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
         constraints,
         null, // The ideal starting state, this is only relevant for pre-planned paths, so can
               // be null for on-the-fly paths.
-        new GoalEndState(0.0, Rotation2d.fromDegrees(180)) // Goal end state. You can set a holonomic rotation here. If
+        new GoalEndState(0.0, Rotation2d.fromDegrees(0)) // Goal end state. You can set a holonomic rotation here. If
                                                            // using a differential drivetrain, the rotation will have no
                                                            // effect.
     );

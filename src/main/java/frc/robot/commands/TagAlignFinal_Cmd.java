@@ -15,7 +15,7 @@ import frc.robot.subsystems.Swerve_Subsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TagAlignTest_Cmd extends Command {
+public class TagAlignFinal_Cmd extends Command {
   /** Creates a new LineUpToTag. */
   private int counter = 0;
   private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric();
@@ -36,7 +36,7 @@ public class TagAlignTest_Cmd extends Command {
 
   //try making I different for x and y controllers
   // private final PIDController pidControllerX = new PIDController(.45, 0.0005, .0000095); //original p: .35 i: .0005 d: 0.00005
-  private final PIDController pidControllerY = new PIDController(.1, 0.0, 0); //original p: .2 i: .0005 d: 0.00005
+  private final PIDController pidControllerY = new PIDController(.3, 0.0, 0); //original p: .3 i: .000 d: 0.0000
   // private final PIDController pidControllerOmega = new PIDController(.009, .005, 0.0000095); //original p: .05 i:.01 d: .0
 
 
@@ -61,7 +61,7 @@ public class TagAlignTest_Cmd extends Command {
   private boolean middleLinedUp = false;
 
 
-  public TagAlignTest_Cmd(LimeLight_Subsystem limelight, Swerve_Subsystem drivetrain, String direction) {
+  public TagAlignFinal_Cmd(LimeLight_Subsystem limelight, Swerve_Subsystem drivetrain, String direction) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limelight = limelight;
     this.drivetrain = drivetrain;
@@ -82,66 +82,23 @@ public class TagAlignTest_Cmd extends Command {
     double ySpeed = 0;
       //if there are any visible targets 
       if (limelight.getHasTargets()){
-        double posCounter = 0;
-        double negCounter = 0;
-        double avPositions = 0;
-        //get the running average of 10 elements in the list
-        Ypositions.add(limelight.getRelative3dBotPose().getX());
 
-        if (Ypositions.size() > 27){
-          Ypositions.remove(0);
-        }
-        
-        //checks if the average of them are positive
-        for (int i = 0; i < Ypositions.size(); i++){
-          avPositions += Ypositions.get(i);
-          if (Ypositions.get(i) < 0){
-            negCounter++;
-          } else {
-            posCounter++;
-          }
-          
-        }
-                
-        if (negCounter > posCounter){
-          yDirection = -1;
-        } else {
-          yDirection = 1;
+        if (direction == "left" && initalPositionY > 0){
+          System.out.println(initalPositionY);
+          ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), -.22);
+        } else if (direction == "left"){
+          ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), -.1);
         }
 
-        System.out.println(yDirection);
-
-        for (int i = 0; i < Ypositions.size(); i++){
-          if (Math.signum(Ypositions.get(i)) != yDirection){
-            avPositions += -Ypositions.get(i);
-          } else {
-            avPositions += Ypositions.get(i);
-          }
-
-        }
-        
-        avPositions = avPositions/Ypositions.size();
-
-        System.out.println("av position " + avPositions);
-        // double ySpeed = 0;
-
-        // if (direction == "right"){
-        //   ySpeed = pidControllerY.calculate(limelight.getH_angle(), -0);
-        // } else {
-        //   ySpeed = pidControllerY.calculate(limelight.getH_angle(), 0);
-        // }
-
-        // if (initalPositionY > 0){
-        //   ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), -.1);
-        //   System.out.println(initalPositionY);
-        // } else {
-        //   ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
-        //   System.out.println(initalPositionY);
+        if (direction == "right" && initalPositionY > 0){
+          ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), -.1);
+        } else if (direction == "right") {
+          ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
+          System.out.println(initalPositionY);
        
-        // }
-        ySpeed = pidControllerY.calculate(avPositions, 0);
+        }
+        // double ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
         //PID setpoint for robot to be 1 meters away from the tag in the x direction
-        double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -.85);
         // //PID setpoint for robot to be 0 meters away from the tag in the y direction
 
           //PID setpoint for the robot to be 0 degrees away from the apriltag
@@ -151,7 +108,7 @@ public class TagAlignTest_Cmd extends Command {
         if (counter % 50 == 0){
           
           // System.out.println(xSpeed);
-          System.out.println("y speed " + -ySpeed);
+          System.out.println("y speed" + -ySpeed);
           // System.out.println(omegaSpeed);
 
           // System.out.println(pidControllerOmega.getError());
@@ -166,9 +123,6 @@ public class TagAlignTest_Cmd extends Command {
 
 
         //Error Threshold for X, Y, Omega
-        if (Math.abs(pidControllerX.getError()) < xErrorBound){
-          xSpeed = 0;
-        }
 
         if (Math.abs(pidControllerY.getError()) < yErrorBound){ //was .1
           ySpeed = 0;

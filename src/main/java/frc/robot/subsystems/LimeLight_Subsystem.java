@@ -94,6 +94,9 @@ public class LimeLight_Subsystem extends SubsystemBase {
     return true;
   }
 
+  public double averageYPositions(){
+    return 0;
+  }
   public Pose3d getAprilTagPose3d(){
     targetPoseList = targetPose.getDoubleArray(new double[6]);
     //position

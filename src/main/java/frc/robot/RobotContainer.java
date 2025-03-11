@@ -11,7 +11,7 @@ import frc.robot.commands.ElevatorLift_Cmd;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualLift_Cmd;
 import frc.robot.commands.SetLeds_Cmd;
-import frc.robot.commands.TagAlignPP_Cmd;
+import frc.robot.commands.TagAlignFinal_Cmd;
 import frc.robot.commands.TagAlignTest_Cmd;
 import frc.robot.commands.TagAlign_Cmd;
 import frc.robot.commands.testReleaseCoral;
@@ -115,7 +115,7 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    // dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
+    dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
 
     reactedLeds.setDefaultCommand(new SetLeds_Cmd(reactedLeds));
 
@@ -137,10 +137,10 @@ public class RobotContainer {
     joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "left"));
     // joystick_1.x().whileTrue(new TagAlignPP_Cmd(drivetrain, limelight, 2));
       // joystick_1.x().whileTrue(drivetrain.alginToTag(() -> limelight.getRelative3dBotPose().toPose2d()));
-    
+    // joystick_1.x().whileTrue(new TagAlignFinal_Cmd(limelight, drivetrain, "left"));
 
-    joystick_1.leftTrigger().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "left"));
-    joystick_1.rightTrigger().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "right"));
+    // joystick_1.leftTrigger().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "left"));
+    // joystick_1.rightTrigger().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "right"));
     
     
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
