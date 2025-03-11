@@ -49,9 +49,5 @@ public final class Constants {
   public static final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per
                                                                                                 // second max angular
                                                                                                 // velocity
-  public static final int toplimitSwitchID = 3;
   public static final int bottomlimitSwitchID = 2;
-  public static final int leftWhiskerID = 4;
-  public static final int rightWhiskerID = 5;
-  // public static final RobotConfig ROBOT_CONFIG = RobotConfig.fromGUISettings();
 }

@@ -17,6 +17,7 @@ import frc.robot.commands.Slow_Cmd;
 import frc.robot.commands.TagAlign2024_Cmd;
 import frc.robot.commands.TagAlignTest_Cmd;
 import frc.robot.commands.TagAlign_Cmd;
+import frc.robot.commands.Whisker_Cmd;
 import frc.robot.commands.testReleaseCoral;
 import frc.robot.generated.TunerConstants;
 import frc.robot.generated.TunerConstantsOLD;
@@ -184,7 +185,12 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
 
-    joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "Right"));
+    // joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain,
+    // "Right"))
+    joystick_1.x()
+        .whileTrue(new ParallelCommandGroup(new Whisker_Cmd(whisker, drivetrain),
+            new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
+                () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 2)));
 
     joystick_1.y().whileTrue(new GeneratePath_Cmd(limelight, drivetrain));
 
@@ -193,17 +199,17 @@ public class RobotContainer {
         .whileTrue(
             new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
                 () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()),
-            new ElevatorLift_Cmd(elevator, dropper, 2)));
+                new ElevatorLift_Cmd(elevator, dropper, 2)));
     joystick_2.b()
         .whileTrue(
             new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
                 () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()),
-            new ElevatorLift_Cmd(elevator, dropper, 3)));
+                new ElevatorLift_Cmd(elevator, dropper, 3)));
     joystick_2.y()
         .whileTrue(
             new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
                 () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()),
-            new ElevatorLift_Cmd(elevator, dropper, 4)));
+                new ElevatorLift_Cmd(elevator, dropper, 4)));
 
   }
 

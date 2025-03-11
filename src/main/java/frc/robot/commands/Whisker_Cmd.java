@@ -37,9 +37,9 @@ public class Whisker_Cmd extends Command {
     
     if (whisker.getDirection().equals("Right")) {
       // get the right LS
-      if (whisker.getRightWhiskerClicked()) {
-        drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
-      }
+      // if (whisker.getRightWhiskerClicked()) {
+      //   drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
+      // }
     } else {
       // get the left LS
       if (whisker.getLeftWhiskerClicked()) {

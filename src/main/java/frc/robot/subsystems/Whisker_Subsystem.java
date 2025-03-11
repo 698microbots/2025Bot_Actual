@@ -9,8 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Whisker_Subsystem extends SubsystemBase {
-  private DigitalInput leftWhisker = new DigitalInput(Constants.leftWhiskerID);
-  private DigitalInput rightWhisker = new DigitalInput(Constants.rightWhiskerID);
+  private DigitalInput leftWhisker = new DigitalInput(3);
   private String direction;
 
   /** Creates a new Whisker_Subsystem. */
@@ -19,7 +18,7 @@ public class Whisker_Subsystem extends SubsystemBase {
   }
 
   public Whisker_Subsystem() {
-    
+    direction = null;
   }
 
   public String getDirection() {
@@ -30,9 +29,9 @@ public class Whisker_Subsystem extends SubsystemBase {
     return leftWhisker.get();
   }
 
-  public boolean getRightWhiskerClicked() {
-    return rightWhisker.get();
-  }
+  // public boolean getRightWhiskerClicked() {
+  //   return rightWhisker.get();
+  // }
 
   @Override
   public void periodic() {

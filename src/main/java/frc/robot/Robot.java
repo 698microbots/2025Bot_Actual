@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("elevator bottom pressed", m_robotContainer.elevator.getPressed());
     SmartDashboard.putBoolean("whisker left pressed", m_robotContainer.whisker.getLeftWhiskerClicked());
-    SmartDashboard.putBoolean("whisker right pressed", m_robotContainer.whisker.getRightWhiskerClicked());
+    // SmartDashboard.putBoolean("whisker right pressed", m_robotContainer.whisker.getRightWhiskerClicked());
     
     SmartDashboard.putNumber("ensimated Y position", (m_robotContainer.limelight.getRelative3dBotPose().getZ()/Math.tan(m_robotContainer.limelight.getYaw())));
 
