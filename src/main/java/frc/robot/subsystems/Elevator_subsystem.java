@@ -40,7 +40,7 @@ public class Elevator_subsystem extends SubsystemBase {
     if (getPosition() < .3 && speed < 0){
       speed = 0.05;
     } else if (getPosition() < .15 && speed < 0) {
-      speed = .05/2;
+      speed = 0;
     }
     else if (getPosition() > 7.7 && speed > 0){
       speed = 0;
