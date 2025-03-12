@@ -20,12 +20,13 @@ import frc.robot.Constants;
 public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
-  // private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId);
+  // private DutyCycleEncoder revEncoder = new
+  // DutyCycleEncoder(Constants.boreEncoderId);
   private DigitalInput limitSwitch = new DigitalInput(Constants.bottomlimitSwitchID);
   private Encoder revEncoder = new Encoder(0, 1);
-  
+
   /** Creates a new slevator. */
-  
+
   public Elevator_subsystem() {
     // motor1.setNeutralMode(NeutralModeValue.Coast);
     // motor2.setNeutralMode(NeutralModeValue.Coast);
@@ -35,38 +36,47 @@ public class Elevator_subsystem extends SubsystemBase {
   }
 
   public void setspeed(double speed) {
-    //Max Encoder: 8.077
-    
-    if (getPosition() < .3 && speed < 0){
+    // Max Encoder: 8.077
+
+    if (getPosition() < .3 && speed < 0) {
       speed = 0.05;
     } else if (getPosition() < .15 && speed < 0) {
       speed = 0;
-    }
-    else if (getPosition() > 7.7 && speed > 0){
+    } else if (getPosition() > 7.7 && speed > 0) {
       speed = 0;
     }
 
-    motor1.set(-speed); //RIGHT NOW POSITIE VALUES FED INTO THE PARAMETER GOES UP
-    motor2.set(-speed); // without direction changes, pushing up on the joystick goes down   
+    motor1.set(-speed); // RIGHT NOW POSITIE VALUES FED INTO THE PARAMETER GOES UP
+    motor2.set(-speed); // without direction changes, pushing up on the joystick goes down
+  }
+
+  public void setSpeed(double speed, int level) {
+    if (level == 2 && getPosition() > 3) {
+      speed = 0;
+    } else if (level == 3 && getPosition() > 4.85) {
+      speed = 0;
+    } else if (level == 4 && getPosition() > 7.85) {
+      speed = 0;
+    }
   }
 
   public double getPosition() {
     return revEncoder.get() * -.001;
   }
 
-  public boolean getPressed(){
+  public boolean getPressed() {
     return limitSwitch.get();
   }
 
   // public boolean getPressed2(){
-  //   return limitSwitchTop.get();
+  // return limitSwitchTop.get();
   // }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (getPressed()){
+    if (getPressed()) {
       revEncoder.reset();
-    } 
+    }
   }
 }
