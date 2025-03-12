@@ -22,7 +22,7 @@ public class Dropper_Subsystem extends SubsystemBase {
   public Dropper_Subsystem() {}
 
   public void dropCoral(){
-    dropperMotor.set(-.7);
+    dropperMotor.set(-.12);
   }
 
   public void driveUp(){

@@ -24,6 +24,10 @@ public class ElevatorLift_Cmd extends Command {
   private double level = 0;
   private double output = 0;
   private int counter = 0;
+
+  private double L4Limit = 8.05;
+  private double L3Limit = 4.9;
+  private double L2Limit = 3.1;
   /** Creates a new l1_lift_command. */
   public ElevatorLift_Cmd(Elevator_subsystem elevator, Dropper_Subsystem dropper, double level) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -62,22 +66,22 @@ public class ElevatorLift_Cmd extends Command {
     if (level == 2){
       // output = pidController.calculate(elevator.getPosition(), 3);
       // System.out.println(output);
-      elevator.setspeed(.1, 3);
+      elevator.setspeed(.1, L2Limit);
     } else if (level == 3){
       // output = pidController.calculate(elevator.getPosition(), 4.85);
       // System.out.println(output);
-      elevator.setspeed(.1, 4.85);
+      elevator.setspeed(.1, L3Limit);
 
     } else if (level == 4){
-      elevator.setspeed(.1, 8);
+      elevator.setspeed(.1, L4Limit);
 
       // output = pidController.calculate(elevator.getPosition(), 7.85);
       // System.out.println(filter.calculate(output));
     }
     
-    if (Math.abs(output) > .1){
-      output = Math.signum(output) * .1;
-    }
+    // if (Math.abs(output) > .1){
+    //   output = Math.signum(output) * .1;
+    // }
 
     // System.out.println(filter.calculate(output));
     // System.out.println(output);
@@ -96,6 +100,14 @@ public class ElevatorLift_Cmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (level == 2 && elevator.getPosition() >= L2Limit){
+      return true;
+    } else if (level == 3 && elevator.getPosition() >= L3Limit){
+      return true;
+    } else if (level == 4 && elevator.getPosition() >= L4Limit){
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -191,18 +191,21 @@ public class RobotContainer {
 
     // joystick_2.a().whileTrue(new SequentialCommandGroup(
     //   new Whisker_Cmd(whisker, drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX(), "left", elevator),
-    //   new ElevatorLift_Cmd(elevator, dropper, 2)
+    //   new ElevatorLift_Cmd(elevator, dropper, 2),
+    //   new Drop_Cmd(dropper)
     // ));
 
-    // joystick_2.a().whileTrue(new SequentialCommandGroup(
+    // joystick_2.b().whileTrue(new SequentialCommandGroup(
     //   new Whisker_Cmd(whisker, drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX(), "left", elevator),
-    //   new ElevatorLift_Cmd(elevator, dropper, 2)
-    // )); 
+    //   new ElevatorLift_Cmd(elevator, dropper, 3),
+    //   new Drop_Cmd(dropper)
+    // ));
     
-    // joystick_2.a().whileTrue(new SequentialCommandGroup(
+    // joystick_2.y().whileTrue(new SequentialCommandGroup(
     //   new Whisker_Cmd(whisker, drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX(), "left", elevator),
-    //   new ElevatorLift_Cmd(elevator, dropper, 2)
-    // ));    
+    //   new ElevatorLift_Cmd(elevator, dropper, 4),
+    //   new Drop_Cmd(dropper)
+    // )); 
   }
 
   /**
