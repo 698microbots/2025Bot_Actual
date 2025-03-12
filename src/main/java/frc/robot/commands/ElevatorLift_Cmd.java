@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,8 +16,9 @@ import frc.robot.subsystems.Elevator_subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorLift_Cmd extends Command {
-  // private final PIDController pidcontroller = new PIDController(.04, 0.003, 0);
-  private final ProfiledPIDController pidController = new ProfiledPIDController(0.04, 0.003, 0, new Constraints(0.5, 2));
+  private final PIDController pidController = new PIDController(.04, 0.00, .0);
+  private final SlewRateLimiter filter = new SlewRateLimiter(.01);
+  // private final ProfiledPIDController pidController = new ProfiledPIDController(0.04, 0.003, 0, new Constraints(0.5, 2));
   private final Elevator_subsystem elevator;
   private final Dropper_Subsystem dropper;
   private double level = 0;
@@ -56,21 +58,31 @@ public class ElevatorLift_Cmd extends Command {
       dropper.stopDrive();
     }
 
-    if (level == 2){
-      output = pidController.calculate(elevator.getPosition(), 3);
 
+    if (level == 2){
+      // output = pidController.calculate(elevator.getPosition(), 3);
+      // System.out.println(output);
+      elevator.setspeed(.1, 3);
     } else if (level == 3){
-      output = pidController.calculate(elevator.getPosition(), 4.85);
+      // output = pidController.calculate(elevator.getPosition(), 4.85);
+      // System.out.println(output);
+      elevator.setspeed(.1, 4.85);
 
     } else if (level == 4){
-     output = pidController.calculate(elevator.getPosition(), 7.85);
+      elevator.setspeed(.1, 8);
 
+      // output = pidController.calculate(elevator.getPosition(), 7.85);
+      // System.out.println(filter.calculate(output));
     }
-    if (output > .1){
-      output = .1;
+    
+    if (Math.abs(output) > .1){
+      output = Math.signum(output) * .1;
     }
+
+    // System.out.println(filter.calculate(output));
     // System.out.println(output);
-    elevator.setspeed(output);
+    
+    // elevator.setspeed(filter.calculate(output));
  
   }
 

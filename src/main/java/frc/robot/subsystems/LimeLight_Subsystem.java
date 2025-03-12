@@ -94,13 +94,7 @@ public class LimeLight_Subsystem extends SubsystemBase {
   public double getAprilTagID() {
     return aprilID.getDouble(0);
   }
-  public double gethvratio(){
-    return H_angle.getDouble(0) / V_angle.getDouble(0);
-  }
-
-  public double getvhratio(){
-    return V_angle.getDouble(0) / H_angle.getDouble(0);
-  }  
+ 
 
   public boolean getHasTargets() {
     if (hasTargets.getDouble(0) == 0) {

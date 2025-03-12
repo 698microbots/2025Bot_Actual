@@ -44,6 +44,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -176,38 +177,32 @@ public class RobotContainer {
 
 
     // joystick_1.rightTrigger().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "right"));
-    
-    
-
-    joystick_2.rightBumper().whileTrue(new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
-        () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 4)));
-
-
     // joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain,
     // "Right"))
-    joystick_1.x()
-        .whileTrue(new Whisker_Cmd(whisker, drivetrain, () -> -joystick_1.getLeftY(),
-            () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()));
+
     joystick_1.y().whileTrue(new GeneratePath_Cmd(limelight, drivetrain));
 
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
 
-    //makeshift driver slow speeds
-    joystick_2.a().whileTrue(new ParallelCommandGroup(
-      new ElevatorLift_Cmd(elevator, dropper, 2),
-      new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(),  () -> -joystick_1.getRightX())
-    ));
+    joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2));
+    joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3));
+    joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4));
 
-    joystick_2.b().whileTrue(new ParallelCommandGroup(
-      new ElevatorLift_Cmd(elevator, dropper, 3),
-      new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(),  () -> -joystick_1.getRightX())
-    ));
 
-    joystick_2.y().whileTrue(new ParallelCommandGroup(
-      new ElevatorLift_Cmd(elevator, dropper, 4),
-      new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(),  () -> -joystick_1.getRightX())
-    ));
+    // joystick_2.a().whileTrue(new SequentialCommandGroup(
+    //   new Whisker_Cmd(whisker, drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX(), "left", elevator),
+    //   new ElevatorLift_Cmd(elevator, dropper, 2)
+    // ));
+
+    // joystick_2.a().whileTrue(new SequentialCommandGroup(
+    //   new Whisker_Cmd(whisker, drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX(), "left", elevator),
+    //   new ElevatorLift_Cmd(elevator, dropper, 2)
+    // )); 
     
+    // joystick_2.a().whileTrue(new SequentialCommandGroup(
+    //   new Whisker_Cmd(whisker, drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX(), "left", elevator),
+    //   new ElevatorLift_Cmd(elevator, dropper, 2)
+    // ));    
   }
 
   /**

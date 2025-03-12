@@ -16,8 +16,7 @@ import frc.robot.subsystems.Swerve_Subsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Slow_Cmd extends Command {
   private Swerve_Subsystem drivetrain;
-  private final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
-  private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
+  private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric();
   Supplier<Double> xspeed;
 Supplier<Double> yspeed;
 Supplier<Double> rotateSpeed;
@@ -40,7 +39,7 @@ Supplier<Double> rotateSpeed;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.setControl(robotCentric.withVelocityX(xspeed.get()*.1).withVelocityY(yspeed.get()*.1).withRotationalRate(rotateSpeed.get()*.5));
+    drivetrain.setControl(fieldCentric.withVelocityX(xspeed.get()*.1).withVelocityY(yspeed.get()*.1).withRotationalRate(rotateSpeed.get()*.5));
   }
 
   // Called once the command ends or is interrupted.
