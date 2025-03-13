@@ -37,7 +37,7 @@ public class Elevator_subsystem extends SubsystemBase {
   public void setspeed(double speed) {
     //Max Encoder: 8.077
     
-    if (getPosition() < .17 && speed < 0){
+    if (getPosition() < .13 && speed < 0){
       speed = 0;
     } else if (getPosition() > 8.06 && speed > 0){
       speed = 0;
@@ -49,8 +49,7 @@ public class Elevator_subsystem extends SubsystemBase {
 
   public void setspeed(double speed, double encoderLevel) {
     //Max Encoder: 8.077
-    
-    if (getPosition() < .17 && speed < 0){
+    if (getPosition() < .13 && speed < 0){
       speed = 0;
     } else if (getPosition() > encoderLevel && speed > 0){
       speed = 0;

@@ -10,6 +10,7 @@ import frc.robot.Constants;
 
 public class Whisker_Subsystem extends SubsystemBase {
   private DigitalInput leftWhisker = new DigitalInput(3);
+  private DigitalInput rightWhisker = new DigitalInput(4);
 
   /** Creates a new Whisker_Subsystem. */
   public Whisker_Subsystem() {
@@ -19,6 +20,10 @@ public class Whisker_Subsystem extends SubsystemBase {
 
   public boolean getLeftWhiskerClicked() {
     return leftWhisker.get();
+  }
+
+  public boolean getRightWhiskerClicked() {
+    return rightWhisker.get();
   }
 
   // public boolean getRightWhiskerClicked() {

@@ -13,25 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "alignToTag"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "raiseElevator"
+            "name": "RaiseElevatorL2"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "dropCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "returnReef"
           }
         }
       ]

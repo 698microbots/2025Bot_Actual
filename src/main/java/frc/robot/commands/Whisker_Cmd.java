@@ -17,7 +17,7 @@ import frc.robot.subsystems.Whisker_Subsystem;
 public class Whisker_Cmd extends Command {
   // create 2 limit switch objects
   private Whisker_Subsystem whisker;
-  private Swerve_Subsystem drivetrain;
+  // private Swerve_Subsystem drivetrain;
   private Supplier<Double> xspeed;
   private Supplier<Double> yspeed;
   private Supplier<Double> rotateSpeed;
@@ -25,17 +25,16 @@ public class Whisker_Cmd extends Command {
   private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric();
   private String direction;
   /** Creates a new Whisker_Cmd. */
-  public Whisker_Cmd(Whisker_Subsystem whisker, Swerve_Subsystem drivetrain, Supplier<Double> xspeed,
-      Supplier<Double> yspeed, Supplier<Double> rotateSpeed, String direction, Elevator_subsystem elevator) {
+  public Whisker_Cmd(Whisker_Subsystem whisker, String direction, Elevator_subsystem elevator) {
     this.whisker = whisker;
-    this.drivetrain = drivetrain;
-    this.drivetrain = drivetrain;
-    this.xspeed = xspeed;
-    this.yspeed = yspeed;
+    // this.drivetrain = drivetrain;
+    // this.xspeed = xspeed;
+    // this.yspeed = yspeed;
+    // this.rotateSpeed = rotateSpeed;
     this.direction = direction;
     this.elevator = elevator;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(whisker,drivetrain,elevator);
+    addRequirements(whisker,elevator);
   }
 
   // Called when the command is initially scheduled.
@@ -46,14 +45,14 @@ public class Whisker_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() { 
-    elevator.setspeed(.09, 1);
-    drivetrain.setControl(fieldCentric.withVelocityX(xspeed.get()*.1).withVelocityY(yspeed.get()*.1).withRotationalRate(rotateSpeed.get()*.5));
+    elevator.setspeed(.09, .3);
+    // drivetrain.setControl(fieldCentric.withVelocityX(xspeed.get()).withVelocityY(yspeed.get()).withRotationalRate(rotateSpeed.get()*.5));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.setControl(fieldCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
+    // drivetrain.setControl(fieldCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
 
   }
 
@@ -62,8 +61,9 @@ public class Whisker_Cmd extends Command {
   public boolean isFinished() {
     if (direction.equals("left") && whisker.getLeftWhiskerClicked()){
       return true;
-    } else {
-      return false;
+    } else if (direction.equals("right") && whisker.getRightWhiskerClicked()){
+      return true;
     }
+    return false;
   }
 }

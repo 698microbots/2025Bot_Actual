@@ -109,5 +109,6 @@ public class ElevatorLift_Cmd extends Command {
     } else {
       return false;
     }
+    // return false;
   }
 }
