@@ -8,27 +8,30 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
+import frc.robot.subsystems.LimeLight_Subsystem;
 import frc.robot.subsystems.Swerve_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Slow_Cmd extends Command {
+public class AutoRotate_Cmd extends Command {
   private Swerve_Subsystem drivetrain;
   private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric();
-  Supplier<Double> xspeed;
-Supplier<Double> yspeed;
-Supplier<Double> rotateSpeed;
-
+  
+  private Supplier<Double> xspeed;
+  private Supplier<Double> yspeed;
+  private LimeLight_Subsystem limeLight;
+  private final PIDController pidControllerOmega = new PIDController(.06, .0005, 0.0000095);   
   /** Creates a new Slow_Cmd. */
-  public Slow_Cmd(Swerve_Subsystem drivetrain, Supplier<Double> xspeed, Supplier<Double> yspeed, Supplier<Double> rotateSpeed) {
+  public AutoRotate_Cmd(Swerve_Subsystem drivetrain, Supplier<Double> xspeed, Supplier<Double> yspeed, LimeLight_Subsystem limelight) {
     this.drivetrain = drivetrain;
     this.xspeed = xspeed;
     this.yspeed = yspeed;
-    this.rotateSpeed = rotateSpeed;
+    this.limeLight = limelight;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drivetrain);
+    addRequirements(drivetrain, limelight);
   }
 
   // Called when the command is initially scheduled.
@@ -39,7 +42,8 @@ Supplier<Double> rotateSpeed;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.setControl(fieldCentric.withVelocityX(xspeed.get()*.1).withVelocityY(yspeed.get()*.1).withRotationalRate(rotateSpeed.get()*.5));
+    double omegaSpeed = pidControllerOmega.calculate(limeLight.getH_angle(), 0);
+    drivetrain.setControl(fieldCentric.withVelocityX(xspeed.get()*.1).withVelocityY(yspeed.get()*.1).withRotationalRate(omegaSpeed));
   }
 
   // Called once the command ends or is interrupted.
