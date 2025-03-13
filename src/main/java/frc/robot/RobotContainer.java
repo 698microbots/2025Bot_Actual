@@ -194,8 +194,11 @@ public class RobotContainer {
     // joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2));
     // joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3));
     // joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4));
+    
+    //P2 Slowmode
+    joystick_2.rightBumper().whileTrue(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()));
 
-
+    //P2 Auto Rotate
     //P2 right whisker
     joystick_2.a().whileTrue(new SequentialCommandGroup(
       new Whisker_Cmd(whisker, "right", elevator),
