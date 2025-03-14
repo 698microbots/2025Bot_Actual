@@ -17,9 +17,9 @@ import frc.robot.subsystems.Swerve_Subsystem;
 public class Slow_Cmd extends Command {
   private Swerve_Subsystem drivetrain;
   private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric();
-  Supplier<Double> xspeed;
-Supplier<Double> yspeed;
-Supplier<Double> rotateSpeed;
+  private Supplier<Double> xspeed;
+  private Supplier<Double> yspeed;
+  private Supplier<Double> rotateSpeed;
 
   /** Creates a new Slow_Cmd. */
   public Slow_Cmd(Swerve_Subsystem drivetrain, Supplier<Double> xspeed, Supplier<Double> yspeed, Supplier<Double> rotateSpeed) {
@@ -39,7 +39,7 @@ Supplier<Double> rotateSpeed;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.setControl(fieldCentric.withVelocityX(xspeed.get()*.1).withVelocityY(yspeed.get()*.1).withRotationalRate(rotateSpeed.get()*.5));
+    drivetrain.setControl(fieldCentric.withVelocityX(xspeed.get()*.4).withVelocityY(yspeed.get()*.4).withRotationalRate(rotateSpeed.get()*Math.PI*.5));
   }
 
   // Called once the command ends or is interrupted.

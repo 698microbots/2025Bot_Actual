@@ -18,28 +18,29 @@ import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.Swerve_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ElevatorLift_Cmd extends Command {
-  // private final PIDController pidController = new PIDController(.04, 0.00, .0);
-  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.06);
+public class ElevatorLiftWhisker_Cmd extends Command {
+  private final PIDController pidController = new PIDController(.04, 0.00, .0);
+  private final SlewRateLimiter filter = new SlewRateLimiter(.01);
+  private final Swerve_Subsystem drivetrain;
   // private final ProfiledPIDController pidController = new ProfiledPIDController(0.04, 0.003, 0, new Constraints(0.5, 2));
   private final Elevator_subsystem elevator;
   private final Dropper_Subsystem dropper;
   private double level = 0;
+  private double output = 0;
   private int counter = 0;
-  private boolean auto;
-  private double speed = 0;
+  private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric();
 
-  private double L4Limit = 7.9;
-  private double L3Limit = 4.7;
-  private double L2Limit = 2.7;
+  private double L4Limit = 8.05;
+  private double L3Limit = 4.9;
+  private double L2Limit = 3.1;
   /** Creates a new l1_lift_command. */
-  public ElevatorLift_Cmd(Elevator_subsystem elevator, Dropper_Subsystem dropper, double level, boolean auto) {
+  public ElevatorLiftWhisker_Cmd(Elevator_subsystem elevator, Dropper_Subsystem dropper, double level, Swerve_Subsystem drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.elevator = elevator;
     this.level = level;
-    this.auto = auto;
     this.dropper = dropper;
-    addRequirements(elevator,dropper);
+    this.drivetrain = drivetrain;
+    addRequirements(elevator,dropper, drivetrain);
   }
 
   /*
@@ -59,6 +60,7 @@ public class ElevatorLift_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    drivetrain.setControl(fieldCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
     
     counter++;
 
@@ -67,25 +69,40 @@ public class ElevatorLift_Cmd extends Command {
     } else {
       dropper.stopDrive();
     }
-    
-    if (counter < Constants.numSeconds(1.5)){
-      speed = slewRateLimiter.calculate(.3);
-      if (level == 2){
-        elevator.setspeed(speed, L2Limit);
-      } else if (level == 3){
-        elevator.setspeed(speed, L3Limit);
-      } else if (level == 4){
-        elevator.setspeed(speed, L4Limit);
-      }      
-    } else {
-      if (level == 2){
-        elevator.setspeed(.3, L2Limit);
-      } else if (level == 3){
-        elevator.setspeed(.3, L3Limit);
-      } else if (level == 4){
-        elevator.setspeed(.3, L4Limit);
-      }
+
+    //L4 Acceleration change (slower acceleration)
+    // if (counter < Constants.numSeconds(.75) && level == 4){
+    //   dropper.driveUp();
+    //   elevator.setspeed(.1);
+    // } else {
+    //   dropper.stopDrive();
+    // }
+
+    if (level == 2){
+      // output = pidController.calculate(elevator.getPosition(), 3);
+      // System.out.println(output);
+      elevator.setspeed(.1, L2Limit);
+    } else if (level == 3){
+      // output = pidController.calculate(elevator.getPosition(), 4.85);
+      // System.out.println(output);
+      elevator.setspeed(.1, L3Limit);
+
+    } else if (level == 4){
+      elevator.setspeed(.1, L4Limit);
+
+      // output = pidController.calculate(elevator.getPosition(), 7.85);
+      // System.out.println(filter.calculate(output));
     }
+    
+    // if (Math.abs(output) > .1){
+    //   output = Math.signum(output) * .1;
+    // }
+
+    // System.out.println(filter.calculate(output));
+    // System.out.println(output);
+    
+    // elevator.setspeed(filter.calculate(output));
+ 
   }
 
   // Called once the command ends or is interrupted.
@@ -93,24 +110,20 @@ public class ElevatorLift_Cmd extends Command {
   public void end(boolean interrupted) {
     counter = 0;
     dropper.stopDrive();
-    elevator.setspeed(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (auto){
-      if (level == 2 && elevator.getPosition() >= L2Limit){
-        return true;
-      } else if (level == 3 && elevator.getPosition() >= L3Limit){
-        return true;
-      } else if (level == 4 && elevator.getPosition() >= L4Limit){
-        return true;
-      } else {
-        return false;
-      }
+    if (level == 2 && elevator.getPosition() >= L2Limit){
+      return true;
+    } else if (level == 3 && elevator.getPosition() >= L3Limit){
+      return true;
+    } else if (level == 4 && elevator.getPosition() >= L4Limit){
+      return true;
     } else {
-    return false;
+      return false;
     }
+    // return false;
   }
 }

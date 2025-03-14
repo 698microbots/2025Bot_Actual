@@ -94,7 +94,7 @@ public class TagAlignFinal_Cmd extends Command {
           ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), -.1);
         } else if (direction == "right") {
           ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
-          System.out.println(initalPositionY);
+          // System.out.println(initalPositionY);
        
         }
         // double ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
@@ -108,7 +108,7 @@ public class TagAlignFinal_Cmd extends Command {
         if (counter % 50 == 0){
           
           // System.out.println(xSpeed);
-          System.out.println("y speed" + -ySpeed);
+          // System.out.println("y speed" + -ySpeed);
           // System.out.println(omegaSpeed);
 
           // System.out.println(pidControllerOmega.getError());

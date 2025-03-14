@@ -26,9 +26,7 @@ public class Whisker_Subsystem extends SubsystemBase {
     return rightWhisker.get();
   }
 
-  // public boolean getRightWhiskerClicked() {
-  //   return rightWhisker.get();
-  // }
+
 
   @Override
   public void periodic() {

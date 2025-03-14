@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "OppositeStartPath"
+            "pathName": "DropCoralWLineup"
           }
         },
         {
@@ -20,6 +20,12 @@
           "type": "named",
           "data": {
             "name": "dropCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "elevatorDown"
           }
         }
       ]

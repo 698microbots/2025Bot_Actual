@@ -4,9 +4,11 @@
 
 package frc.robot;
 
+import frc.robot.commands.AutoRotate_Cmd;
 import frc.robot.commands.AutoSetLEDS_cmd;
 import frc.robot.commands.Drop_Cmd;
-
+import frc.robot.commands.ElevatorDown_Cmd;
+import frc.robot.commands.ElevatorLiftWhisker_Cmd;
 import frc.robot.commands.ExElevator;
 import frc.robot.commands.Slow_Cmd;
 import frc.robot.commands.ElevatorLift_Cmd;
@@ -69,6 +71,7 @@ public class RobotContainer {
 
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
   private final CommandXboxController joystick_2 = new CommandXboxController(Constants.joystick_2);
+  private final CommandXboxController joystick_TEST = new CommandXboxController(2);
 
   public Dropper_Subsystem dropper = new Dropper_Subsystem();
   public Elevator_subsystem elevator = new Elevator_subsystem();
@@ -92,10 +95,11 @@ public class RobotContainer {
     // NamedCommands.registerCommand("dropCommand", Commands.runOnce(()-> new Drop_Cmd(dropper)));
 
     // NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
+    NamedCommands.registerCommand("elevatorDown", new ElevatorDown_Cmd(elevator));
     NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
-    NamedCommands.registerCommand("RaiseElevatorL2", new ElevatorLift_Cmd(elevator, dropper, 2));
-    NamedCommands.registerCommand("RaiseElevatorL3", new ElevatorLift_Cmd(elevator, dropper, 3));
-    NamedCommands.registerCommand("RaiseElevatorL4", new ElevatorLift_Cmd(elevator, dropper, 4));
+    NamedCommands.registerCommand("RaiseElevatorL2", new ElevatorLift_Cmd(elevator, dropper, 2, true));
+    NamedCommands.registerCommand("RaiseElevatorL3", new ElevatorLift_Cmd(elevator, dropper, 3, true));
+    NamedCommands.registerCommand("RaiseElevatorL4", new ElevatorLift_Cmd(elevator, dropper, 4, true));
 
 
     //
@@ -161,11 +165,9 @@ public class RobotContainer {
     //P2 manual dropper
     dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
     //P2 manual elevator
-    elevator.setDefaultCommand(new ManualLift_Cmd(elevator, () -> -joystick_2.getLeftY()));
+    elevator.setDefaultCommand(new ManualLift_Cmd(elevator, () -> -joystick_2.getLeftY(), dropper));
 
-
-
-
+    //P1 driver
     drivetrain.setDefaultCommand(
         // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-joystick_1.getLeftY() * Constants.MaxSpeed * .5) // Drive
@@ -179,63 +181,70 @@ public class RobotContainer {
                                                                                          // negative X (left)
         ));
 
-    // reset the field-centric heading on left bumper press
+    //P1 reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    // joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "left"));
-    // joystick_1.rightTrigger().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "right"));
-    // joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain,
-    // "Right"))
+    //P1 Slowmode
+    joystick_1.rightTrigger().whileTrue(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()));
 
-    // joystick_1.y().whileTrue(new GeneratePath_Cmd(limelight, drivetrain));
-
+    //P2 drop button
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
-
-    // joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2));
-    // joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3));
-    // joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4));
     
-    //P2 Slowmode
-    joystick_2.rightBumper().whileTrue(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()));
-
     //P2 Auto Rotate
+    // joystick_2.rightBumper().whileTrue(new AutoRotate_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), limelight));
+
+    //P2 auto leveling and drops
+    joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2, false));
+    joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3, false));
+    joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4, false));
+
     //P2 right whisker
-    joystick_2.a().whileTrue(new SequentialCommandGroup(
-      new Whisker_Cmd(whisker, "right", elevator),
-      new ElevatorLift_Cmd(elevator, dropper, 2),
-      new Drop_Cmd(dropper)
-    ));
+    // joystick_2.a().whileTrue(new SequentialCommandGroup(
+    //   new Whisker_Cmd(whisker, "right", elevator),
+    //   new ElevatorLiftWhisker_Cmd(elevator, dropper, 2, drivetrain),
+    //   new Drop_Cmd(dropper),
+    //   new ElevatorDown_Cmd(elevator)
+    // ));
 
-    joystick_2.b().whileTrue(new SequentialCommandGroup(
-      new Whisker_Cmd(whisker, "right", elevator),
-      new ElevatorLift_Cmd(elevator, dropper, 3),
-      new Drop_Cmd(dropper)
-    ));
+    // joystick_2.b().whileTrue(new SequentialCommandGroup(
+    //   new Whisker_Cmd(whisker, "right", elevator),
+    //   new ElevatorLiftWhisker_Cmd(elevator, dropper, 3, drivetrain),
+    //   new Drop_Cmd(dropper),
+    //   new ElevatorDown_Cmd(elevator)
+    // ));
     
-    joystick_2.y().whileTrue(new SequentialCommandGroup(
-      new Whisker_Cmd(whisker, "right", elevator),
-      new ElevatorLift_Cmd(elevator, dropper, 4),
-      new Drop_Cmd(dropper)
-    )); 
+    // joystick_2.y().whileTrue(new SequentialCommandGroup(
+    //   new Whisker_Cmd(whisker, "right", elevator),
+    //   new ElevatorLiftWhisker_Cmd(elevator, dropper, 4, drivetrain),
+    //   new Drop_Cmd(dropper),
+    //   new ElevatorDown_Cmd(elevator)
+    // )); 
 
-    //P2 left whisker
-    joystick_2.povDown().whileTrue(new SequentialCommandGroup(
-      new Whisker_Cmd(whisker, "left", elevator),
-      new ElevatorLift_Cmd(elevator, dropper, 2),
-      new Drop_Cmd(dropper)
-    ));  
+    // //P2 left whisker
+    // joystick_2.povDown().whileTrue(new SequentialCommandGroup(
+    //   new Whisker_Cmd(whisker, "left", elevator),
+    //   new ElevatorLiftWhisker_Cmd(elevator, dropper, 2, drivetrain),
+    //   new Drop_Cmd(dropper),
+    //   new ElevatorDown_Cmd(elevator)
+    // ));  
 
-    joystick_2.povRight().whileTrue(new SequentialCommandGroup(
-      new Whisker_Cmd(whisker, "left", elevator),
-      new ElevatorLift_Cmd(elevator, dropper, 3),
-      new Drop_Cmd(dropper)
-    ));
+    // joystick_2.povRight().whileTrue(new SequentialCommandGroup(
+    //   new Whisker_Cmd(whisker, "left", elevator),
+    //   new ElevatorLiftWhisker_Cmd(elevator, dropper, 3, drivetrain),
+    //   new Drop_Cmd(dropper),
+    //   new ElevatorDown_Cmd(elevator)
+    // ));
   
-    joystick_2.povUp().whileTrue(new SequentialCommandGroup(
-      new Whisker_Cmd(whisker, "left", elevator),
-      new ElevatorLift_Cmd(elevator, dropper, 4),
-      new Drop_Cmd(dropper)
-    ));    
+    // joystick_2.povUp().whileTrue(new SequentialCommandGroup(
+    //   new Whisker_Cmd(whisker, "left", elevator),
+    //   new ElevatorLiftWhisker_Cmd(elevator, dropper, 4, drivetrain),
+    //   new Drop_Cmd(dropper),
+    //   new ElevatorDown_Cmd(elevator)
+    // ));    
+
+
+
+    // joystick_TEST.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2));
   }
 
   /**

@@ -20,6 +20,7 @@ import frc.robot.Constants;
 public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
+  
   // private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId);
   private DigitalInput limitSwitch = new DigitalInput(2);
   private Encoder revEncoder = new Encoder(0, 1);
@@ -37,7 +38,7 @@ public class Elevator_subsystem extends SubsystemBase {
   public void setspeed(double speed) {
     //Max Encoder: 8.077
     
-    if (getPosition() < .13 && speed < 0){
+    if (getPosition() < .11 && speed < 0){
       speed = 0;
     } else if (getPosition() > 8.06 && speed > 0){
       speed = 0;
@@ -49,11 +50,13 @@ public class Elevator_subsystem extends SubsystemBase {
 
   public void setspeed(double speed, double encoderLevel) {
     //Max Encoder: 8.077
-    if (getPosition() < .13 && speed < 0){
+    if (getPosition() < .11 && speed < 0){
       speed = 0;
     } else if (getPosition() > encoderLevel && speed > 0){
       speed = 0;
     }
+
+    
 
     motor1.set(-speed); //RIGHT NOW POSITIE VALUES FED INTO THE PARAMETER GOES UP
     motor2.set(-speed); // without direction changes, pushing up on the joystick goes down   

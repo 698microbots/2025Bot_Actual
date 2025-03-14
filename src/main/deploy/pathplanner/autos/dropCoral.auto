@@ -13,13 +13,19 @@
         {
           "type": "named",
           "data": {
-            "name": "RaiseElevatorL2"
+            "name": "RaiseElevatorL4"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "dropCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "elevatorDown"
           }
         }
       ]

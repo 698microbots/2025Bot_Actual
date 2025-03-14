@@ -43,7 +43,7 @@ public class AutoRotate_Cmd extends Command {
   @Override
   public void execute() {
     double omegaSpeed = pidControllerOmega.calculate(limeLight.getH_angle(), 0);
-    drivetrain.setControl(fieldCentric.withVelocityX(xspeed.get()*.1).withVelocityY(yspeed.get()*.1).withRotationalRate(omegaSpeed));
+    drivetrain.setControl(fieldCentric.withVelocityX(xspeed.get()).withVelocityY(yspeed.get()).withRotationalRate(omegaSpeed));
   }
 
   // Called once the command ends or is interrupted.

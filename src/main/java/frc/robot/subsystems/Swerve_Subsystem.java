@@ -333,8 +333,8 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
     
     resetPose(new Pose2d(0,0, new Rotation2d(0)));
     
-    System.out.println(current.get().getX());
-    System.out.println(current.get().getY());
+    // System.out.println(current.get().getX());
+    // System.out.println(current.get().getY());
 
     // Create a list of waypoints from poses. Each pose represents one waypoint.
     // The rotation component of the pose should be the direction of travel. Do not
