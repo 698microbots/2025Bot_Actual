@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putBoolean("whisker right pressed", m_robotContainer.whisker.getRightWhiskerClicked());
     
     SmartDashboard.putNumber("ensimated Y position", (m_robotContainer.limelight.getRelative3dBotPose().getZ()/Math.tan(m_robotContainer.limelight.getYaw())));
-
+    SmartDashboard.putString("", m_robotContainer.elevator.getVoltage());
     // 
     // SmartDashboard.putData("Robot Pose _ ", m_robotContainer.limelight.get)    
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled

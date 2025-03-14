@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -15,6 +16,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
@@ -116,6 +118,10 @@ public class Elevator_subsystem extends SubsystemBase {
   // public boolean getPressed2(){
   //   return limitSwitchTop.get();
   // }
+
+  public String getVoltage() {
+    return "Left motor voltage" + motor1.getMotorVoltage().getValueAsDouble() + "|| ||" + "Right motor voltage" + motor2.getMotorVoltage().getValueAsDouble();
+  }
 
   @Override
   public void periodic() {
