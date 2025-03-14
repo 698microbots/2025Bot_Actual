@@ -52,7 +52,7 @@ public final class Constants {
   public static final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per
                                                                                                 // second max angular
                                                                                                 // velocity
-  public static final int toplimitSwitchID = 0;
+  public static final int toplimitSwitchID = 2;
   public static final int bottomlimitSwitchID = 1;
 
   public static final Transform3d robotToCam = new Transform3d(

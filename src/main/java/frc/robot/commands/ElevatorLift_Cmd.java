@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -71,7 +73,7 @@ public class ElevatorLift_Cmd extends Command {
     }
     // System.out.println(output);
     elevator.setspeed(output);
- 
+
   }
 
   // Called once the command ends or is interrupted.

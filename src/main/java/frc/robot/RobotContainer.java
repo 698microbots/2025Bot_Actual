@@ -31,19 +31,27 @@ import frc.robot.subsystems.Light_Subsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
 import frc.robot.subsystems.ReactedLED_Subsystem;
 
+import java.security.AuthProvider;
+
+import javax.security.sasl.AuthorizeCallback;
+
 import com.ctre.phoenix.Logger;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -208,10 +216,23 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    // return Autos.exampleAuto(m_exampleSubsystem);
-    return autoChooser.getSelected();
-    // return new PathPlannerAuto("New Auto");
+   
+  //   try{
+  //     // Load the path you want to follow using its name in the GUI
+  //     PathPlannerPath path = PathPlannerPath.fromPathFile("returnReef");
+
+  //     // Create a path following command using AutoBuilder. This will also trigger event markers.
+  //     return AutoBuilder.followPath(path);
+  // } catch (Exception e) {
+  //     DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+  //     return Commands.none();
+  // }
+    return new SequentialCommandGroup(
+      NamedCommands.getCommand("alignToTag"),
+      new ElevatorLift_Cmd(elevator, dropper, 4),
+      NamedCommands.getCommand("dropCommand"),
+      NamedCommands.getCommand("Elevatordown")
+      );
   }
 }
 
