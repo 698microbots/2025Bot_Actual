@@ -17,42 +17,43 @@ import frc.robot.subsystems.Elevator_subsystem;
 public class ManualLift_Cmd extends Command {
   /** Creates a new ManualLift_Cmd. */
   private Elevator_subsystem elevator_subsystem;
-  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.06);
+  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.12);
   private Supplier<Double> x;
   private double speed = 0;    
-  private Dropper_Subsystem dropper;
 
   private int counter = 0;
-  public ManualLift_Cmd(Elevator_subsystem elevator_subsystem, Supplier<Double> x, Dropper_Subsystem dropper) {
+  public ManualLift_Cmd(Elevator_subsystem elevator_subsystem, Supplier<Double> x) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.elevator_subsystem = elevator_subsystem;
-    this.dropper = dropper;
     this.x = x;
-    addRequirements(elevator_subsystem, dropper);
+    addRequirements(elevator_subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     counter++;
-    
-    //this breaks things maybe need to comment
-    if (counter < Constants.numSeconds(.75)){
-      dropper.driveUp();  
-    } else {
-      dropper.stopDrive();
+
+    if (counter < Constants.numSeconds(1.2)){
+      // System.out.println("slew rate running");
+      speed = slewRateLimiter.calculate(x.get() * .41);
+    }  else {
+      speed = x.get() * .41;      
     }
 
-    if (counter > Constants.numSeconds(1.5)){
-      speed = slewRateLimiter.calculate(x.get() * .3);
-    } else {
-      speed = x.get() * .3;
-    }
+    if (x.get() < 0 && speed > 0){
+      speed = -speed;
+    } 
+
     elevator_subsystem.setspeed(speed);
+    // System.out.println(speed);
+
+    // elevator_subsystem.setspeed(x.get()*.15);
 
   }
 
@@ -66,6 +67,9 @@ public class ManualLift_Cmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (x.get() == 0){
+      return true;
+    }
     return false;
   }
 }

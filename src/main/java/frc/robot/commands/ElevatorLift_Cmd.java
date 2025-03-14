@@ -20,7 +20,7 @@ import frc.robot.subsystems.Swerve_Subsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorLift_Cmd extends Command {
   // private final PIDController pidController = new PIDController(.04, 0.00, .0);
-  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.06);
+  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.12);
   // private final ProfiledPIDController pidController = new ProfiledPIDController(0.04, 0.003, 0, new Constraints(0.5, 2));
   private final Elevator_subsystem elevator;
   private final Dropper_Subsystem dropper;
@@ -28,6 +28,7 @@ public class ElevatorLift_Cmd extends Command {
   private int counter = 0;
   private boolean auto;
   private double speed = 0;
+  private double maxSpeed = .35;
 
   private double L4Limit = 7.9;
   private double L3Limit = 4.7;
@@ -54,7 +55,9 @@ public class ElevatorLift_Cmd extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    speed = slewRateLimiter.calculate(0);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -68,24 +71,34 @@ public class ElevatorLift_Cmd extends Command {
       dropper.stopDrive();
     }
     
-    if (counter < Constants.numSeconds(1.5)){
-      speed = slewRateLimiter.calculate(.3);
+  
+
+    if (counter < Constants.numSeconds(1.3)){
+      speed = slewRateLimiter.calculate(maxSpeed);
       if (level == 2){
         elevator.setspeed(speed, L2Limit);
       } else if (level == 3){
         elevator.setspeed(speed, L3Limit);
       } else if (level == 4){
         elevator.setspeed(speed, L4Limit);
-      }      
-    } else {
-      if (level == 2){
-        elevator.setspeed(.3, L2Limit);
-      } else if (level == 3){
-        elevator.setspeed(.3, L3Limit);
-      } else if (level == 4){
-        elevator.setspeed(.3, L4Limit);
       }
+
+    } else {
+      if (level == 2 && elevator.getPosition() < L2Limit-.1){
+        elevator.setspeed(maxSpeed, L2Limit);
+      } else if (level == 3 && elevator.getPosition() < L3Limit-.1){
+        elevator.setspeed(maxSpeed, L3Limit);
+      } else if (level == 4 && elevator.getPosition() < L4Limit-.1){
+        elevator.setspeed(maxSpeed, L4Limit);
+      } else {
+        elevator.setspeed(0);
+      }
+  
     }
+    // System.out.println(counter);
+
+
+
   }
 
   // Called once the command ends or is interrupted.

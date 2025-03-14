@@ -163,9 +163,9 @@ public class RobotContainer {
 
 
     //P2 manual dropper
-    dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
+    // dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
     //P2 manual elevator
-    elevator.setDefaultCommand(new ManualLift_Cmd(elevator, () -> -joystick_2.getLeftY(), dropper));
+    elevator.setDefaultCommand(new ManualLift_Cmd(elevator, () -> -joystick_2.getLeftY()));
 
     //P1 driver
     drivetrain.setDefaultCommand(
@@ -193,58 +193,12 @@ public class RobotContainer {
     //P2 Auto Rotate
     // joystick_2.rightBumper().whileTrue(new AutoRotate_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), limelight));
 
-    //P2 auto leveling and drops
+    //P2 auto leveling and drops WITH THE CURRENT SLEWRATE THIS WILL CUASE LOTS OF OVERSHOOT
     joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2, false));
     joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3, false));
     joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4, false));
 
-    //P2 right whisker
-    // joystick_2.a().whileTrue(new SequentialCommandGroup(
-    //   new Whisker_Cmd(whisker, "right", elevator),
-    //   new ElevatorLiftWhisker_Cmd(elevator, dropper, 2, drivetrain),
-    //   new Drop_Cmd(dropper),
-    //   new ElevatorDown_Cmd(elevator)
-    // ));
 
-    // joystick_2.b().whileTrue(new SequentialCommandGroup(
-    //   new Whisker_Cmd(whisker, "right", elevator),
-    //   new ElevatorLiftWhisker_Cmd(elevator, dropper, 3, drivetrain),
-    //   new Drop_Cmd(dropper),
-    //   new ElevatorDown_Cmd(elevator)
-    // ));
-    
-    // joystick_2.y().whileTrue(new SequentialCommandGroup(
-    //   new Whisker_Cmd(whisker, "right", elevator),
-    //   new ElevatorLiftWhisker_Cmd(elevator, dropper, 4, drivetrain),
-    //   new Drop_Cmd(dropper),
-    //   new ElevatorDown_Cmd(elevator)
-    // )); 
-
-    // //P2 left whisker
-    // joystick_2.povDown().whileTrue(new SequentialCommandGroup(
-    //   new Whisker_Cmd(whisker, "left", elevator),
-    //   new ElevatorLiftWhisker_Cmd(elevator, dropper, 2, drivetrain),
-    //   new Drop_Cmd(dropper),
-    //   new ElevatorDown_Cmd(elevator)
-    // ));  
-
-    // joystick_2.povRight().whileTrue(new SequentialCommandGroup(
-    //   new Whisker_Cmd(whisker, "left", elevator),
-    //   new ElevatorLiftWhisker_Cmd(elevator, dropper, 3, drivetrain),
-    //   new Drop_Cmd(dropper),
-    //   new ElevatorDown_Cmd(elevator)
-    // ));
-  
-    // joystick_2.povUp().whileTrue(new SequentialCommandGroup(
-    //   new Whisker_Cmd(whisker, "left", elevator),
-    //   new ElevatorLiftWhisker_Cmd(elevator, dropper, 4, drivetrain),
-    //   new Drop_Cmd(dropper),
-    //   new ElevatorDown_Cmd(elevator)
-    // ));    
-
-
-
-    // joystick_TEST.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2));
   }
 
   /**

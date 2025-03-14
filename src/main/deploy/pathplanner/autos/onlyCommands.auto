@@ -5,21 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "dropCoralAlt1"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "alignToTag"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "raiseElevator"
+            "name": "RaiseElevatorL4"
           }
         },
         {
@@ -29,9 +17,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "returnReef"
+            "name": "elevatorDown"
           }
         }
       ]

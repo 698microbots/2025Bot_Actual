@@ -21,6 +21,12 @@
           "data": {
             "name": "dropCommand"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "elevatorDown"
+          }
         }
       ]
     }
