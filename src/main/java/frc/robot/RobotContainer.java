@@ -4,15 +4,12 @@
 
 package frc.robot;
 
-import frc.robot.commands.AutoRotate_Cmd;
 import frc.robot.commands.AutoSetLEDS_cmd;
 import frc.robot.commands.Drop_Cmd;
 import frc.robot.commands.ElevatorDown_Cmd;
-import frc.robot.commands.ElevatorLiftWhisker_Cmd;
 import frc.robot.commands.ExElevator;
 import frc.robot.commands.Slow_Cmd;
 import frc.robot.commands.ElevatorLift_Cmd;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.GeneratePath_Cmd;
 import frc.robot.commands.ManualLift_Cmd;
 import frc.robot.commands.SetLeds_Cmd;
@@ -28,7 +25,6 @@ import frc.robot.subsystems.Swerve_Subsystem;
 import frc.robot.subsystems.Whisker_Subsystem;
 import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Light_Subsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
 import frc.robot.subsystems.ReactedLED_Subsystem;
@@ -61,7 +57,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -154,8 +149,6 @@ public class RobotContainer {
     reactedLeds.setDefaultCommand(new SetLeds_Cmd(reactedLeds));
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
