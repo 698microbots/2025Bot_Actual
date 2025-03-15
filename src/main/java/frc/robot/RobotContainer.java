@@ -44,7 +44,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -136,8 +135,6 @@ public class RobotContainer {
     reactedLeds.setDefaultCommand(new SetLeds_Cmd(reactedLeds));
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
