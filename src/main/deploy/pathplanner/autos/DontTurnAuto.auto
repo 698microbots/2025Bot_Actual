@@ -7,19 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "goToDropStation"
+            "pathName": "dontTurnPath"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 2.0
+            "name": "RaiseElevatorL4"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "returnFromDS"
+            "name": "dropCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "elevatorDown"
           }
         }
       ]

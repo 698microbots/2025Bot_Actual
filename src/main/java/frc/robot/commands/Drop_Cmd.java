@@ -33,7 +33,7 @@ public class Drop_Cmd extends Command {
     //   dropperSubsystem.stopDrive();
     // }
 
-    dropperSubsystem.testDropCoral(-1);
+    dropperSubsystem.testDropCoral(1);
 
   }
 

@@ -30,9 +30,9 @@ public class ElevatorLift_Cmd extends Command {
   private double speed = 0;
   private double maxSpeed = .35;
 
-  private double L4Limit = 7.9;
+  private double L4Limit = 8.0;
   private double L3Limit = 4.7;
-  private double L2Limit = 2.7;
+  private double L2Limit = 2.9;
   /** Creates a new l1_lift_command. */
   public ElevatorLift_Cmd(Elevator_subsystem elevator, Dropper_Subsystem dropper, double level, boolean auto) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -84,11 +84,11 @@ public class ElevatorLift_Cmd extends Command {
       }
 
     } else {
-      if (level == 2 && elevator.getPosition() < L2Limit-.1){
+      if (level == 2 && elevator.getPosition() < L2Limit){
         elevator.setspeed(maxSpeed, L2Limit);
-      } else if (level == 3 && elevator.getPosition() < L3Limit-.1){
+      } else if (level == 3 && elevator.getPosition() < L3Limit){
         elevator.setspeed(maxSpeed, L3Limit);
-      } else if (level == 4 && elevator.getPosition() < L4Limit-.1){
+      } else if (level == 4 && elevator.getPosition() < L4Limit){
         elevator.setspeed(maxSpeed, L4Limit);
       } else {
         elevator.setspeed(0);

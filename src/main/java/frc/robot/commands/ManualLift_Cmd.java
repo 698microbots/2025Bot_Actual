@@ -17,7 +17,7 @@ import frc.robot.subsystems.Elevator_subsystem;
 public class ManualLift_Cmd extends Command {
   /** Creates a new ManualLift_Cmd. */
   private Elevator_subsystem elevator_subsystem;
-  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.12);
+  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.13);
   private Supplier<Double> x;
   private double speed = 0;    
 
@@ -39,7 +39,7 @@ public class ManualLift_Cmd extends Command {
   public void execute() {
     counter++;
 
-    if (counter < Constants.numSeconds(1.2)){
+    if (counter < Constants.numSeconds(1.25)){
       // System.out.println("slew rate running");
       speed = slewRateLimiter.calculate(x.get() * .41);
     }  else {
@@ -53,6 +53,7 @@ public class ManualLift_Cmd extends Command {
     elevator_subsystem.setspeed(speed);
     // System.out.println(speed);
 
+    //WORKING FOR SURE
     // elevator_subsystem.setspeed(x.get()*.15);
 
   }

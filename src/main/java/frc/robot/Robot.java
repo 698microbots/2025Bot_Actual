@@ -69,10 +69,12 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Module 3 Angle", m_robotContainer.drivetrain.getAngle(3));
     SmartDashboard.putNumber("Yaw", m_robotContainer.limelight.getYaw());
 
+
+    // SmartDashboard.putString("Rotation", kDefaultPeriod);
     SmartDashboard.putBoolean("limit switch", m_robotContainer.elevator.getPressed());
 
 
-    SmartDashboard.putNumber("yaw", m_robotContainer.limelight.getYaw());    
+    // SmartDashboard.putNumber("yaw", m_robotContainer.limelight.getYaw());    
     // SmartDashboard.putNumber("pitch", m_robotContainer.limelight.getPitch());    
     SmartDashboard.putNumber("roll", m_robotContainer.limelight.getRoll());   
 

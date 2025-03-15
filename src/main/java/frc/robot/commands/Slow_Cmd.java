@@ -45,6 +45,9 @@ public class Slow_Cmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // drivetrain.setControl(fieldCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
+    // drivetrain.setControl(fieldCentric.withVelocityX(xspeed.get()*1.5*.5).withVelocityY(yspeed.get()*1.5*.5).withRotationalRate(rotateSpeed.get()*.8*.75*Math.PI));
+
   }
 
   // Returns true when the command should end.

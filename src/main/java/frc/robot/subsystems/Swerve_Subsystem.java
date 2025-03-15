@@ -275,9 +275,9 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
                                     .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
                     new PPHolonomicDriveController(
                             // PID constants for translation
-                            new PIDConstants(1, 0, 0),
+                            new PIDConstants(10, 0, 0), //P IS 1
                             // PID constants for rotation
-                            new PIDConstants(0.7, 0, 0)),
+                            new PIDConstants(7, 0, 0)),// P IS .7
                     config,
                     // Assume the path needs to be flipped for Red vs Blue, this is normally the
                     // case
@@ -329,19 +329,20 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
 
     }
 
-    public Command alginToTag(Supplier<Pose2d> current){
     
-    resetPose(new Pose2d(0,0, new Rotation2d(0)));
+    public Command alignToTag(Supplier<Pose2d> current){
+    
+    // resetPose(new Pose2d(0,0, new Rotation2d(0)));
     
     // System.out.println(current.get().getX());
     // System.out.println(current.get().getY());
 
     // Create a list of waypoints from poses. Each pose represents one waypoint.
     // The rotation component of the pose should be the direction of travel. Do not
-    // use holonomic rotation.
+    // use holonomic rotation. (THE DIRECTION IS LIKE THE WAYPOINTS IN THE GUI)
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
         current.get(),//Pose2d(current.get().getX(), current.get().getY(), new Rotation2d(0))
-        new Pose2d(-.7,0, current.get().getRotation()));
+        new Pose2d(-.7,0, new Rotation2d(0)));
 
     PathConstraints constraints = new PathConstraints(.3, .3, 2 * Math.PI, 4 * Math.PI); // The constraints for this
                                                                                            // path.

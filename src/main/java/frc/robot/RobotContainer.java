@@ -4,39 +4,25 @@
 
 package frc.robot;
 
-import frc.robot.commands.AutoRotate_Cmd;
-import frc.robot.commands.AutoSetLEDS_cmd;
 import frc.robot.commands.Drop_Cmd;
 import frc.robot.commands.ElevatorDown_Cmd;
-import frc.robot.commands.ElevatorLiftWhisker_Cmd;
-import frc.robot.commands.ExElevator;
 import frc.robot.commands.Slow_Cmd;
+import frc.robot.commands.testReleaseCoral;
 import frc.robot.commands.ElevatorLift_Cmd;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.GeneratePath_Cmd;
 import frc.robot.commands.ManualLift_Cmd;
 import frc.robot.commands.SetLeds_Cmd;
-import frc.robot.commands.TagAlignFinal_Cmd;
-import frc.robot.commands.Slow_Cmd;
-import frc.robot.commands.TagAlignTest_Cmd;
-import frc.robot.commands.TagAlign_Cmd;
-import frc.robot.commands.Whisker_Cmd;
-import frc.robot.commands.testReleaseCoral;
 import frc.robot.generated.TunerConstants;
-import frc.robot.generated.TunerConstantsOLD;
 import frc.robot.subsystems.Swerve_Subsystem;
 import frc.robot.subsystems.Whisker_Subsystem;
 import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Light_Subsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
 import frc.robot.subsystems.ReactedLED_Subsystem;
 
-import com.ctre.phoenix.Logger;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -44,9 +30,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -78,7 +61,6 @@ public class RobotContainer {
   public LimeLight_Subsystem limelight = new LimeLight_Subsystem();
   public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
   public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
-  public Light_Subsystem lights = new Light_Subsystem();
   public Whisker_Subsystem whisker = new Whisker_Subsystem();
   /* Path follower */
   private SendableChooser<Command> autoChooser;
@@ -163,7 +145,7 @@ public class RobotContainer {
 
 
     //P2 manual dropper
-    // dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
+    dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
     //P2 manual elevator
     elevator.setDefaultCommand(new ManualLift_Cmd(elevator, () -> -joystick_2.getLeftY()));
 
@@ -190,6 +172,8 @@ public class RobotContainer {
     //P2 drop button
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
     
+    //P1 path on the fly
+    joystick_1.y().whileTrue(drivetrain.alignToTag(() -> limelight.getAprilTagPose3d().toPose2d()));
     //P2 Auto Rotate
     // joystick_2.rightBumper().whileTrue(new AutoRotate_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), limelight));
 

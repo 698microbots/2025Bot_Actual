@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.util.ArrayList;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
@@ -103,9 +104,7 @@ public class LimeLight_Subsystem extends SubsystemBase {
     return true;
   }
 
-  public double averageYPositions(){
-    return 0;
-  }
+
   public Pose3d getAprilTagPose3d(){
     targetPoseList = targetPose.getDoubleArray(new double[6]);
     //position
@@ -166,6 +165,10 @@ public class LimeLight_Subsystem extends SubsystemBase {
 
   public double simulatedYDist(){
     return poseList[2] / (Math.tan(Units.degreesToRadians(getH_angle())));
+  }
+
+  public Rotation2d geRotation2d(){
+    return getAprilTagPose3d().toPose2d().getRotation();
   }
 
   @Override

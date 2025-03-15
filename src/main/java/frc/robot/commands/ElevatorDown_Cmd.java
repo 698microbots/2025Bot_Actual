@@ -40,7 +40,7 @@ public class ElevatorDown_Cmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (elevator.getPosition() <= .12){
+    if (elevator.getPosition() <= .5){
       return true;
     }
     return false;
