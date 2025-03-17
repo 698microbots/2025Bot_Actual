@@ -9,14 +9,17 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Dropper_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Drop_Cmd extends Command {
+public class Drop_Command extends Command {
   /** Creates a new DropCoral. */
   private Dropper_Subsystem dropperSubsystem;
   private int counter = 0;
+<<<<<<< HEAD:src/main/java/frc/robot/commands/Drop_Cmd.java
   public Drop_Cmd(Dropper_Subsystem dropperSubsystem) {
+=======
+  public Drop_Command(Dropper_Subsystem dropper) {
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd:src/main/java/frc/robot/commands/Drop_Command.java
     // Use addRequirements() here to declare subsystem dependencies.\
-    this.dropperSubsystem = dropperSubsystem;
-    addRequirements(dropperSubsystem);
+    this.dropperSubsystem = dropper;
   }
 
   // Called when the command is initially scheduled.
@@ -26,6 +29,7 @@ public class Drop_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+<<<<<<< HEAD:src/main/java/frc/robot/commands/Drop_Cmd.java
     counter++;
     // if (counter < Constants.numSeconds(2.5)){
     //   dropperSubsystem.testDropCoral(-1);
@@ -35,6 +39,10 @@ public class Drop_Cmd extends Command {
 
     dropperSubsystem.testDropCoral(1);
 
+=======
+    dropperSubsystem.dropCoral();
+    counter++;
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd:src/main/java/frc/robot/commands/Drop_Command.java
   }
 
   // Called once the command ends or is interrupted.
@@ -47,9 +55,18 @@ public class Drop_Cmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+<<<<<<< HEAD:src/main/java/frc/robot/commands/Drop_Cmd.java
     if(counter > Constants.numSeconds(1)){
       return true;
     }
     return false;
+=======
+    if (counter >= 5){
+      return true;
+    } else {
+      return false;
+    }
+    
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd:src/main/java/frc/robot/commands/Drop_Command.java
   }
 }

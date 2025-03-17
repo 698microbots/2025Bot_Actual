@@ -18,10 +18,15 @@ import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.Swerve_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+<<<<<<< HEAD:src/main/java/frc/robot/commands/ElevatorLift_Cmd.java
 public class ElevatorLift_Cmd extends Command {
   // private final PIDController pidController = new PIDController(.04, 0.00, .0);
   private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.12);
   // private final ProfiledPIDController pidController = new ProfiledPIDController(0.04, 0.003, 0, new Constraints(0.5, 2));
+=======
+public class ElevatorLift_Command extends Command {
+  private final PIDController pidcontroller = new PIDController(.5, 0, 0);
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd:src/main/java/frc/robot/commands/ElevatorLift_Command.java
   private final Elevator_subsystem elevator;
   private final Dropper_Subsystem dropper;
   private double level = 0;
@@ -34,7 +39,11 @@ public class ElevatorLift_Cmd extends Command {
   private double L3Limit = 4.7;
   private double L2Limit = 2.9;
   /** Creates a new l1_lift_command. */
+<<<<<<< HEAD:src/main/java/frc/robot/commands/ElevatorLift_Cmd.java
   public ElevatorLift_Cmd(Elevator_subsystem elevator, Dropper_Subsystem dropper, double level, boolean auto) {
+=======
+  public ElevatorLift_Command(Elevator_subsystem elevator, Dropper_Subsystem dropper, double level) {
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd:src/main/java/frc/robot/commands/ElevatorLift_Command.java
     // Use addRequirements() here to declare subsystem dependencies.
     this.elevator = elevator;
     this.level = level;

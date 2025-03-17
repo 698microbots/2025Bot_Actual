@@ -8,14 +8,19 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
 
+<<<<<<< HEAD
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+=======
+import edu.wpi.first.math.system.plant.DCMotor;
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd
 import frc.robot.generated.TunerConstants;
-import frc.robot.generated.TunerConstantsOLD;
+import java.util.*;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -34,6 +39,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+<<<<<<< HEAD
     public static double numSeconds(double seconds){ //does the calculations for how many 20ms are in a second, compare it to a counter adds every 20ms
       return seconds * 50;
   }  
@@ -47,11 +53,30 @@ public final class Constants {
   public static final int joystick_2 = 1;
   public static final int joystick_3 = 2;
 
+=======
+  public static double numSeconds(double seconds) { // does the calculations for how many 20ms are in a second, compare
+                                                    // it to a counter adds every 20ms
+    return seconds * 50;
+  }
+
+  public static final int elevator_motor_1 = 20;
+  public static final int elevator_motor_2 = 21;
+  public static final int dropper_id = 22;
+  public static final int lidar_id = 23;
+  public static final int revId = 4;
+  public static final int rotation_sensor = 6;
+  public static final int joystick_1 = 0;
+  public static final int joystick_2 = 1;
+  public static final double l2 = 5; // change this to say like coralL2 to not get confused
+  public static final double l3 = 6;
+  public static final double l4 = 7;
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd
   public static final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired
                                                                                             // top speed
   public static final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per
                                                                                                 // second max angular
                                                                                                 // velocity
+<<<<<<< HEAD
   public static final int toplimitSwitchID = 0;
   public static final int bottomlimitSwitchID = 1;
 
@@ -60,4 +85,7 @@ public final class Constants {
     new Rotation3d(0, 0, 0)
   );
   // public static final RobotConfig ROBOT_CONFIG = RobotConfig.fromGUISettings();
+=======
+  public static final int dropperMotorID = 2;
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd
 }

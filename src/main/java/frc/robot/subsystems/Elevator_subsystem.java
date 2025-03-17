@@ -20,6 +20,7 @@ import frc.robot.Constants;
 public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
+<<<<<<< HEAD
   
   // private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId);
   private DigitalInput limitSwitch = new DigitalInput(2);
@@ -60,6 +61,19 @@ public class Elevator_subsystem extends SubsystemBase {
 
     motor1.set(-speed); //RIGHT NOW POSITIE VALUES FED INTO THE PARAMETER GOES UP
     motor2.set(-speed); // without direction changes, pushing up on the joystick goes down   
+=======
+  private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.revId);
+  /** Creates a new slevator. */
+  public Elevator_subsystem() {}
+
+  public void setspeed(double speed) {
+    motor1.set(speed);
+    motor2.set(speed);
+  }
+
+  public double getPosition(){
+    return revEncoder.get();
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd
   }
 
   public double getPosition() {
@@ -81,4 +95,8 @@ public class Elevator_subsystem extends SubsystemBase {
       revEncoder.reset();
     } 
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd

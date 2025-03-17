@@ -68,6 +68,10 @@ public class GeneratePath_Cmd extends Command {
     // Prevent the path from being flipped if the coordinates are already correct
     path.preventFlipping = true;
 
+<<<<<<< HEAD
+=======
+    drivetrain.followPathCommand(path.name);
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd
   }
 
   // Called every time the scheduler runs while the command is scheduled.

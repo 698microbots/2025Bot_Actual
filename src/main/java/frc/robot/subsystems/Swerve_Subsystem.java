@@ -31,7 +31,11 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+<<<<<<< HEAD
 import edu.wpi.first.math.geometry.Rotation3d;
+=======
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
@@ -43,6 +47,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
@@ -480,7 +485,65 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
+<<<<<<< HEAD
 
+=======
+    public Command followPathCommand(String pathName) {
+        LimeLight_Subsystem limelight = new LimeLight_Subsystem();
+
+        DriveFeedforwards driveFeedforwards = DriveFeedforwards.zeros(8);
+        // BiConsumer<ChassisSpeeds, DriveFeedforwards> output = new 
+        BiConsumer<ChassisSpeeds, DriveFeedforwards> output = (speed, feedforward) -> {
+            driveRobotRelative(speed);
+        };
+        output.accept(getState().Speeds, driveFeedforwards);
+
+
+        try {
+            PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+            return new FollowPathCommand(
+                    path,
+                    () -> getState().Pose, // Robot pose supplier
+                    () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                    output, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds, AND feedforwards
+                            new PPHolonomicDriveController( // PPHolonomicController is the built in path following
+                                                            // controller
+                                                            // for holonomic drive trains
+                                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+                            ),
+                    RobotConfig.fromGUISettings(), // The robot configuration
+                    () -> {
+                        // Boolean supplier that controls when the path will be mirrored for the red
+                        // alliance
+                        // This will flip the path being followed to the red side of the field.
+                        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                        var alliance = DriverStation.getAlliance();
+                        if (alliance.isPresent()) {
+                            return alliance.get() == DriverStation.Alliance.Red;
+                        }
+                        return false;
+                    },
+                    this // Reference to this subsystem to set requirements
+            );
+       } catch (Exception e) {
+            DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+            return Commands.none();
+        }
+    }
+
+    public void driveRobotRelative(ChassisSpeeds speeds) {
+        // Note: it is important to not discretize speeds before or after
+        // using the setpoint generator, as it will discretize them for you
+        previousSetpoint = setpointGenerator.generateSetpoint(
+                previousSetpoint, // The previous setpoint
+                speeds, // The desired target speeds
+                0.02 // The loop time of the robot code, in seconds
+        );
+        setModuleStates(previousSetpoint.moduleStates()); // Method that will drive the robot given target module states
+    }
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd
 
 
     /**

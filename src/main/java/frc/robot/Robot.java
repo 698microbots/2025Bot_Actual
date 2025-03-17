@@ -10,8 +10,11 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+<<<<<<< HEAD
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+=======
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -54,6 +57,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+<<<<<<< HEAD
     SmartDashboard.putNumber("Elevator Position", m_robotContainer.elevator.getPosition());
     SmartDashboard.putNumber("Sensor Distance", m_robotContainer.reactedLeds.returnDistance());
     // SmartDashboard.putNumber("speed", Constants.MaxSpeed);
@@ -87,6 +91,8 @@ public class Robot extends TimedRobot {
 
     // 
     // SmartDashboard.putData("Robot Pose _ ", m_robotContainer.limelight.get)    
+=======
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic

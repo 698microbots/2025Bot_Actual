@@ -16,14 +16,19 @@ import frc.robot.subsystems.Swerve_Subsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+<<<<<<< HEAD:src/main/java/frc/robot/commands/TagAlign_Cmd.java
 public class TagAlign_Cmd extends Command {
 
 
+=======
+public class TagAlign_Command extends Command {
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd:src/main/java/frc/robot/commands/TagAlign_Command.java
   /** Creates a new LineUpToTag. */
   private int counter = 0;
   private final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
   private double ySpeed = 0;
 
+<<<<<<< HEAD:src/main/java/frc/robot/commands/TagAlign_Cmd.java
 
 
 
@@ -39,6 +44,16 @@ public class TagAlign_Cmd extends Command {
 
 
   public TagAlign_Cmd(LimeLight_Subsystem limelight, Swerve_Subsystem drivetrain, String direction, Supplier<Double> x, Supplier<Double> omega) {
+=======
+  //pid and constants
+  private final PIDController pidControllerX = new PIDController(1, 0.1, 0);
+  private final PIDController pidControllerY = new PIDController(1, 0.1, 0);
+  private final PIDController pidControllerOmega = new PIDController(.05, .01, 0);
+
+  private LimeLight_Subsystem limelight;
+  private Swerve_Subsystem drivetrain;
+  public TagAlign_Command(LimeLight_Subsystem limelight, Swerve_Subsystem drivetrain) {
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd:src/main/java/frc/robot/commands/TagAlign_Command.java
     // Use addRequirements() here to declare subsystem dependencies.
     this.limelight = limelight;
     this.drivetrain = drivetrain;
@@ -65,7 +80,11 @@ public class TagAlign_Cmd extends Command {
     }
 
     //if there are any visible targets 
+<<<<<<< HEAD:src/main/java/frc/robot/commands/TagAlign_Cmd.java
       if (limelight.getHasTargets()){
+=======
+    if (limelight.getHasTargets()){
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd:src/main/java/frc/robot/commands/TagAlign_Command.java
 
         
         // if (Math.abs(pidControllerY.getError()) < yErrorBound){ //was .1
@@ -90,10 +109,21 @@ public class TagAlign_Cmd extends Command {
 
       
 
+<<<<<<< HEAD:src/main/java/frc/robot/commands/TagAlign_Cmd.java
    
    
    
     
+=======
+      //PID setpoint for robot to be 1.3 meters away from the tag in the x direction
+      double xSpeed = pidControllerX.calculate(limelight.getRelative3dBotPose().getZ(), -1.3);
+      //PID setpoint for robot to be 0 meters away from the tag in the y direction
+      double ySpeed = pidControllerY.calculate(limelight.getRelative3dBotPose().getX(), 0);
+
+      //set all the calculated speeds to the robot 
+      drivetrain.setControl(robotCentric.withVelocityX(-xSpeed).withVelocityY(ySpeed).withRotationalRate(omegaSpeed));
+  }
+>>>>>>> 832b341bd6bad1fb07078e6caef8d7c93646e5fd:src/main/java/frc/robot/commands/TagAlign_Command.java
 }
 
   // Called once the command ends or is interrupted.

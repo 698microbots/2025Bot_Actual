@@ -10,10 +10,10 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Climber_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Climb_Cmd extends Command {
+public class Climb_Comand extends Command {
   /** Creates a new RobotClimber. */
   private Climber_Subsystem climber = new Climber_Subsystem();//making an object of subsystem 
-  public Climb_Cmd(Climber_Subsystem climber) {
+  public Climb_Comand(Climber_Subsystem climber) {
       this.climber = climber;
       addRequirements(climber);
     }
