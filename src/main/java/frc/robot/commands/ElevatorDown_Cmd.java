@@ -6,16 +6,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Dropper_Subsystem;
+import frc.robot.subsystems.Elevator_subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class DropCoralCommand extends Command {
-  /** Creates a new DropCoral. */
-  private Dropper_Subsystem dropperSubsystem;
-  private int counter;
-  public DropCoralCommand(Dropper_Subsystem dropper) {
-    // Use addRequirements() here to declare subsystem dependencies.\
-    this.dropperSubsystem = dropper;
+public class ElevatorDown_Cmd extends Command {
+  /** Creates a new ElevatorDown_Cmd. */
+  private Elevator_subsystem elevator;
+  private int counter = 0;
+  public ElevatorDown_Cmd(Elevator_subsystem elevator) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.elevator = elevator;
+    addRequirements(elevator);
   }
 
   // Called when the command is initially scheduled.
@@ -25,24 +26,23 @@ public class DropCoralCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    dropperSubsystem.dropCoral();
     counter++;
+    elevator.setspeed(-.2);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    dropperSubsystem.testDropCoral(0);
+    counter = 0;
+    elevator.setspeed(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (counter >= Constants.numSeconds(.5)){
+    if (elevator.getPosition() <= .5){
       return true;
-    } else {
-      return false;
     }
-    
+    return false;
   }
 }

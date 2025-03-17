@@ -4,21 +4,15 @@ import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.function.BiConsumer;
+
 import java.util.function.Supplier;
 import java.lang.Math;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.hardware.core.CoreTalonFX;
-import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
-import com.ctre.phoenix6.swerve.SwerveModule;
-import com.ctre.phoenix6.swerve.SwerveModule.ModuleRequest;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -30,29 +24,26 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
-import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -60,6 +51,8 @@ import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
  * Subsystem so it can easily be used in command-based projects.
  */
 public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem {
+    private NetworkTable limeLight = NetworkTableInstance.getDefault().getTable("limelight");
+    private NetworkTableEntry botPose = limeLight.getEntry("botpose_targetspace");
 
     // drive motors
     private TalonFX motor1 = new TalonFX(1);
@@ -275,9 +268,9 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
                                     .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
                     new PPHolonomicDriveController(
                             // PID constants for translation
-                            new PIDConstants(1, 0, 0),
+                            new PIDConstants(10, 0, 0), //P IS 1
                             // PID constants for rotation
-                            new PIDConstants(0.7, 0, 0)),
+                            new PIDConstants(7, 0, 0)),// P IS .7
                     config,
                     // Assume the path needs to be flipped for Red vs Blue, this is normally the
                     // case
@@ -329,19 +322,48 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
 
     }
 
-    public Command alginToTag(Supplier<Pose2d> current){
+  public Pose3d getRelative3dBotPose() {
+    /*
+     * Its specific because it determines what type of botpose we need
+     * For example, we may need the botpose, botpose_wpiblue, botpose_wpired, etc
+     * in order to tell our distance from the apriltag.
+     * This method should give us an x and y position to the april tag as well as a
+     * rotaiton angle to it
+     */
+    double[] poseList = botPose.getDoubleArray(new double[6]);
+    // position
+    double x = poseList[0];
+    double y = poseList[1];
+    double z = poseList[2];
+    // rotation
+    double roll = poseList[3];
+    double pitch = poseList[4];
+    double yaw = poseList[5];
+
+    Pose3d pose3d = new Pose3d(
+        x,
+        y,
+        z,
+        new Rotation3d(
+            roll,
+            pitch,
+            yaw));
+    return pose3d;
+  }      
     
-    resetPose(new Pose2d(0,0, new Rotation2d(0)));
+    public Command alignToTag(Supplier<Pose2d> current){
     
-    System.out.println(current.get().getX());
-    System.out.println(current.get().getY());
+    // resetPose(new Pose2d(0,0, new Rotation2d(0)));
+    
+    // System.out.println(current.get().getX());
+    // System.out.println(current.get().getY());
 
     // Create a list of waypoints from poses. Each pose represents one waypoint.
     // The rotation component of the pose should be the direction of travel. Do not
-    // use holonomic rotation.
+    // use holonomic rotation. (THE DIRECTION IS LIKE THE WAYPOINTS IN THE GUI)
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        current.get(),//Pose2d(current.get().getX(), current.get().getY(), new Rotation2d(0))
-        new Pose2d(-.7,0, current.get().getRotation()));
+        getRelative3dBotPose().toPose2d(),//Pose2d(current.get().getX(), current.get().getY(), new Rotation2d(0))
+        new Pose2d(-.7,0, new Rotation2d(0)));
 
     PathConstraints constraints = new PathConstraints(.3, .3, 2 * Math.PI, 4 * Math.PI); // The constraints for this
                                                                                            // path.

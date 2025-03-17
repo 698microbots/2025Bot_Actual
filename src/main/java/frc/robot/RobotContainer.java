@@ -4,46 +4,36 @@
 
 package frc.robot;
 
-import frc.robot.commands.AutoSetLEDS_cmd;
 import frc.robot.commands.Drop_Cmd;
-
-import frc.robot.commands.ExElevator;
+import frc.robot.commands.ElevatorDown_Cmd;
 import frc.robot.commands.Slow_Cmd;
+import frc.robot.commands.TagAlign_Cmd;
+import frc.robot.commands.testReleaseCoral;
 import frc.robot.commands.ElevatorLift_Cmd;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.GeneratePath_Cmd;
 import frc.robot.commands.ManualLift_Cmd;
 import frc.robot.commands.SetLeds_Cmd;
-import frc.robot.commands.TagAlignFinal_Cmd;
-import frc.robot.commands.Slow_Cmd;
-import frc.robot.commands.TagAlignTest_Cmd;
-import frc.robot.commands.TagAlign_Cmd;
-import frc.robot.commands.Whisker_Cmd;
-import frc.robot.commands.testReleaseCoral;
 import frc.robot.generated.TunerConstants;
-import frc.robot.generated.TunerConstantsOLD;
 import frc.robot.subsystems.Swerve_Subsystem;
 import frc.robot.subsystems.Whisker_Subsystem;
 import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Light_Subsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
 import frc.robot.subsystems.ReactedLED_Subsystem;
 
-import com.ctre.phoenix.Logger;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.fasterxml.jackson.databind.ext.SqlBlobSerializer;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.wpilibj.simulation.JoystickSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -58,7 +48,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -68,13 +57,13 @@ public class RobotContainer {
 
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
   private final CommandXboxController joystick_2 = new CommandXboxController(Constants.joystick_2);
+  private final CommandXboxController joystick_TEST = new CommandXboxController(2);
 
   public Dropper_Subsystem dropper = new Dropper_Subsystem();
   public Elevator_subsystem elevator = new Elevator_subsystem();
   public LimeLight_Subsystem limelight = new LimeLight_Subsystem();
   public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
   public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
-  public Light_Subsystem lights = new Light_Subsystem();
   public Whisker_Subsystem whisker = new Whisker_Subsystem();
   /* Path follower */
   private SendableChooser<Command> autoChooser;
@@ -88,11 +77,15 @@ public class RobotContainer {
     // drivetrain.autoBalanceCommand());
     // NamedCommands.registerCommand("exampleCommand",
     // exampleSubsystem.exampleCommand());
-    NamedCommands.registerCommand("dropCommand", Commands.runOnce(()-> new Drop_Cmd(dropper)));
+    // NamedCommands.registerCommand("dropCommand", Commands.runOnce(()-> new Drop_Cmd(dropper)));
 
-    NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
+    // NamedCommands.registerCommand("alignToTag", new TagAlign_Cmd(limelight, drivetrain, "Right"));
+    NamedCommands.registerCommand("elevatorDown", new ElevatorDown_Cmd(elevator));
     NamedCommands.registerCommand("dropCommand", new Drop_Cmd(dropper));
-    // NamedCommands.registerCommand("EX", new ExampleCommand(m_exampleSubsystem));
+    NamedCommands.registerCommand("RaiseElevatorL2", new ElevatorLift_Cmd(elevator, dropper, 2, true));
+    NamedCommands.registerCommand("RaiseElevatorL3", new ElevatorLift_Cmd(elevator, dropper, 3, true));
+    NamedCommands.registerCommand("RaiseElevatorL4", new ElevatorLift_Cmd(elevator, dropper, 4, true));
+
 
     //
     // MOVED THIS DOWN BELOW THE NamedCommands REGISTRATIONS
@@ -143,19 +136,21 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    reactedLeds.setDefaultCommand(new SetLeds_Cmd(reactedLeds));
+
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
+
+
+    //P2 manual dropper
     dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
-
-    reactedLeds.setDefaultCommand(new SetLeds_Cmd(reactedLeds));
-
+    //P2 manual elevator
     elevator.setDefaultCommand(new ManualLift_Cmd(elevator, () -> -joystick_2.getLeftY()));
 
+    //P1 driver
     drivetrain.setDefaultCommand(
         // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-joystick_1.getLeftY() * Constants.MaxSpeed * .5) // Drive
@@ -169,45 +164,40 @@ public class RobotContainer {
                                                                                          // negative X (left)
         ));
 
-    // reset the field-centric heading on left bumper press
+    //P1 reset the field-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "left"));
+    //P1 Right reef score
+    joystick_1.rightTrigger().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "right", () -> -joystick_1.getLeftY(), () -> -joystick_1.getRightX()));
 
+    //P1 Left reef score
+    joystick_1.leftTrigger().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "left", () -> -joystick_1.getLeftY(), () -> -joystick_1.getRightX()));
 
-    // joystick_1.rightTrigger().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain, "right"));
-    
-    
-
-    joystick_2.rightBumper().whileTrue(new ParallelCommandGroup(new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(),
-        () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()), new ElevatorLift_Cmd(elevator, dropper, 4)));
-
-
-    // joystick_1.x().whileTrue(new TagAlignTest_Cmd(limelight, drivetrain,
-    // "Right"))
-    joystick_1.x()
-        .whileTrue(new Whisker_Cmd(whisker, drivetrain, () -> -joystick_1.getLeftY(),
-            () -> -joystick_1.getLeftX(), () -> -joystick_1.getRightX()));
-    joystick_1.y().whileTrue(new GeneratePath_Cmd(limelight, drivetrain));
-
+    //P2 drop button
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
+    
+    //P2 Auto Rotate
+    // joystick_2.rightBumper().whileTrue(new AutoRotate_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), limelight));
 
-    //makeshift driver slow speeds
-    joystick_2.a().whileTrue(new ParallelCommandGroup(
-      new ElevatorLift_Cmd(elevator, dropper, 2),
-      new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(),  () -> -joystick_1.getRightX())
+    //P2 auto leveling and drops WITH THE CURRENT SLEWRATE THIS WILL CUASE LOTS OF OVERSHOOT
+    // joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2, false));
+    // joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3, false));
+    // joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4, false));
+
+    joystick_2.a().whileTrue(new SequentialCommandGroup(
+      new ElevatorLift_Cmd(elevator, dropper, 2, true),
+      new Drop_Cmd(dropper)
     ));
 
-    joystick_2.b().whileTrue(new ParallelCommandGroup(
-      new ElevatorLift_Cmd(elevator, dropper, 3),
-      new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(),  () -> -joystick_1.getRightX())
-    ));
-
-    joystick_2.y().whileTrue(new ParallelCommandGroup(
-      new ElevatorLift_Cmd(elevator, dropper, 4),
-      new Slow_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(),  () -> -joystick_1.getRightX())
+    joystick_2.b().whileTrue(new SequentialCommandGroup(
+      new ElevatorLift_Cmd(elevator, dropper, 3, true),
+      new Drop_Cmd(dropper)
     ));
     
+    joystick_2.y().whileTrue(new SequentialCommandGroup(
+      new ElevatorLift_Cmd(elevator, dropper, 4, true),
+      new Drop_Cmd(dropper)
+    ));    
   }
 
   /**
