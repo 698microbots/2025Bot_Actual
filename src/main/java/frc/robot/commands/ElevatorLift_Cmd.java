@@ -57,14 +57,16 @@ public class ElevatorLift_Cmd extends Command {
     }
 
     if (level == 2){
-      output = pidcontroller.calculate(elevator.getPosition(), 3);
+      //output = pidcontroller.calculate(elevator.getPosition(), 3);
+      elevator.setspeed(0.1, 3);
 
     } else if (level == 3){
-      output = pidcontroller.calculate(elevator.getPosition(), 4.85);
+      //output = pidcontroller.calculate(elevator.getPosition(), 4.85);
+      elevator.setspeed(0.1, 4.85);
 
     } else if (level == 4){
-     output = pidcontroller.calculate(elevator.getPosition(), 7.85);
-
+     //output = pidcontroller.calculate(elevator.getPosition(), 7.85);
+     elevator.setspeed(0.1, 7.85);
     }
     if (output > .1){
       output = .1;

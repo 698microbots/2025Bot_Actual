@@ -8,6 +8,7 @@ import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
@@ -19,6 +20,7 @@ public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
   private DigitalInput limitSwitch = new DigitalInput(2);
   private Encoder revEncoder = new Encoder(0, 1);
+  SlewRateLimiter filter = new SlewRateLimiter(0.5);
   
   /** Creates a new slevator. */
   
@@ -45,6 +47,17 @@ public class Elevator_subsystem extends SubsystemBase {
 
   public double getPosition() {
     return revEncoder.get() * -.001;
+  }
+
+  public void setspeed(double speed, double encoderLevel){
+    if (getPosition() < .17 && speed < 0){
+      speed = 0;
+    } else if (getPosition() > 7.7 && speed > 0){
+      speed = 0;
+    }
+
+    motor1.set(-speed); //RIGHT NOW POSITIE VALUES FED INTO THE PARAMETER GOES UP
+    motor2.set(-speed); // without direction changes, pushing up on the joystick goes down 
   }
 
   public boolean getPressed(){
