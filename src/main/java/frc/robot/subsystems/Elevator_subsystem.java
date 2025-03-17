@@ -5,12 +5,15 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -18,6 +21,8 @@ import frc.robot.Constants;
 public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
+  
+  // private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId);
   private DigitalInput limitSwitch = new DigitalInput(2);
   private Encoder revEncoder = new Encoder(0, 1);
   SlewRateLimiter filter = new SlewRateLimiter(0.5);
@@ -35,11 +40,25 @@ public class Elevator_subsystem extends SubsystemBase {
   public void setspeed(double speed) {
     //Max Encoder: 8.077
     
-    if (getPosition() < .3 && speed < 0){
+    if (getPosition() < .2 && speed < 0){
       speed = 0;
-    } else if (getPosition() > 7.7 && speed > 0){
+    } else if (getPosition() > 8.06 && speed > 0){
       speed = 0;
     }
+
+    motor1.set(-speed); //RIGHT NOW POSITIE VALUES FED INTO THE PARAMETER GOES UP
+    motor2.set(-speed); // without direction changes, pushing up on the joystick goes down   
+  }
+
+  public void setspeed(double speed, double encoderLevel) {
+    //Max Encoder: 8.077
+    if (getPosition() < .2 && speed < 0){
+      speed = 0;
+    } else if (getPosition() > encoderLevel && speed > 0){
+      speed = 0;
+    }
+
+    
 
     motor1.set(-speed); //RIGHT NOW POSITIE VALUES FED INTO THE PARAMETER GOES UP
     motor2.set(-speed); // without direction changes, pushing up on the joystick goes down   
@@ -64,6 +83,10 @@ public class Elevator_subsystem extends SubsystemBase {
     return limitSwitch.get();
   }
 
+  // public boolean getPressed2(){
+  //   return limitSwitchTop.get();
+  // }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -71,5 +94,4 @@ public class Elevator_subsystem extends SubsystemBase {
       revEncoder.reset();
     } 
   }
-
 }

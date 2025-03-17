@@ -18,8 +18,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.LimeLight_Subsystem;
 
 /**
- * The methods in this class are called automatically corresponding to each mode, as described in
- * the TimedRobot documentation. If you change the name of this class or the package after creating
+ * The methods in this class are called automatically corresponding to each
+ * mode, as described in
+ * the TimedRobot documentation. If you change the name of this class or the
+ * package after creating
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
@@ -32,11 +34,13 @@ public class Robot extends TimedRobot {
   
 
   /**
-   * This function is run when the robot is first started up and should be used for any
+   * This function is run when the robot is first started up and should be used
+   * for any
    * initialization code.
    */
   public Robot() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // Instantiate our RobotContainer. This will perform all our button bindings,
+    // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
   }
@@ -58,24 +62,53 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Robot Pose Z", m_robotContainer.limelight.getRelative3dBotPose().getZ());
     SmartDashboard.putBoolean("Has Target", m_robotContainer.limelight.getHasTargets());
     SmartDashboard.putNumber("Angle", m_robotContainer.limelight.getH_angle());
+
+    SmartDashboard.putNumber("Module 0 Angle", m_robotContainer.drivetrain.getAngle(0));
+    SmartDashboard.putNumber("Module 1 Angle", m_robotContainer.drivetrain.getAngle(1));
+    SmartDashboard.putNumber("Module 2 Angle", m_robotContainer.drivetrain.getAngle(2));
+    SmartDashboard.putNumber("Module 3 Angle", m_robotContainer.drivetrain.getAngle(3));
     SmartDashboard.putNumber("Yaw", m_robotContainer.limelight.getYaw());
 
+
+    // SmartDashboard.putString("Rotation", kDefaultPeriod);
     SmartDashboard.putBoolean("limit switch", m_robotContainer.elevator.getPressed());
+
+
+    // SmartDashboard.putNumber("yaw", m_robotContainer.limelight.getYaw());    
+    // SmartDashboard.putNumber("pitch", m_robotContainer.limelight.getPitch());    
+    SmartDashboard.putNumber("roll", m_robotContainer.limelight.getRoll());   
+
+    SmartDashboard.putBoolean("elevator bottom pressed", m_robotContainer.elevator.getPressed());
+    SmartDashboard.putBoolean("whisker left pressed", m_robotContainer.whisker.getLeftWhiskerClicked());
+    SmartDashboard.putBoolean("whisker right pressed", m_robotContainer.whisker.getRightWhiskerClicked());
+    // SmartDashboard.putBoolean("whisker right pressed", m_robotContainer.whisker.getRightWhiskerClicked());
+    
+    SmartDashboard.putNumber("ensimated Y position", (m_robotContainer.limelight.getRelative3dBotPose().getZ()/Math.tan(m_robotContainer.limelight.getYaw())));
+
+    // 
+    // SmartDashboard.putData("Robot Pose _ ", m_robotContainer.limelight.get)    
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+  /**
+   * This autonomous runs the autonomous command selected by your
+   * {@link RobotContainer} class.
+   */
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
@@ -88,7 +121,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
   public void teleopInit() {
@@ -104,6 +138,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+  
     
   }
 
@@ -115,14 +150,17 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+  }
 }
 // Hello World
