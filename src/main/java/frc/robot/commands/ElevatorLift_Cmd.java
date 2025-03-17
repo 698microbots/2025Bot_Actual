@@ -71,22 +71,35 @@ public class ElevatorLift_Cmd extends Command {
     } else {
       dropper.stopDrive();
     }
-
-    if (level == 2){
-      output = pidcontroller.calculate(elevator.getPosition(), 3);
-
-    } else if (level == 3){
-      output = pidcontroller.calculate(elevator.getPosition(), 4.85);
-
-    } else if (level == 4){
-     output = pidcontroller.calculate(elevator.getPosition(), 7.85);
-
+    
+  
+    //limit acceleration for a bit so elevator can get up to speed
+    if (counter < Constants.numSeconds(1.3)){
+      speed = slewRateLimiter.calculate(maxSpeed);
+      if (level == 2){
+        elevator.setspeed(speed, L2Limit);
+      } else if (level == 3){
+        elevator.setspeed(speed, L3Limit);
+      } else if (level == 4){
+        elevator.setspeed(speed, L4Limit);
+      }
+    //set elevator at max speed until it gets to correct position
+    } else {
+      if (level == 2 && elevator.getPosition() < L2Limit){
+        elevator.setspeed(maxSpeed, L2Limit);
+      } else if (level == 3 && elevator.getPosition() < L3Limit){
+        elevator.setspeed(maxSpeed, L3Limit);
+      } else if (level == 4 && elevator.getPosition() < L4Limit){
+        elevator.setspeed(maxSpeed, L4Limit);
+      } else {
+        elevator.setspeed(0);
+      }
+  
     }
-    if (output > .1){
-      output = .1;
-    }
-    // System.out.println(output);
-    elevator.setspeed(output);
+    // System.out.println(counter);
+
+
+
   }
 
   // Called once the command ends or is interrupted.
