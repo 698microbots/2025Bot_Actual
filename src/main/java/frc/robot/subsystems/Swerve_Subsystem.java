@@ -29,9 +29,14 @@ import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -46,6 +51,8 @@ import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
  * Subsystem so it can easily be used in command-based projects.
  */
 public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem {
+    private NetworkTable limeLight = NetworkTableInstance.getDefault().getTable("limelight");
+    private NetworkTableEntry botPose = limeLight.getEntry("botpose_targetspace");
 
     // drive motors
     private TalonFX motor1 = new TalonFX(1);
@@ -315,6 +322,34 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
 
     }
 
+  public Pose3d getRelative3dBotPose() {
+    /*
+     * Its specific because it determines what type of botpose we need
+     * For example, we may need the botpose, botpose_wpiblue, botpose_wpired, etc
+     * in order to tell our distance from the apriltag.
+     * This method should give us an x and y position to the april tag as well as a
+     * rotaiton angle to it
+     */
+    double[] poseList = botPose.getDoubleArray(new double[6]);
+    // position
+    double x = poseList[0];
+    double y = poseList[1];
+    double z = poseList[2];
+    // rotation
+    double roll = poseList[3];
+    double pitch = poseList[4];
+    double yaw = poseList[5];
+
+    Pose3d pose3d = new Pose3d(
+        x,
+        y,
+        z,
+        new Rotation3d(
+            roll,
+            pitch,
+            yaw));
+    return pose3d;
+  }      
     
     public Command alignToTag(Supplier<Pose2d> current){
     
@@ -327,7 +362,7 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
     // The rotation component of the pose should be the direction of travel. Do not
     // use holonomic rotation. (THE DIRECTION IS LIKE THE WAYPOINTS IN THE GUI)
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        current.get(),//Pose2d(current.get().getX(), current.get().getY(), new Rotation2d(0))
+        getRelative3dBotPose().toPose2d(),//Pose2d(current.get().getX(), current.get().getY(), new Rotation2d(0))
         new Pose2d(-.7,0, new Rotation2d(0)));
 
     PathConstraints constraints = new PathConstraints(.3, .3, 2 * Math.PI, 4 * Math.PI); // The constraints for this

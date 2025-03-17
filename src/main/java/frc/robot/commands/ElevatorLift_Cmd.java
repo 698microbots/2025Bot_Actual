@@ -65,6 +65,7 @@ public class ElevatorLift_Cmd extends Command {
     
     counter++;
 
+    //drive the neo up for a bit so coral doesnt fall out
     if (counter < Constants.numSeconds(.75)){
       dropper.driveUp();
     } else {
@@ -72,7 +73,7 @@ public class ElevatorLift_Cmd extends Command {
     }
     
   
-
+    //limit acceleration for a bit so elevator can get up to speed
     if (counter < Constants.numSeconds(1.3)){
       speed = slewRateLimiter.calculate(maxSpeed);
       if (level == 2){
@@ -82,7 +83,7 @@ public class ElevatorLift_Cmd extends Command {
       } else if (level == 4){
         elevator.setspeed(speed, L4Limit);
       }
-
+    //set elevator at max speed until it gets to correct position
     } else {
       if (level == 2 && elevator.getPosition() < L2Limit){
         elevator.setspeed(maxSpeed, L2Limit);
@@ -112,6 +113,7 @@ public class ElevatorLift_Cmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //auto == true, stop this command once it gets to the level
     if (auto){
       if (level == 2 && elevator.getPosition() >= L2Limit){
         return true;
