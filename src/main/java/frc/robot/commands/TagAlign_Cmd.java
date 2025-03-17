@@ -76,7 +76,7 @@ public class TagAlign_Cmd extends Command {
         // System.out.println(ySpeed);
 
         //lets driver only control x direction
-        drivetrain.setControl(robotCentric.withVelocityY(ySpeed).withVelocityX(x.get()*0.75).withRotationalRate(0));
+        drivetrain.setControl(robotCentric.withVelocityY(ySpeed).withVelocityX(x.get()*0.75));
 
         //lets driver control x direction and rotation
         // drivetrain.setControl(robotCentric.withVelocityY(ySpeed).withVelocityX(x.get()*0.75).withRotationalRate(omega.get()*.8*.75*Math.PI));
