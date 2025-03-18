@@ -46,6 +46,7 @@ public final class Constants {
   public static final int joystick_1 = 0;
   public static final int joystick_2 = 1;
   public static final int joystick_3 = 2;
+  public static final int climberMotorID = 16;
 
   public static final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired
                                                                                             // top speed

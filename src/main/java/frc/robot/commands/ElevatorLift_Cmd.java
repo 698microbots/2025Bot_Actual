@@ -9,6 +9,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,19 +21,27 @@ import frc.robot.subsystems.Swerve_Subsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorLift_Cmd extends Command {
   // private final PIDController pidController = new PIDController(.04, 0.00, .0);
-  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.12);
-  // private final ProfiledPIDController pidController = new ProfiledPIDController(0.04, 0.003, 0, new Constraints(0.5, 2));
+  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.2);
+  private final ProfiledPIDController pidController = new ProfiledPIDController(0.04, 0.003, 0, new Constraints(0.5, 2));
   private final Elevator_subsystem elevator;
   private final Dropper_Subsystem dropper;
   private double level = 0;
   private int counter = 0;
   private boolean auto;
   private double speed = 0;
-  private double maxSpeed = .35;
+  private double maxSpeed = .45;
 
   private double L4Limit = 8.0;
   private double L3Limit = 4.7;
   private double L2Limit = 2.9;
+
+ // Create a motion profile with the given maximum velocity and maximum
+  // acceleration constraints for the next setpoint.
+  // private final TrapezoidProfile profile =
+  //     new TrapezoidProfile(new TrapezoidProfile.Constraints(1.75, 0.75));
+  // private TrapezoidProfile.State goal = new TrapezoidProfile.State();
+  // private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
+
   /** Creates a new l1_lift_command. */
   public ElevatorLift_Cmd(Elevator_subsystem elevator, Dropper_Subsystem dropper, double level, boolean auto) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -52,7 +61,6 @@ public class ElevatorLift_Cmd extends Command {
   
   */  
   
-
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -74,7 +82,7 @@ public class ElevatorLift_Cmd extends Command {
     
   
     //limit acceleration for a bit so elevator can get up to speed
-    if (counter < Constants.numSeconds(1.3)){
+    if (counter < Constants.numSeconds(1.0)){// orignal: 1.3 sec
       speed = slewRateLimiter.calculate(maxSpeed);
       if (level == 2){
         elevator.setspeed(speed, L2Limit);
@@ -97,9 +105,6 @@ public class ElevatorLift_Cmd extends Command {
   
     }
     // System.out.println(counter);
-
-
-
   }
 
   // Called once the command ends or is interrupted.

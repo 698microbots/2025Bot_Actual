@@ -13,9 +13,11 @@ import frc.robot.commands.ElevatorLift_Cmd;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualLift_Cmd;
 import frc.robot.commands.SetLeds_Cmd;
+import frc.robot.commands.Climb_Cmd;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Swerve_Subsystem;
 import frc.robot.subsystems.Whisker_Subsystem;
+import frc.robot.subsystems.Climber_Subsystem;
 import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -65,6 +67,7 @@ public class RobotContainer {
   public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
   public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
   public Whisker_Subsystem whisker = new Whisker_Subsystem();
+  public Climber_Subsystem climber = new Climber_Subsystem();
   /* Path follower */
   private SendableChooser<Command> autoChooser;
 
@@ -173,8 +176,14 @@ public class RobotContainer {
     //P1 Left reef score
     joystick_1.leftTrigger().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "left", () -> -joystick_1.getLeftY(), () -> -joystick_1.getRightX()));
 
+    //P1 Slow Mode
+    joystick_1.rightBumper().whileTrue(drivetrain.applyRequest(() -> drive
+    .withVelocityX(-joystick_1.getLeftY() * .5)
+    .withVelocityY(-joystick_1.getLeftX() * .5)
+    .withRotationalRate(-joystick_1.getRightX() * .8)));
+    
     //P2 drop button
-    joystick_2.x().whileTrue(new Drop_Cmd(dropper));
+    // joystick_2.x().whileTrue(new Drop_Cmd(dropper));
     
     //P2 Auto Rotate
     // joystick_2.rightBumper().whileTrue(new AutoRotate_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), limelight));
@@ -197,7 +206,10 @@ public class RobotContainer {
     joystick_2.y().whileTrue(new SequentialCommandGroup(
       new ElevatorLift_Cmd(elevator, dropper, 4, true),
       new Drop_Cmd(dropper)
-    ));    
+    ));  
+    
+    //joystick_2.x().whileTrue(new Climb_Cmd(climber));
+    climber.setDefaultCommand(new Climb_Cmd(climber, () -> -joystick_TEST.getLeftY()));
   }
 
   /**
