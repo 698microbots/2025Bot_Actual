@@ -12,6 +12,7 @@ import frc.robot.commands.testReleaseCoral;
 import frc.robot.commands.ElevatorLift_Cmd;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualLift_Cmd;
+import frc.robot.commands.MoveBack_Cmd;
 import frc.robot.commands.SetLeds_Cmd;
 import frc.robot.commands.Climb_Cmd;
 import frc.robot.generated.TunerConstants;
@@ -35,6 +36,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -208,8 +210,11 @@ public class RobotContainer {
       new Drop_Cmd(dropper)
     ));  
     
-    //joystick_2.x().whileTrue(new Climb_Cmd(climber));
-    climber.setDefaultCommand(new Climb_Cmd(climber, () -> -joystick_TEST.getLeftY()));
+    //climber.setDefaultCommand(new Climb_Cmd(climber, () -> -joystick_TEST.getLeftY()));
+    joystick_2.povDown().whileTrue(new ParallelCommandGroup(
+      new ElevatorDown_Cmd(elevator),
+      new MoveBack_Cmd(drivetrain)
+      ));
   }
 
   /**
