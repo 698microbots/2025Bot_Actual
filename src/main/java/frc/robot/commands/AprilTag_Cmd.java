@@ -14,6 +14,7 @@ import com.pathplanner.lib.path.Waypoint;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.LimeLight_Subsystem;
@@ -26,26 +27,34 @@ public class AprilTag_Cmd extends Command {
   private LimeLight_Subsystem limelight;
   private String direction;
   private Command pathCommand;
+  private Pose2d startingPose;
   private PathConstraints constraints = new PathConstraints(.3, .3, 2 * Math.PI, 4 * Math.PI); // The constraints for this
-
   public AprilTag_Cmd(Swerve_Subsystem swerve, LimeLight_Subsystem limelight, String direction) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerve = swerve;
     this.limelight = limelight;
     this.direction = direction;
-    addRequirements(swerve);
+    addRequirements(swerve, limelight);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Pose2d startingPose2d = limelight.getRelative3dBotPose().toPose2d();
+    swerve.resetPose(new Pose2d(0,0, new Rotation2d(0)));
+    startingPose = limelight.getRelative3dBotPose().toPose2d();
+
+
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
 
     if (direction.equals("left")){
     
       List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        startingPose2d,//Pose2d(current.get().getX(), current.get().getY(), new Rotation2d(0))
-        new Pose2d(-.7,0, new Rotation2d(0)));
+        new Pose2d(0,0, new Rotation2d(0)),
+        startingPose);
 
       PathPlannerPath path = new PathPlannerPath(
           waypoints,
@@ -57,20 +66,12 @@ public class AprilTag_Cmd extends Command {
                                                             // effect.
       );
 
-        path.preventFlipping = true;
+        path.preventFlipping = false;
 
         pathCommand = AutoBuilder.pathfindThenFollowPath(path, Constants.PathplannerConstants.constraints);
     
-      } else if (direction.equals("right")){
-    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-       startingPose2d,//Pose2d(current.get().getX(), current.get().getY(), new Rotation2d(0))
-       new Pose2d(-.7,0, new Rotation2d(0)));
-    }
-  }
+      }    
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
     pathCommand.execute();
   }
 

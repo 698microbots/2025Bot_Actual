@@ -30,7 +30,7 @@ public class ElevatorLift_Cmd extends Command {
   private double speed = 0;
   private double maxSpeed = .85;
 
-  private double L4Limit = 8.0;
+  private double L4Limit = 8.1;
   private double L3Limit = 5.3;
   private double L2Limit = 3.8;
   /** Creates a new l1_lift_command. */

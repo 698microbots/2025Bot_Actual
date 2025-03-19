@@ -75,7 +75,7 @@ public class TagAlign_Cmd extends Command {
 
 
     } else if (direction.equals("right")){
-      angle = Math.atan2(.5-.25, -limelight.getRelative3dBotPose().getZ()) * (180/Math.PI) -1;
+      angle = Math.atan2(.5-.25, -limelight.getRelative3dBotPose().getZ()) * (180/Math.PI) + 4.5;
 
       System.out.println("angle is " + angle);
       ySpeed = pidControllerYR.calculate(limelight.getH_angle(), angle);

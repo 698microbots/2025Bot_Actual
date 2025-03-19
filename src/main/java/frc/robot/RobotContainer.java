@@ -181,12 +181,12 @@ public class RobotContainer {
 
     //P1 Slow Mode
     joystick_1.rightBumper().whileTrue(drivetrain.applyRequest(() -> drive
-    .withVelocityX(-joystick_1.getLeftY() * .3)
-    .withVelocityY(-joystick_1.getLeftX() * .3)
-    .withRotationalRate(-joystick_1.getRightX() * Math.PI * 1/12)));
+    .withVelocityX(-joystick_1.getLeftY() * .2)
+    .withVelocityY(-joystick_1.getLeftX() * .2)
+    .withRotationalRate(-joystick_1.getRightX() * Math.PI * 5/12)));
 
     //P1 auto align test
-    joystick_1.povUp().whileTrue(new AprilTag_Cmd(drivetrain, limelight, "left"));
+    // joystick_1.povUp().whileTrue(new AprilTag_Cmd(drivetrain, limelight, "left"));
     //P2 drop button
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
     

@@ -270,7 +270,7 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
                             // PID constants for translation
                             new PIDConstants(10, 0, 0), //P IS 1
                             // PID constants for rotation
-                            new PIDConstants(7, 0, 0)),// P IS .7
+                            new PIDConstants(.7, 0.01, .1)),// P IS .7
                     config,
                     // Assume the path needs to be flipped for Red vs Blue, this is normally the
                     // case
@@ -350,10 +350,12 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
             yaw));
     return pose3d;
   }      
+
+    
     
     public Command alignToTag(Supplier<Pose2d> current){
     
-    // resetPose(new Pose2d(0,0, new Rotation2d(0)));
+    resetPose(new Pose2d(0,0, new Rotation2d(0)));
     
     // System.out.println(current.get().getX());
     // System.out.println(current.get().getY());
@@ -362,7 +364,7 @@ public class Swerve_Subsystem extends TunerSwerveDrivetrain implements Subsystem
     // The rotation component of the pose should be the direction of travel. Do not
     // use holonomic rotation. (THE DIRECTION IS LIKE THE WAYPOINTS IN THE GUI)
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        getRelative3dBotPose().toPose2d(),//Pose2d(current.get().getX(), current.get().getY(), new Rotation2d(0))
+        //Pose2d(current.get().getX(), current.get().getY(), new Rotation2d(0))
         new Pose2d(-.7,0, new Rotation2d(0)));
 
     PathConstraints constraints = new PathConstraints(.3, .3, 2 * Math.PI, 4 * Math.PI); // The constraints for this
