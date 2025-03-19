@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -21,6 +22,8 @@ public class Elevator_subsystem extends SubsystemBase {
   private TalonFX motor1 = new TalonFX(Constants.elevator_motor_1);
   private TalonFX motor2 = new TalonFX(Constants.elevator_motor_2);
   
+  private CurrentLimitsConfigs config1 = new CurrentLimitsConfigs().withStatorCurrentLimit(40).withSupplyCurrentLowerLimit(30).withSupplyCurrentLowerTime(2);
+  
   // private DutyCycleEncoder revEncoder = new DutyCycleEncoder(Constants.boreEncoderId);
   private DigitalInput limitSwitch = new DigitalInput(2);
   private Encoder revEncoder = new Encoder(0, 1);
@@ -28,8 +31,12 @@ public class Elevator_subsystem extends SubsystemBase {
   /** Creates a new slevator. */
   
   public Elevator_subsystem() {
-    // motor1.setNeutralMode(NeutralModeValue.Coast);
-    // motor2.setNeutralMode(NeutralModeValue.Coast);
+    config1.withStatorCurrentLimitEnable(true);
+
+    config1.withSupplyCurrentLimitEnable(true);
+    
+    motor1.getConfigurator().apply(config1);
+    motor2.getConfigurator().apply(config1);
 
     motor1.setNeutralMode(NeutralModeValue.Brake);
     motor2.setNeutralMode(NeutralModeValue.Brake);

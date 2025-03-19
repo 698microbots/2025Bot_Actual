@@ -61,29 +61,31 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Robot Pose X", m_robotContainer.limelight.getRelative3dBotPose().getX());
     SmartDashboard.putNumber("Robot Pose Z", m_robotContainer.limelight.getRelative3dBotPose().getZ());
     SmartDashboard.putBoolean("Has Target", m_robotContainer.limelight.getHasTargets());
-    SmartDashboard.putNumber("Angle", m_robotContainer.limelight.getH_angle());
+    SmartDashboard.putNumber("H Angle", m_robotContainer.limelight.getH_angle());
 
     SmartDashboard.putNumber("Module 0 Angle", m_robotContainer.drivetrain.getAngle(0));
     SmartDashboard.putNumber("Module 1 Angle", m_robotContainer.drivetrain.getAngle(1));
     SmartDashboard.putNumber("Module 2 Angle", m_robotContainer.drivetrain.getAngle(2));
     SmartDashboard.putNumber("Module 3 Angle", m_robotContainer.drivetrain.getAngle(3));
-    SmartDashboard.putNumber("Yaw", m_robotContainer.limelight.getYaw());
+    // SmartDashboard.putNumber("Yaw", m_robotContainer.limelight.getYaw());
 
 
     // SmartDashboard.putString("Rotation", kDefaultPeriod);
     SmartDashboard.putBoolean("limit switch", m_robotContainer.elevator.getPressed());
 
+    SmartDashboard.putNumber("encoder of climber", m_robotContainer.climber.getClimbPosition());
+
 
     // SmartDashboard.putNumber("yaw", m_robotContainer.limelight.getYaw());    
     // SmartDashboard.putNumber("pitch", m_robotContainer.limelight.getPitch());    
-    SmartDashboard.putNumber("roll", m_robotContainer.limelight.getRoll());   
+    // SmartDashboard.putNumber("roll", m_robotContainer.limelight.getRoll());   
 
-    SmartDashboard.putBoolean("elevator bottom pressed", m_robotContainer.elevator.getPressed());
-    SmartDashboard.putBoolean("whisker left pressed", m_robotContainer.whisker.getLeftWhiskerClicked());
-    SmartDashboard.putBoolean("whisker right pressed", m_robotContainer.whisker.getRightWhiskerClicked());
+    // SmartDashboard.putBoolean("elevator bottom pressed", m_robotContainer.elevator.getPressed());
+    // SmartDashboard.putBoolean("whisker left pressed", m_robotContainer.whisker.getLeftWhiskerClicked());
+    // SmartDashboard.putBoolean("whisker right pressed", m_robotContainer.whisker.getRightWhiskerClicked());
     // SmartDashboard.putBoolean("whisker right pressed", m_robotContainer.whisker.getRightWhiskerClicked());
     
-    SmartDashboard.putNumber("ensimated Y position", (m_robotContainer.limelight.getRelative3dBotPose().getZ()/Math.tan(m_robotContainer.limelight.getYaw())));
+    // SmartDashboard.putNumber("ensimated Y position", (m_robotContainer.limelight.getRelative3dBotPose().getZ()/Math.tan(m_robotContainer.limelight.getYaw())));
 
     // 
     // SmartDashboard.putData("Robot Pose _ ", m_robotContainer.limelight.get)    

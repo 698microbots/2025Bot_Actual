@@ -4,11 +4,12 @@
 
 package frc.robot;
 
+import frc.robot.commands.AprilTag_Cmd;
+import frc.robot.commands.Climb_Cmd;
 import frc.robot.commands.Drop_Cmd;
 import frc.robot.commands.ElevatorDown_Cmd;
 import frc.robot.commands.Slow_Cmd;
 import frc.robot.commands.TagAlign_Cmd;
-import frc.robot.commands.testReleaseCoral;
 import frc.robot.commands.ElevatorLift_Cmd;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualLift_Cmd;
@@ -16,6 +17,7 @@ import frc.robot.commands.SetLeds_Cmd;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Swerve_Subsystem;
 import frc.robot.subsystems.Whisker_Subsystem;
+import frc.robot.subsystems.Climber_Subsystem;
 import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -65,6 +67,7 @@ public class RobotContainer {
   public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
   public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
   public Whisker_Subsystem whisker = new Whisker_Subsystem();
+  public Climber_Subsystem climber = new Climber_Subsystem();
   /* Path follower */
   private SendableChooser<Command> autoChooser;
 
@@ -146,9 +149,12 @@ public class RobotContainer {
 
 
     //P2 manual dropper
-    dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
+    // dropper.setDefaultCommand(new testReleaseCoral(dropper, () -> -joystick_2.getRightY()));
     //P2 manual elevator
     elevator.setDefaultCommand(new ManualLift_Cmd(elevator, () -> -joystick_2.getLeftY()));
+    //P2 manual climb
+    climber.setDefaultCommand(new Climb_Cmd(climber, () -> -joystick_2.getRightY()));
+
 
     //P1 driver
     drivetrain.setDefaultCommand(
@@ -173,17 +179,21 @@ public class RobotContainer {
     //P1 Left reef score
     joystick_1.leftTrigger().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "left", () -> -joystick_1.getLeftY(), () -> -joystick_1.getRightX()));
 
+    //P1 Slow Mode
+    joystick_1.rightBumper().whileTrue(drivetrain.applyRequest(() -> drive
+    .withVelocityX(-joystick_1.getLeftY() * .3)
+    .withVelocityY(-joystick_1.getLeftX() * .3)
+    .withRotationalRate(-joystick_1.getRightX() * Math.PI * 1/12)));
+
+    //P1 auto align test
+    joystick_1.povUp().whileTrue(new AprilTag_Cmd(drivetrain, limelight, "left"));
     //P2 drop button
     joystick_2.x().whileTrue(new Drop_Cmd(dropper));
     
     //P2 Auto Rotate
     // joystick_2.rightBumper().whileTrue(new AutoRotate_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), limelight));
 
-    //P2 auto leveling and drops WITH THE CURRENT SLEWRATE THIS WILL CUASE LOTS OF OVERSHOOT
-    // joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2, false));
-    // joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3, false));
-    // joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4, false));
-
+    //P2 auto leveling and drops
     joystick_2.a().whileTrue(new SequentialCommandGroup(
       new ElevatorLift_Cmd(elevator, dropper, 2, true),
       new Drop_Cmd(dropper)
@@ -198,6 +208,8 @@ public class RobotContainer {
       new ElevatorLift_Cmd(elevator, dropper, 4, true),
       new Drop_Cmd(dropper)
     ));    
+
+    
   }
 
   /**

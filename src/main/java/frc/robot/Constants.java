@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -42,6 +43,7 @@ public final class Constants {
   public static final int lidar_id = 0;
   public static final int revId = 4;
   public static final int dropperMotorID = 17;
+  public static final int climberMotorID = 16;
   public static final int boreEncoderId = 0;
   public static final int joystick_1 = 0;
   public static final int joystick_2 = 1;
@@ -60,4 +62,11 @@ public final class Constants {
     new Rotation3d(0, 0, 0)
   );
   // public static final RobotConfig ROBOT_CONFIG = RobotConfig.fromGUISettings();
+
+    public class PathplannerConstants {
+        // Create the constraints to use while pathfinding
+        public static final PathConstraints constraints = new PathConstraints(
+        2, 2.5,
+            Units.degreesToRadians(360), Units.degreesToRadians(540));
+    }  
 }

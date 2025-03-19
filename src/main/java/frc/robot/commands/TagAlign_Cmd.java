@@ -23,12 +23,13 @@ public class TagAlign_Cmd extends Command {
   private int counter = 0;
   private final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
   private double ySpeed = 0;
+  private double angle = 0;
 
 
 
+  private final PIDController pidControllerYL = new PIDController(.01, 0.00, 0); // original p: .014 i: 0.0014 d: 0.00005
 
-  private final PIDController pidControllerY = new PIDController(.014, 0.00, 0); // original p: .014 i: 0.0014 d: 0.00005
-
+  private final PIDController pidControllerYR = new PIDController(.01, 0.00, 0); // original p: .014 i: 0.0014 d: 0.00005
 
   private double yErrorBound = 0.0;
 
@@ -59,10 +60,26 @@ public class TagAlign_Cmd extends Command {
   public void execute() {
     //xSpeed = 0;
     if (direction.equals("left")){
-      ySpeed = pidControllerY.calculate(limelight.getH_angle(), -2);
+
+
+      //left eq based on z pose (make z pose positive): y = -68.555x + 131.1
+      // angle = -68.555 * limelight.getRelative3dBotPose().getZ() * -1 + 152;
+
+      //derivation
+      angle = Math.atan2(.5+.25, -limelight.getRelative3dBotPose().getZ()) * (180/Math.PI) -2.5 ;
+
+      System.out.println("angle is " + angle);
+      ySpeed = pidControllerYL.calculate(limelight.getH_angle(), angle);
+      System.out.println("left Y " + ySpeed);
+
+
+
     } else if (direction.equals("right")){
-      ySpeed = pidControllerY.calculate(limelight.getH_angle(), 2);
-    }
+      angle = Math.atan2(.5-.25, -limelight.getRelative3dBotPose().getZ()) * (180/Math.PI) -1;
+
+      System.out.println("angle is " + angle);
+      ySpeed = pidControllerYR.calculate(limelight.getH_angle(), angle);
+      System.out.println("right Y " + ySpeed);    }
 
     //if there are any visible targets 
       if (limelight.getHasTargets()){
@@ -73,10 +90,10 @@ public class TagAlign_Cmd extends Command {
         //   xSpeed = -.5;
         // }
 
-        // System.out.println(ySpeed);
+        System.out.println(x.get());
 
-        //lets driver only control x direction
-        drivetrain.setControl(robotCentric.withVelocityY(ySpeed).withVelocityX(x.get()*0.75));
+        //lets driver only control x direction PUT THE X.GET OUTSIDE THE APRILTAG IF STATEMENT SO THEY CAN STILL MOVE ROBOT CENTRIC 
+        drivetrain.setControl(robotCentric.withVelocityY(ySpeed).withVelocityX(x.get()*0.12));
 
         //lets driver control x direction and rotation
         // drivetrain.setControl(robotCentric.withVelocityY(ySpeed).withVelocityX(x.get()*0.75).withRotationalRate(omega.get()*.8*.75*Math.PI));
@@ -84,15 +101,8 @@ public class TagAlign_Cmd extends Command {
         //automatically does x direction
         // drivetrain.setControl(robotCentric.withVelocityY(ySpeed).withVelocityX(xSpeed));
     } else {
-        drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
+        drivetrain.setControl(robotCentric.withVelocityX(x.get()*0.12).withVelocityY(0).withRotationalRate(0));
     } 
-    
-
-      
-
-   
-   
-   
     
 }
 
