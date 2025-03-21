@@ -4,19 +4,22 @@
 
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.elevator.Elevator_subsystem;
+import frc.robot.subsystems.dropper.Dropper_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ElevatorDown_Cmd extends Command {
-  /** Creates a new ElevatorDown_Cmd. */
-  private Elevator_subsystem elevator;
-  private int counter = 0;
-  public ElevatorDown_Cmd(Elevator_subsystem elevator) {
+public class testReleaseCoral extends Command {
+  /** Creates a new testReleaseCoral. */
+  private Dropper_Subsystem dropper;
+  private Supplier<Double> x;
+  public testReleaseCoral(Dropper_Subsystem dropper, Supplier<Double> x) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.elevator = elevator;
-    addRequirements(elevator);
+  this.dropper = dropper;
+  this.x = x;
+  addRequirements(dropper);
   }
 
   // Called when the command is initially scheduled.
@@ -26,23 +29,17 @@ public class ElevatorDown_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    counter++;
-    elevator.setspeed(-.2);
+    dropper.testDropCoral(-x.get());
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    counter = 0;
-    elevator.setspeed(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (elevator.getPosition() <= .5){
-      return true;
-    }
     return false;
   }
 }
