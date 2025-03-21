@@ -13,14 +13,14 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Dropper_Subsystem;
-import frc.robot.subsystems.Elevator_subsystem;
-import frc.robot.subsystems.Swerve_Subsystem;
+import frc.robot.subsystems.dropper.Dropper_Subsystem;
+import frc.robot.subsystems.elevator.Elevator_subsystem;
+import frc.robot.subsystems.drive.Swerve_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorLift_Cmd extends Command {
   // private final PIDController pidController = new PIDController(.04, 0.00, .0);
-  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.4);
+  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.12);
   // private final ProfiledPIDController pidController = new ProfiledPIDController(0.04, 0.003, 0, new Constraints(0.5, 2));
   private final Elevator_subsystem elevator;
   private final Dropper_Subsystem dropper;
@@ -28,11 +28,11 @@ public class ElevatorLift_Cmd extends Command {
   private int counter = 0;
   private boolean auto;
   private double speed = 0;
-  private double maxSpeed = .85;
+  private double maxSpeed = .35;
 
-  private double L4Limit = 8.1;
-  private double L3Limit = 5.3;
-  private double L2Limit = 3.8;
+  private double L4Limit = 8.0;
+  private double L3Limit = 4.7;
+  private double L2Limit = 2.9;
   /** Creates a new l1_lift_command. */
   public ElevatorLift_Cmd(Elevator_subsystem elevator, Dropper_Subsystem dropper, double level, boolean auto) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -66,7 +66,7 @@ public class ElevatorLift_Cmd extends Command {
     counter++;
 
     //drive the neo up for a bit so coral doesnt fall out
-    if (counter < Constants.numSeconds(1)){
+    if (counter < Constants.numSeconds(.75)){
       dropper.driveUp();
     } else {
       dropper.stopDrive();
@@ -74,7 +74,7 @@ public class ElevatorLift_Cmd extends Command {
     
   
     //limit acceleration for a bit so elevator can get up to speed
-    if (counter < Constants.numSeconds(.8)){
+    if (counter < Constants.numSeconds(1.3)){
       speed = slewRateLimiter.calculate(maxSpeed);
       if (level == 2){
         elevator.setspeed(speed, L2Limit);

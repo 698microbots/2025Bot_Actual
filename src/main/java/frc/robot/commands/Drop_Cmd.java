@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Dropper_Subsystem;
+import frc.robot.subsystems.dropper.Dropper_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Drop_Cmd extends Command {
@@ -33,8 +33,8 @@ public class Drop_Cmd extends Command {
     //   dropperSubsystem.stopDrive();
     // }
 
-    // dropperSubsystem.testDropCoral(1);
-    dropperSubsystem.dropCoral();
+    dropperSubsystem.testDropCoral(1);
+
   }
 
   // Called once the command ends or is interrupted.

@@ -10,17 +10,17 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Dropper_Subsystem;
-import frc.robot.subsystems.Elevator_subsystem;
+import frc.robot.subsystems.dropper.Dropper_Subsystem;
+import frc.robot.subsystems.elevator.Elevator_subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ManualLift_Cmd extends Command {
   /** Creates a new ManualLift_Cmd. */
   private Elevator_subsystem elevator_subsystem;
-  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.2);
+  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.13);
   private Supplier<Double> x;
   private double speed = 0;    
-  private double maxSpeed = .45;
+
   private int counter = 0;
   public ManualLift_Cmd(Elevator_subsystem elevator_subsystem, Supplier<Double> x) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -41,9 +41,9 @@ public class ManualLift_Cmd extends Command {
 
     if (counter < Constants.numSeconds(1.25)){
       // System.out.println("slew rate running");
-      speed = slewRateLimiter.calculate(x.get() * maxSpeed);
+      speed = slewRateLimiter.calculate(x.get() * .41);
     }  else {
-      speed = x.get() * maxSpeed;      
+      speed = x.get() * .41;      
     }
 
     if (x.get() < 0 && speed > 0){
