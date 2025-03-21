@@ -9,8 +9,8 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Elevator_subsystem;
-import frc.robot.subsystems.Swerve_Subsystem;
+import frc.robot.subsystems.elevator.Elevator_subsystem;
+import frc.robot.subsystems.drive.Swerve_Subsystem;
 import frc.robot.subsystems.Whisker_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */

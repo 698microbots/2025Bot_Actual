@@ -13,9 +13,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Dropper_Subsystem;
-import frc.robot.subsystems.Elevator_subsystem;
-import frc.robot.subsystems.Swerve_Subsystem;
+import frc.robot.subsystems.dropper.Dropper_Subsystem;
+import frc.robot.subsystems.elevator.Elevator_subsystem;
+import frc.robot.subsystems.drive.Swerve_Subsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorLift_Cmd extends Command {
