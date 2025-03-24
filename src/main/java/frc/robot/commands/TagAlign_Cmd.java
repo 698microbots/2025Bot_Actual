@@ -27,13 +27,14 @@ public class TagAlign_Cmd extends Command {
   private double angle = 0;
   private double rotSpeed = 0;
   private double rotAngle = 0;
+  private double currentID = -1;
 
-  private final PIDController pidControllerRotation = new PIDController(.1, 0.00, 0); // original p: .014 i: 0.0014 d: 0.00005
+  private final PIDController pidControllerRotation = new PIDController(.005, 0.00, 0); // original p: .014 i: 0.0014 d: 0.00005
 
 
-  private final PIDController pidControllerYL = new PIDController(.01, 0.00, 0); // original p: .014 i: 0.0014 d: 0.00005
+  private final PIDController pidControllerYL = new PIDController(.03, 0.0, 0); // original p: .014 i: 0.00 d: 0.0000
 
-  private final PIDController pidControllerYR = new PIDController(.01, 0.00, 0); // original p: .014 i: 0.0014 d: 0.00005
+  private final PIDController pidControllerYR = new PIDController(.03, 0.0, 0); // original p: .014 i: 0.00 d: 0.0000
 
   private double yErrorBound = 0.0;
 
@@ -59,16 +60,18 @@ public class TagAlign_Cmd extends Command {
   @Override
   public void initialize() {
     rotAngle = gyro.getYaw();
+    currentID = limelight.getAprilTagID();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    rotSpeed = pidControllerRotation.calculate(gyro.getYaw(), rotAngle);
+    // rotSpeed = pidControllerRotation.calculate(gyro.getYaw(), rotAngle);
+
     if (direction.equals("left")){
 
       //derivation
-      angle = Math.atan2(.5+.25, -limelight.getRelative3dBotPose().getZ()) * (180/Math.PI) -2 ;
+      angle = Math.atan2(.5+.25, -limelight.getRelative3dBotPose().getZ() ) * (180/Math.PI) + 3; // used + 2
 
       System.out.println("angle is " + angle);
       ySpeed = pidControllerYL.calculate(limelight.getH_angle(), angle);
@@ -77,14 +80,15 @@ public class TagAlign_Cmd extends Command {
 
 
     } else if (direction.equals("right")){
-      angle = Math.atan2(.5-.25, -limelight.getRelative3dBotPose().getZ()) * (180/Math.PI) + 4.5;
+      angle = Math.atan2(.5-.25, -limelight.getRelative3dBotPose().getZ() ) * (180/Math.PI) + 9; // + 9
 
-      System.out.println("angle is " + angle);
+      // System.out.println("angle is " + angle);
       ySpeed = pidControllerYR.calculate(limelight.getH_angle(), angle);
-      System.out.println("right Y " + ySpeed);    }
+      // System.out.println("right Y " + ySpeed);
+    }
 
     //if there are any visible targets 
-      if (limelight.getHasTargets()){
+      if (limelight.getHasTargets() && limelight.getAprilTagID() == currentID){
 
         
         // if (Math.abs(pidControllerY.getError()) < yErrorBound){ //was .1
@@ -92,10 +96,9 @@ public class TagAlign_Cmd extends Command {
         //   xSpeed = -.5;
         // }
 
-        System.out.println(x.get());
 
         //lets driver only control x direction PUT THE X.GET OUTSIDE THE APRILTAG IF STATEMENT SO THEY CAN STILL MOVE ROBOT CENTRIC 
-        drivetrain.setControl(robotCentric.withVelocityY(ySpeed).withVelocityX(x.get()*0.12).withRotationalRate(rotSpeed));
+        drivetrain.setControl(robotCentric.withVelocityY(ySpeed).withVelocityX(x.get()*0.4).withRotationalRate(rotSpeed));
 
         //lets driver control x direction and rotation
         // drivetrain.setControl(robotCentric.withVelocityY(ySpeed).withVelocityX(x.get()*0.75).withRotationalRate(omega.get()*.8*.75*Math.PI));
@@ -103,7 +106,7 @@ public class TagAlign_Cmd extends Command {
         //automatically does x direction
         // drivetrain.setControl(robotCentric.withVelocityY(ySpeed).withVelocityX(xSpeed));
     } else {
-        drivetrain.setControl(robotCentric.withVelocityX(x.get()*0.12).withVelocityY(0).withRotationalRate(rotSpeed));
+        drivetrain.setControl(robotCentric.withVelocityX(x.get()*0.4).withVelocityY(0).withRotationalRate(rotSpeed));
     } 
     
 }
@@ -113,7 +116,6 @@ public class TagAlign_Cmd extends Command {
   public void end(boolean interrupted) {
     counter = 0;  
     drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
-
   }
 
   // Returns true when the command should end.

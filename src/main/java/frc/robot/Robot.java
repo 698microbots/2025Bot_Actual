@@ -72,6 +72,7 @@ public class Robot extends TimedRobot {
 
     // SmartDashboard.putString("Rotation", kDefaultPeriod);
     SmartDashboard.putBoolean("limit switch", m_robotContainer.elevator.getPressed());
+    SmartDashboard.putNumber("gyro angle", m_robotContainer.gyro.getYaw());
 
     SmartDashboard.putNumber("encoder of climber", m_robotContainer.climber.getClimbPosition());
 

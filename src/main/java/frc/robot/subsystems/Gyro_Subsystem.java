@@ -9,7 +9,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Gyro_Subsystem extends SubsystemBase {
-  private final Pigeon2 gyro = new Pigeon2(0);
+  private final Pigeon2 gyro = new Pigeon2(0, "Default Name");
 
   /** Creates a new Gyro_Subsystem. */
   public Gyro_Subsystem() {}

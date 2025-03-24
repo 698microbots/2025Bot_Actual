@@ -5,15 +5,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.controls.ControlRequest;
-import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -47,7 +41,7 @@ public class Elevator_subsystem extends SubsystemBase {
     
     if (getPosition() < .2 && speed < 0){
       speed = 0;
-    } else if (getPosition() > 8.06 && speed > 0){
+    } else if (getPosition() > 7.96 && speed > 0){
       speed = 0;
     }
 

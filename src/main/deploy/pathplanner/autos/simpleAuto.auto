@@ -23,9 +23,35 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "elevatorDown"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "elevatorDown"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "simpleMoveBack"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]

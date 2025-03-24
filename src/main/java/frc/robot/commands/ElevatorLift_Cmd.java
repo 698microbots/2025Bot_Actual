@@ -20,7 +20,7 @@ import frc.robot.subsystems.Swerve_Subsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorLift_Cmd extends Command {
   // private final PIDController pidController = new PIDController(.04, 0.00, .0);
-  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.4);
+  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(0.35); //was .4
   // private final ProfiledPIDController pidController = new ProfiledPIDController(0.04, 0.003, 0, new Constraints(0.5, 2));
   private final Elevator_subsystem elevator;
   private final Dropper_Subsystem dropper;
@@ -28,11 +28,11 @@ public class ElevatorLift_Cmd extends Command {
   private int counter = 0;
   private boolean auto;
   private double speed = 0;
-  private double maxSpeed = .85;
-
-  private double L4Limit = 8.1;
-  private double L3Limit = 5.3;
-  private double L2Limit = 3.8;
+  private double maxSpeed = .75;
+  private double dropperCounter = 0;
+  private double L4Limit = 7.85; // was 8
+  private double L3Limit = 5.1; //5.3
+  private double L2Limit = 3; //3.8
   /** Creates a new l1_lift_command. */
   public ElevatorLift_Cmd(Elevator_subsystem elevator, Dropper_Subsystem dropper, double level, boolean auto) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -62,19 +62,23 @@ public class ElevatorLift_Cmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    dropperCounter++;
     counter++;
 
     //drive the neo up for a bit so coral doesnt fall out
-    if (counter < Constants.numSeconds(1)){
+    if (dropperCounter < Constants.numSeconds(1)){
       dropper.driveUp();
     } else {
       dropper.stopDrive();
     }
+
+    if (dropperCounter > Constants.numSeconds(1.3)){
+      dropperCounter = 0;
+    }
     
   
     //limit acceleration for a bit so elevator can get up to speed
-    if (counter < Constants.numSeconds(.8)){
+    if (counter < Constants.numSeconds(1.2)){
       speed = slewRateLimiter.calculate(maxSpeed);
       if (level == 2){
         elevator.setspeed(speed, L2Limit);
@@ -105,6 +109,7 @@ public class ElevatorLift_Cmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    dropperCounter = 0;
     counter = 0;
     dropper.stopDrive();
     elevator.setspeed(0);

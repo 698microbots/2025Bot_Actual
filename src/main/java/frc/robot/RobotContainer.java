@@ -21,6 +21,7 @@ import frc.robot.subsystems.Climber_Subsystem;
 import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Gyro_Subsystem;
 import frc.robot.subsystems.LimeLight_Subsystem;
 import frc.robot.subsystems.ReactedLED_Subsystem;
 
@@ -57,6 +58,14 @@ public class RobotContainer {
                                                                                                       // deadband
   // Use open-loop control for drive motors
 
+  private final SwerveRequest.RobotCentric Rdrive = new SwerveRequest.RobotCentric()
+      .withDeadband(Constants.MaxSpeed * 0.1).withRotationalDeadband(Constants.MaxAngularRate * 0.1); // Add a 10%
+                                                                                                      // deadband
+  // Use open-loop control for drive motors  
+
+  private final SwerveRequest.SwerveDriveBrake brakeMode = new SwerveRequest.SwerveDriveBrake();
+ 
+
   private final CommandXboxController joystick_1 = new CommandXboxController(Constants.joystick_1);
   private final CommandXboxController joystick_2 = new CommandXboxController(Constants.joystick_2);
   private final CommandXboxController joystick_TEST = new CommandXboxController(2);
@@ -68,6 +77,7 @@ public class RobotContainer {
   public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
   public Whisker_Subsystem whisker = new Whisker_Subsystem();
   public Climber_Subsystem climber = new Climber_Subsystem();
+  public Gyro_Subsystem gyro = new Gyro_Subsystem();
   /* Path follower */
   private SendableChooser<Command> autoChooser;
 
@@ -174,15 +184,15 @@ public class RobotContainer {
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
     //P1 Right reef score
-    joystick_1.rightTrigger().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "right", () -> -joystick_1.getLeftY(), () -> -joystick_1.getRightX()));
+    joystick_1.rightTrigger().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "right", () -> -joystick_1.getLeftY(), () -> -joystick_1.getRightX(), gyro));
 
     //P1 Left reef score
-    joystick_1.leftTrigger().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "left", () -> -joystick_1.getLeftY(), () -> -joystick_1.getRightX()));
+    joystick_1.leftTrigger().whileTrue(new TagAlign_Cmd(limelight, drivetrain, "left", () -> -joystick_1.getLeftY(), () -> -joystick_1.getRightX(), gyro));
 
     //P1 Slow Mode
-    joystick_1.rightBumper().whileTrue(drivetrain.applyRequest(() -> drive
-    .withVelocityX(-joystick_1.getLeftY() * .2)
-    .withVelocityY(-joystick_1.getLeftX() * .2)
+    joystick_1.rightBumper().whileTrue(drivetrain.applyRequest(() -> Rdrive
+    .withVelocityX(-joystick_1.getLeftY() * .3)
+    .withVelocityY(-joystick_1.getLeftX() * .3)
     .withRotationalRate(-joystick_1.getRightX() * Math.PI * 5/12)));
 
     //P1 auto align test
@@ -194,21 +204,27 @@ public class RobotContainer {
     // joystick_2.rightBumper().whileTrue(new AutoRotate_Cmd(drivetrain, () -> -joystick_1.getLeftY(), () -> -joystick_1.getLeftX(), limelight));
 
     //P2 auto leveling and drops
-    joystick_2.a().whileTrue(new SequentialCommandGroup(
-      new ElevatorLift_Cmd(elevator, dropper, 2, true),
-      new Drop_Cmd(dropper)
-    ));
+    // joystick_2.a().whileTrue(new SequentialCommandGroup(
+    //   new ElevatorLift_Cmd(elevator, dropper, 2, true),
+    //   new Drop_Cmd(dropper)
+    // ));
 
-    joystick_2.b().whileTrue(new SequentialCommandGroup(
-      new ElevatorLift_Cmd(elevator, dropper, 3, true),
-      new Drop_Cmd(dropper)
-    ));
+    // joystick_2.b().whileTrue(new SequentialCommandGroup(
+    //   new ElevatorLift_Cmd(elevator, dropper, 3, true),
+    //   new Drop_Cmd(dropper)
+    // ));
     
-    joystick_2.y().whileTrue(new SequentialCommandGroup(
-      new ElevatorLift_Cmd(elevator, dropper, 4, true),
-      new Drop_Cmd(dropper)
-    ));    
+    // joystick_2.y().whileTrue(new SequentialCommandGroup(
+    //   new ElevatorLift_Cmd(elevator, dropper, 4, true),
+    //   new Drop_Cmd(dropper)
+    // ));    
 
+    //p2 manual drops
+    joystick_2.y().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 4, false));
+    joystick_2.b().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 3, false));
+    joystick_2.a().whileTrue(new ElevatorLift_Cmd(elevator, dropper, 2, false));
+
+    joystick_1.y().whileTrue(drivetrain.applyRequest(() -> brakeMode));
     
   }
 
