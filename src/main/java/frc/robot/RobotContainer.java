@@ -17,7 +17,6 @@ import frc.robot.commands.SetLeds_Cmd;
 import frc.robot.commands.Climb_Cmd;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Swerve_Subsystem;
-import frc.robot.subsystems.Whisker_Subsystem;
 import frc.robot.subsystems.Climber_Subsystem;
 import frc.robot.subsystems.Dropper_Subsystem;
 import frc.robot.subsystems.Elevator_subsystem;
@@ -68,7 +67,6 @@ public class RobotContainer {
   public LimeLight_Subsystem limelight = new LimeLight_Subsystem();
   public Swerve_Subsystem drivetrain = TunerConstants.createDrivetrain();
   public ReactedLED_Subsystem reactedLeds = new ReactedLED_Subsystem();
-  public Whisker_Subsystem whisker = new Whisker_Subsystem();
   public Climber_Subsystem climber = new Climber_Subsystem();
   /* Path follower */
   private SendableChooser<Command> autoChooser;
