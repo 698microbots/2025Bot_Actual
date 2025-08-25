@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.ext.SqlBlobSerializer;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.simulation.JoystickSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -167,7 +168,7 @@ public class RobotContainer {
                                                                                          // negative X (left)
         ));
 
-    //P1 reset the field-centric heading on left bumper press
+    //P1 reset the  bbg-centric heading on left bumper press
     joystick_1.leftBumper().whileTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
     //P1 Right reef score
@@ -223,8 +224,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return Autos.exampleAuto(m_exampleSubsystem);
-    return autoChooser.getSelected();
-    // return new PathPlannerAuto("New Auto");
+    //return autoChooser.getSelected();
+     return new PathPlannerAuto("Move Forward");
   }
 }
 
